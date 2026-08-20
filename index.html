@@ -122,7 +122,7 @@
   <textarea id="titleText" rows="2" placeholder="Tiêu đề chính hiển thị trên banner..."></textarea>
 
   <label>7. Đoạn trích nổi bật:</label>
-  <textarea id="descText" rows="2" placeholder="Đoạn mô tả ngắn hoặc Sapo của bài..."></textarea>
+  <textarea id="descText" rows="3" placeholder="Đoạn mô tả ngắn hoặc Sapo của bài..."></textarea>
 
   <button class="btn" onclick="generateBanner()">🎨 Tạo Ảnh Banner 1200x630</button>
 
@@ -207,14 +207,14 @@
       ctx.drawImage(img, 0, 0, w, h);
     }
 
-    // 2. Gradient mờ nhẹ ở 40% chân ảnh
-    const grad = ctx.createLinearGradient(0, 320, 0, h);
+    // 2. Gradient mờ ở 45% chân ảnh
+    const grad = ctx.createLinearGradient(0, 300, 0, h);
     grad.addColorStop(0, 'rgba(255, 255, 255, 0)');
-    grad.addColorStop(0.35, 'rgba(255, 255, 255, 0.75)');
-    grad.addColorStop(0.7, 'rgba(255, 255, 255, 0.95)');
+    grad.addColorStop(0.3, 'rgba(255, 255, 255, 0.75)');
+    grad.addColorStop(0.65, 'rgba(255, 255, 255, 0.96)');
     grad.addColorStop(1, 'rgba(255, 255, 255, 1)');
     ctx.fillStyle = grad;
-    ctx.fillRect(0, 320, w, h - 320);
+    ctx.fillRect(0, 300, w, h - 300);
 
     // 3. Hiển thị Logo website
     let nextBadgeX = 40;
@@ -222,7 +222,6 @@
       const logoH = 38;
       const logoW = (logo.width / logo.height) * logoH;
       
-      // Nền bo nhẹ cho logo
       ctx.fillStyle = '#e6c687';
       ctx.fillRect(40, 40, logoW + 24, logoH + 12);
       
@@ -230,7 +229,7 @@
       nextBadgeX = 40 + logoW + 36;
     }
 
-    // 4. Badge Nổi bật (nằm cạnh logo)
+    // 4. Badge Nổi bật
     ctx.font = 'bold 18px sans-serif';
     const badgeStr = '🔥 ' + badge.toUpperCase();
     const badgeMetrics = ctx.measureText(badgeStr);
@@ -244,323 +243,16 @@
     ctx.fillStyle = '#8f681d';
     ctx.fillText(badgeStr, nextBadgeX + 15, 71);
 
-    // 5. Tiêu đề chính: Đặt tại y=440
+    // 5. Tiêu đề chính (đặt tại y=405, font 35px)
     ctx.fillStyle = '#0f172a';
-    ctx.font = 'bold 36px sans-serif';
-    const nextY = wrapText(ctx, title, 40, 440, 1120, 45, 2);
+    ctx.font = 'bold 35px sans-serif';
+    const nextY = wrapText(ctx, title, 40, 405, 1120, 44, 2);
 
-    // 6. Đoạn trích nổi bật
+    // 6. Đoạn trích nổi bật: Tăng khoảng cách tách biệt (cách 36px) và mở rộng cho phép hiển thị dài/đầy đủ hơn
     if (desc) {
       ctx.fillStyle = '#334155';
-      ctx.font = '500 18px sans-serif';
-      wrapText(ctx, desc, 40, nextY + 20, 1120, 25, 2);
-    }
-
-    // 7. Tác giả & Nguồn
-    ctx.fillStyle = '#64748b';
-    ctx.font = 'italic 15px sans-serif';
-    let metaInfo = `Tác giả: ${author}`;
-    if (source) {
-      metaInfo += ` | ${source}`;
-    }
-    ctx.fillText(metaInfo, 40, 605);
-
-    canvas.style.display = 'block';
-    document.getElementById('btnDownload').style.display = 'block';
-  }
-
-  function wrapText(ctx, text, x, y, maxWidth, lineHeight, maxLines = 3) {
-    const words = text.split(' ');
-    let line = '';
-    let lineCount = 0;
-    let currentY = y;
-
-    for (let n = 0; n < words.length; n++) {
-      const testLine = line + words[n] + ' ';
-      const metrics = ctx.measureText(testLine);
-      if (metrics.width > maxWidth && n > 0) {
-        ctx.fillText(line, x, currentY);
-        line = words[n] + ' ';
-        currentY += lineHeight;
-        lineCount++;
-        if (lineCount >= maxLines - 1 && n < words.length - 1) {
-          line += '...';
-          break;
-        }
-      } else {
-        line = testLine;
-      }
-    }
-    ctx.fillText(line, x, currentY);
-    return currentY;
-  }
-
-  function downloadImage() {
-    const canvas = document.getElementById('preview-canvas');
-    const link = document.createElement('a');
-    link.download = 'reclash-banner.png';
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-  }
-</script>
-
-</body>
-</html><!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>reClash - Tạo Ảnh Bìa Bài Viết</title>
-  <style>
-    :root {
-      --bg: #ffffff;
-      --card: #faf9f6;
-      --accent: #e6c687;
-      --sub-accent: rgba(230, 198, 135, 0.03);
-      --text: #1a1a1a;
-      --text-dim: #666666;
-    }
-    body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      margin: 0;
-      padding: 16px;
-      display: flex;
-      justify-content: center;
-    }
-    .container {
-      width: 100%;
-      max-width: 650px;
-      background: var(--card);
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-      border: 1px solid var(--accent);
-    }
-    h2 {
-      margin-top: 0;
-      color: #b58d46;
-      font-size: 20px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    label {
-      display: block;
-      font-size: 13px;
-      color: var(--text-dim);
-      margin: 12px 0 6px;
-      font-weight: bold;
-    }
-    input, textarea {
-      width: 100%;
-      background: #ffffff;
-      border: 1px solid #dcd6cd;
-      color: #1a1a1a;
-      padding: 10px;
-      border-radius: 6px;
-      box-sizing: border-box;
-      font-size: 14px;
-    }
-    input:focus, textarea:focus {
-      outline: none;
-      border-color: var(--accent);
-    }
-    .auto-box {
-      background: rgba(230, 198, 135, 0.15);
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px dashed var(--accent);
-      margin-bottom: 15px;
-    }
-    .btn {
-      width: 100%;
-      background: var(--accent);
-      color: #2b2008;
-      border: none;
-      padding: 12px;
-      border-radius: 6px;
-      font-weight: bold;
-      font-size: 15px;
-      cursor: pointer;
-      margin-top: 15px;
-      transition: 0.2s;
-    }
-    .btn:active {
-      transform: scale(0.98);
-    }
-    #preview-canvas {
-      width: 100%;
-      height: auto;
-      border-radius: 8px;
-      margin-top: 15px;
-      border: 1px solid #e0d8cc;
-      display: none;
-    }
-  </style>
-</head>
-<body>
-
-<div class="container">
-  <h2>🎮 reClash Banner Studio</h2>
-
-  <div class="auto-box">
-    <label style="margin-top:0; color:#8f681d;">⚡ Tự động điền dữ liệu (Dán từ Bookmarklet):</label>
-    <input type="text" id="autoPasteInput" placeholder="Dán mã đã copy từ Bookmarklet vào đây để tự điền..." oninput="handleAutoFill(this.value)">
-  </div>
-  
-  <label>1. Link Logo website:</label>
-  <input type="text" id="logoUrl" value="https://datnvps37587.github.io/testchoi/reClash-400x40.png">
-
-  <label>2. Ảnh bìa (Chọn từ máy hoặc Link ảnh):</label>
-  <input type="file" id="fileInput" accept="image/*">
-  <input type="text" id="bgUrl" style="margin-top: 6px;" placeholder="https://example.com/image.jpg">
-
-  <label>3. Nhãn nổi bật (Badge):</label>
-  <input type="text" id="badgeText" value="TIN NÓNG GAMING">
-
-  <label>4. Tác giả bài viết:</label>
-  <input type="text" id="authorText" value="Ẩn danh" placeholder="Tác giả...">
-
-  <label>5. Nguồn trang web:</label>
-  <input type="text" id="sourceText" placeholder="Nguồn: IGN / Gamespot...">
-
-  <label>6. Tiêu đề bài viết:</label>
-  <textarea id="titleText" rows="2" placeholder="Tiêu đề chính hiển thị trên banner..."></textarea>
-
-  <label>7. Đoạn trích nổi bật:</label>
-  <textarea id="descText" rows="2" placeholder="Đoạn mô tả ngắn hoặc Sapo của bài..."></textarea>
-
-  <button class="btn" onclick="generateBanner()">🎨 Tạo Ảnh Banner 1200x630</button>
-
-  <canvas id="preview-canvas" width="1200" height="630"></canvas>
-  <button class="btn" id="btnDownload" style="display:none; background:#b58d46; color:#ffffff;" onclick="downloadImage()">📥 Tải Ảnh Về Máy</button>
-</div>
-
-<script>
-  let loadedImage = null;
-
-  function handleAutoFill(val) {
-    try {
-      const data = JSON.parse(val);
-      if (data.title) document.getElementById('titleText').value = data.title;
-      if (data.desc) document.getElementById('descText').value = data.desc;
-      if (data.image) document.getElementById('bgUrl').value = data.image;
-      if (data.badge) document.getElementById('badgeText').value = data.badge;
-      if (data.author) document.getElementById('authorText').value = data.author;
-      if (data.source) document.getElementById('sourceText').value = "Nguồn: " + data.source;
-      document.getElementById('autoPasteInput').value = "✅ Đã tự động điền đầy đủ!";
-    } catch(e) {}
-  }
-
-  document.getElementById('fileInput').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function(event) {
-        const img = new Image();
-        img.onload = function() { loadedImage = img; };
-        img.src = event.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-  });
-
-  function loadImageAsync(url) {
-    return new Promise((resolve) => {
-      if (!url) return resolve(null);
-      const img = new Image();
-      img.crossOrigin = "anonymous";
-      img.onload = () => resolve(img);
-      img.onerror = () => resolve(null);
-      img.src = url;
-    });
-  }
-
-  async function generateBanner() {
-    const title = document.getElementById('titleText').value.trim();
-    const desc = document.getElementById('descText').value.trim();
-    const badge = document.getElementById('badgeText').value.trim() || 'TIN NÓNG';
-    const author = document.getElementById('authorText').value.trim() || 'Ẩn danh';
-    const source = document.getElementById('sourceText').value.trim();
-    const bgUrl = document.getElementById('bgUrl').value.trim();
-    const logoUrl = document.getElementById('logoUrl').value.trim();
-
-    if (!title) {
-      alert('Vui lòng nhập tiêu đề bài viết!');
-      return;
-    }
-
-    let bgImg = loadedImage;
-    if (!bgImg && bgUrl) {
-      bgImg = await loadImageAsync(bgUrl);
-    }
-
-    const logoImg = await loadImageAsync(logoUrl);
-
-    render(bgImg, logoImg, title, desc, badge, author, source);
-  }
-
-  function render(img, logo, title, desc, badge, author, source) {
-    const canvas = document.getElementById('preview-canvas');
-    const ctx = canvas.getContext('2d');
-    const w = 1200, h = 630;
-
-    // 1. Nền trắng và ảnh bài viết
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, w, h);
-
-    if (img) {
-      ctx.drawImage(img, 0, 0, w, h);
-    }
-
-    // 2. Gradient mờ nhẹ ở 40% chân ảnh
-    const grad = ctx.createLinearGradient(0, 320, 0, h);
-    grad.addColorStop(0, 'rgba(255, 255, 255, 0)');
-    grad.addColorStop(0.35, 'rgba(255, 255, 255, 0.75)');
-    grad.addColorStop(0.7, 'rgba(255, 255, 255, 0.95)');
-    grad.addColorStop(1, 'rgba(255, 255, 255, 1)');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 320, w, h - 320);
-
-    // 3. Hiển thị Logo website
-    let nextBadgeX = 40;
-    if (logo) {
-      const logoH = 38;
-      const logoW = (logo.width / logo.height) * logoH;
-      
-      // Nền bo nhẹ cho logo
-      ctx.fillStyle = '#e6c687';
-      ctx.fillRect(40, 40, logoW + 24, logoH + 12);
-      
-      ctx.drawImage(logo, 52, 46, logoW, logoH);
-      nextBadgeX = 40 + logoW + 36;
-    }
-
-    // 4. Badge Nổi bật (nằm cạnh logo)
-    ctx.font = 'bold 18px sans-serif';
-    const badgeStr = '🔥 ' + badge.toUpperCase();
-    const badgeMetrics = ctx.measureText(badgeStr);
-    const badgeBoxW = Math.max(badgeMetrics.width + 30, 160);
-
-    ctx.strokeStyle = '#e6c687';
-    ctx.lineWidth = 2;
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
-    ctx.fillRect(nextBadgeX, 40, badgeBoxW, 50);
-    ctx.strokeRect(nextBadgeX, 40, badgeBoxW, 50);
-    ctx.fillStyle = '#8f681d';
-    ctx.fillText(badgeStr, nextBadgeX + 15, 71);
-
-    // 5. Tiêu đề chính: Đặt tại y=440
-    ctx.fillStyle = '#0f172a';
-    ctx.font = 'bold 36px sans-serif';
-    const nextY = wrapText(ctx, title, 40, 440, 1120, 45, 2);
-
-    // 6. Đoạn trích nổi bật
-    if (desc) {
-      ctx.fillStyle = '#334155';
-      ctx.font = '500 18px sans-serif';
-      wrapText(ctx, desc, 40, nextY + 20, 1120, 25, 2);
+      ctx.font = '500 17px sans-serif';
+      wrapText(ctx, desc, 40, nextY + 36, 1120, 24, 3);
     }
 
     // 7. Tác giả & Nguồn
