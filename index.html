@@ -159,7 +159,7 @@
   function generateBanner() {
     const title = document.getElementById('titleText').value.trim();
     const desc = document.getElementById('descText').value.trim();
-    const badge = document.getElementById('badgeText').value.trim() || 'TIN MỚI';
+    const badge = document.getElementById('badgeText').value.trim() || 'TIN NÓNG';
     const author = document.getElementById('authorText').value.trim() || 'Ẩn danh';
     const source = document.getElementById('sourceText').value.trim();
     const bgUrl = document.getElementById('bgUrl').value.trim();
@@ -189,7 +189,7 @@
     const ctx = canvas.getContext('2d');
     const w = 1200, h = 630;
 
-    // 1. Nền trắng và ảnh gốc
+    // 1. Vẽ nền trắng & ảnh gốc rõ nét 100%
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, w, h);
 
@@ -197,65 +197,56 @@
       ctx.drawImage(img, 0, 0, w, h);
     }
 
-    // Lớp phủ màu phụ
-    ctx.fillStyle = 'rgba(230, 198, 135, 0.03)';
-    ctx.fillRect(0, 0, w, h);
-
-    // 2. Phủ gradient trắng dồn xuống đáy
-    const grad = ctx.createLinearGradient(0, 0, 0, h);
-    grad.addColorStop(0, 'rgba(255, 255, 255, 0.15)');
-    grad.addColorStop(0.5, 'rgba(255, 255, 255, 0.65)');
-    grad.addColorStop(0.75, 'rgba(255, 255, 255, 0.95)');
+    // 2. Gradient mờ nhẹ chỉ ở 40% chân ảnh (để ảnh trên luôn rõ ràng)
+    const grad = ctx.createLinearGradient(0, 320, 0, h);
+    grad.addColorStop(0, 'rgba(255, 255, 255, 0)');
+    grad.addColorStop(0.35, 'rgba(255, 255, 255, 0.75)');
+    grad.addColorStop(0.7, 'rgba(255, 255, 255, 0.95)');
     grad.addColorStop(1, 'rgba(255, 255, 255, 1)');
     ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, w, h);
+    ctx.fillRect(0, 320, w, h - 320);
 
-    // 3. Khung viền màu chủ đạo
-    ctx.strokeStyle = '#e6c687';
-    ctx.lineWidth = 6;
-    ctx.strokeRect(20, 20, w - 40, h - 40);
-
-    // 4. Badge Brand reClash
+    // 3. Badge Brand reClash (Góc trên trái)
     ctx.fillStyle = '#e6c687';
-    ctx.fillRect(50, 50, 210, 46);
+    ctx.fillRect(40, 40, 200, 42);
     ctx.fillStyle = '#2b2008';
-    ctx.font = 'bold 24px sans-serif';
-    ctx.fillText('reClash.io.vn', 68, 82);
+    ctx.font = 'bold 22px sans-serif';
+    ctx.fillText('reClash.io.vn', 56, 69);
 
-    // 5. Badge Nổi bật
-    ctx.font = 'bold 20px sans-serif';
+    // 4. Badge Nổi bật
+    ctx.font = 'bold 18px sans-serif';
     const badgeStr = '🔥 ' + badge.toUpperCase();
     const badgeMetrics = ctx.measureText(badgeStr);
-    const badgeBoxW = Math.max(badgeMetrics.width + 36, 180);
+    const badgeBoxW = Math.max(badgeMetrics.width + 30, 160);
 
     ctx.strokeStyle = '#e6c687';
     ctx.lineWidth = 2;
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-    ctx.fillRect(275, 50, badgeBoxW, 46);
-    ctx.strokeRect(275, 50, badgeBoxW, 46);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+    ctx.fillRect(255, 40, badgeBoxW, 42);
+    ctx.strokeRect(255, 40, badgeBoxW, 42);
     ctx.fillStyle = '#8f681d';
-    ctx.fillText(badgeStr, 293, 81);
+    ctx.fillText(badgeStr, 270, 67);
 
-    // 6. Tiêu đề chính
-    ctx.fillStyle = '#111827';
-    ctx.font = 'bold 38px sans-serif';
-    const nextY = wrapText(ctx, title, 50, 365, 1100, 48, 2);
+    // 5. Tiêu đề chính: Đẩy xuống y=440
+    ctx.fillStyle = '#0f172a';
+    ctx.font = 'bold 36px sans-serif';
+    const nextY = wrapText(ctx, title, 40, 440, 1120, 45, 2);
 
-    // 7. Đoạn trích nổi bật
+    // 6. Đoạn trích nổi bật: Đẩy xuống sát tiêu đề
     if (desc) {
-      ctx.fillStyle = '#374151';
-      ctx.font = '500 19px sans-serif';
-      wrapText(ctx, desc, 50, nextY + 24, 1100, 27, 2);
+      ctx.fillStyle = '#334155';
+      ctx.font = '500 18px sans-serif';
+      wrapText(ctx, desc, 40, nextY + 20, 1120, 25, 2);
     }
 
-    // 8. Tác giả & Nguồn bài viết
-    ctx.fillStyle = '#6b7280';
-    ctx.font = 'italic 16px sans-serif';
+    // 7. Tác giả & Nguồn: Nằm gọn ở đáy góc trái
+    ctx.fillStyle = '#64748b';
+    ctx.font = 'italic 15px sans-serif';
     let metaInfo = `Tác giả: ${author}`;
     if (source) {
       metaInfo += ` | ${source}`;
     }
-    ctx.fillText(metaInfo, 50, 582);
+    ctx.fillText(metaInfo, 40, 605);
 
     canvas.style.display = 'block';
     document.getElementById('btnDownload').style.display = 'block';
