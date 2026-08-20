@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reClash - Tạo Ảnh Bìa Bài Viết</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card: #161f30;
+      --accent: #00e699;
+      --text: #ffffff;
+      --text-dim: #94a3b8;
+    }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      width: 100%;
+      max-width: 650px;
+      background: var(--card);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+      border: 1px solid rgba(0, 230, 153, 0.2);
+    }
+    h2 {
+      margin-top: 0;
+      color: var(--accent);
+      font-size: 20px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      color: var(--text-dim);
+      margin: 12px 0 6px;
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%;
+      background: #0d1322;
+      border: 1px solid #2d3748;
+      color: #fff;
+      padding: 10px;
+      border-radius: 6px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .btn {
+      width: 100%;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: 0.2s;
+    }
+    .btn:active {
+      transform: scale(0.98);
+    }
+    #preview-canvas {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-top: 15px;
+      border: 1px solid #2d3748;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>🎮 reClash Banner Studio</h2>
+  
+  <label>1. Chọn ảnh từ điện thoại / máy tính:</label>
+  <input type="file" id="fileInput" accept="image/*">
+
+  <label>Hoặc dán Link ảnh trực tiếp (nếu không tải file):</label>
+  <input type="text" id="bgUrl" placeholder="https://example.com/image.jpg">
+
+  <label>2. Nhãn nổi bật (Badge):</label>
+  <input type="text" id="badgeText" value="TIN NÓNG GAMING">
+
+  <label>3. Tiêu đề bài viết:</label>
+  <textarea id="titleText" rows="3" placeholder="Nhập tiêu đề bài viết vào đây..."></textarea>
+
+  <button class="btn" onclick="generateBanner()">🎨 Tạo Ảnh Banner 1200x630</button>
+
+  <canvas id="preview-canvas" width="1200" height="630"></canvas>
+  <button class="btn" id="btnDownload" style="display:none; background:#38bdf8;" onclick="downloadImage()">📥 Tải Ảnh Về Máy</button>
+</div>
+
+<script>
+  let loadedImage = null;
+
+  // Lắng nghe sự kiện khi chọn file ảnh từ máy
+  document.getElementById('fileInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const img = new Image();
+        img.onload = function() {
+          loadedImage = img;
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  function generateBanner() {
+    const title = document.getElementById('titleText').value.trim();
+    const badge = document.getElementById('badgeText').value.trim() || 'TIN MỚI';
+    const bgUrl = document.getElementById('bgUrl').value.trim();
+
+    if (!title) {
+      alert('Vui lòng nhập tiêu đề bài viết!');
+      return;
+    }
+
+    if (loadedImage) {
+      render(loadedImage, title, badge);
+    } else if (bgUrl) {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => render(img, title, badge);
+      img.onerror = () => {
+        alert('Không tải được link ảnh online (do chặn CORS), hệ thống sẽ dùng nền gaming mặc định.');
+        render(null, title, badge);
+      };
+      img.src = bgUrl;
+    } else {
+      render(null, title, badge);
+    }
+  }
+
+  function render(img, title, badge) {
+    const canvas = document.getElementById('preview-canvas');
+    const ctx = canvas.getContext('2d');
+    const w = 1200, h = 630;
+
+    // 1. Vẽ nền ảnh
+    if (img) {
+      ctx.drawImage(img, 0, 0, w, h);
+    } else {
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(0, 0, w, h);
+    }
+
+    // 2. Phủ gradient tối gaming (để nổi bật chữ)
+    const grad = ctx.createLinearGradient(0, 0, 0, h);
+    grad.addColorStop(0, 'rgba(11, 15, 25, 0.4)');
+    grad.addColorStop(0.5, 'rgba(11, 15, 25, 0.7)');
+    grad.addColorStop(1, 'rgba(11, 15, 25, 0.95)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, w, h);
+
+    // 3. Khung viền Neon
+    ctx.strokeStyle = '#00e699';
+    ctx.lineWidth = 6;
+    ctx.strokeRect(20, 20, w - 40, h - 40);
+
+    // 4. Badge Thương hiệu reClash
+    ctx.fillStyle = '#00e699';
+    ctx.fillRect(60, 60, 220, 50);
+    ctx.fillStyle = '#000000';
+    ctx.font = 'bold 26px sans-serif';
+    ctx.fillText('reClash.io.vn', 80, 95);
+
+    // 5. Badge Nổi bật
+    ctx.strokeStyle = '#00e699';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(300, 60, 480, 50);
+    ctx.fillStyle = '#00e699';
+    ctx.font = 'bold 22px sans-serif';
+    ctx.fillText('🔥 ' + badge.toUpperCase(), 320, 93);
+
+    // 6. Tiêu đề bài viết
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 50px sans-serif';
+    wrapText(ctx, title, 60, 360, 1080, 65);
+
+    canvas.style.display = 'block';
+    document.getElementById('btnDownload').style.display = 'block';
+  }
+
+  function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+    const words = text.split(' ');
+    let line = '';
+    for (let n = 0; n < words.length; n++) {
+      const testLine = line + words[n] + ' ';
+      const metrics = ctx.measureText(testLine);
+      if (metrics.width > maxWidth && n > 0) {
+        ctx.fillText(line, x, y);
+        line = words[n] + ' ';
+        y += lineHeight;
+      } else {
+        line = testLine;
+      }
+    }
+    ctx.fillText(line, x, y);
+  }
+
+  function downloadImage() {
+    const canvas = document.getElementById('preview-canvas');
+    const link = document.createElement('a');
+    link.download = 'reclash-banner.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  }
+</script>
+
+</body>
+</html>
