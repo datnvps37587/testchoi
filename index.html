@@ -213,16 +213,16 @@
       ctx.drawImage(img, 0, 0, w, h);
     }
 
-    // 2. Gradient chân ảnh: Bắt đầu từ y=340 để phủ trọn toàn bộ vùng chứa tiêu đề (y=430)
-    const grad = ctx.createLinearGradient(0, 340, 0, h);
+    // 2. Gradient chân ảnh: Bắt đầu từ y=410, tập trung trắng mịn hoàn toàn ở vùng chữ
+    const grad = ctx.createLinearGradient(0, 410, 0, h);
     grad.addColorStop(0, 'rgba(255, 255, 255, 0)');
-    grad.addColorStop(0.25, 'rgba(255, 255, 255, 0.85)');
-    grad.addColorStop(0.55, 'rgba(255, 255, 255, 0.98)');
+    grad.addColorStop(0.28, 'rgba(255, 255, 255, 0.88)');
+    grad.addColorStop(0.6, 'rgba(255, 255, 255, 0.98)');
     grad.addColorStop(1, 'rgba(255, 255, 255, 1)');
     ctx.fillStyle = grad;
-    ctx.fillRect(0, 340, w, h - 340);
+    ctx.fillRect(0, 410, w, h - 410);
 
-    // 3. Logo website: Bo cong góc 6px, nền trong suốt nhẹ nhàng
+    // 3. Logo website: Bo cong góc 6px
     let nextBadgeX = 40;
     if (logo) {
       const srcW = logo.width;
@@ -248,7 +248,7 @@
       nextBadgeX = 40 + targetW + 22;
     }
 
-    // 4. Badge Nổi bật (Bo góc nhẹ 6px)
+    // 4. Badge Nổi bật (Bo góc 6px)
     ctx.font = 'bold 15px sans-serif';
     const badgeStr = '🔥 ' + badge.toUpperCase();
     const badgeMetrics = ctx.measureText(badgeStr);
@@ -266,26 +266,26 @@
     ctx.fillStyle = '#8f681d';
     ctx.fillText(badgeStr, nextBadgeX + 12, 60);
 
-    // 5. Tiêu đề chính: Nằm hoàn toàn trong vùng nền trắng (y=430)
+    // 5. Tiêu đề chính: Hạ thấp xuống y=475, font 31px gọn gàng
     ctx.fillStyle = '#0f172a';
-    ctx.font = 'bold 33px sans-serif';
-    const nextY = wrapText(ctx, title, 40, 430, 1120, 42, 2);
+    ctx.font = 'bold 31px sans-serif';
+    const nextY = wrapText(ctx, title, 40, 475, 1120, 38, 2);
 
-    // 6. Đoạn trích nổi bật: Dễ đọc và rõ nét
+    // 6. Đoạn trích nổi bật: Hạ thấp theo tiêu đề
     if (desc) {
       ctx.fillStyle = '#334155';
-      ctx.font = '500 17px sans-serif';
-      wrapText(ctx, desc, 40, nextY + 28, 1120, 24, 2);
+      ctx.font = '500 16px sans-serif';
+      wrapText(ctx, desc, 40, nextY + 22, 1120, 22, 2);
     }
 
-    // 7. Tác giả & Nguồn
+    // 7. Tác giả & Nguồn: Đẩy sát mép đáy dưới
     ctx.fillStyle = '#64748b';
     ctx.font = 'italic 14px sans-serif';
     let metaInfo = `Tác giả: ${author}`;
     if (source) {
       metaInfo += ` | ${source}`;
     }
-    ctx.fillText(metaInfo, 40, 608);
+    ctx.fillText(metaInfo, 40, 614);
 
     canvas.style.display = 'block';
     document.getElementById('btnDownload').style.display = 'block';
