@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reClash - Minimal TikTok Poster Studio</title>
+  <style>
+    :root {
+      --bg: #0f1115;
+      --card: #161920;
+      --accent: #d4af37;
+      --border: #262b35;
+      --text: #f1f5f9;
+      --text-dim: #94a3b8;
+    }
+    body {
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      width: 100%;
+      max-width: 600px;
+      background: var(--card);
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+      border: 1px solid var(--border);
+    }
+    h2 {
+      margin-top: 0;
+      color: var(--text);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      color: var(--text-dim);
+      margin: 12px 0 6px;
+      font-weight: 600;
+    }
+    input, textarea {
+      width: 100%;
+      background: #0b0d11;
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: 11px 14px;
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-size: 14px;
+      transition: border-color 0.2s ease;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #cbd5e1;
+    }
+    .auto-box {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px dashed #334155;
+      margin-bottom: 15px;
+    }
+    .btn {
+      width: 100%;
+      background: #f8fafc;
+      color: #0f172a;
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 18px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: opacity 0.2s ease, transform 0.1s ease;
+    }
+    .btn:hover {
+      opacity: 0.92;
+    }
+    .btn:active {
+      transform: scale(0.99);
+    }
+    #preview-canvas {
+      width: 100%;
+      max-width: 360px;
+      height: auto;
+      border-radius: 12px;
+      margin: 20px auto 0;
+      border: 1px solid var(--border);
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>reClash TikTok Studio</h2>
+
+  <div class="auto-box">
+    <label style="margin-top:0; color:#e2e8f0;">Dán dữ liệu tự động từ Bookmarklet:</label>
+    <input type="text" id="autoPasteInput" placeholder="Dán mã JSON bài viết vào đây..." oninput="handleAutoFill(this.value)">
+  </div>
+  
+  <label>1. Link Logo website:</label>
+  <input type="text" id="logoUrl" value="https://datnvps37587.github.io/testchoi/reClash-400x40.png">
+
+  <label>2. Ảnh nền game:</label>
+  <input type="file" id="fileInput" accept="image/*">
+  <input type="text" id="bgUrl" style="margin-top: 6px;" placeholder="https://example.com/image.jpg">
+
+  <label>3. Nhãn phân loại:</label>
+  <input type="text" id="badgeText" value="TIN TỨC">
+
+  <label>4. Tác giả & Nguồn:</label>
+  <input type="text" id="authorText" value="Ẩn danh" placeholder="Tác giả...">
+  <input type="text" id="sourceText" style="margin-top: 6px;" placeholder="Nguồn...">
+
+  <label>5. Tiêu đề bài viết:</label>
+  <textarea id="titleText" rows="2" placeholder="Tiêu đề chính..."></textarea>
+
+  <label>6. Đoạn trích nổi bật:</label>
+  <textarea id="descText" rows="4" placeholder="Nội dung tóm tắt..."></textarea>
+
+  <button class="btn" onclick="generateBanner()">Tạo Ảnh TikTok (1080x1920)</button>
+
+  <div style="text-align: center;">
+    <canvas id="preview-canvas" width="1080" height="1920"></canvas>
+  </div>
+  
+  <button class="btn" id="btnDownload" style="display:none; background: #e2e8f0; color:#0f172a;" onclick="downloadImage()">Tải Ảnh Về Máy</button>
+</div>
+
+<script>
+  let loadedImage = null;
+
+  function handleAutoFill(val) {
+    try {
+      const data = JSON.parse(val);
+      if (data.title) document.getElementById('titleText').value = data.title;
+      if (data.desc) document.getElementById('descText').value = data.desc;
+      if (data.image) document.getElementById('bgUrl').value = data.image;
+      if (data.badge) document.getElementById('badgeText').value = data.badge;
+      if (data.author) document.getElementById('authorText').value = data.author;
+      if (data.source) document.getElementById('sourceText').value = data.source;
+      document.getElementById('autoPasteInput').value = "Đã nhận diện nội dung!";
+    } catch(e) {}
+  }
+
+  document.getElementById('fileInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const img = new Image();
+        img.onload = function() { loadedImage = img; };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  function loadImageAsync(url) {
+    return new Promise((resolve) => {
+      if (!url) return resolve(null);
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => resolve(img);
+      img.onerror = () => {
+        const proxyImg = new Image();
+        proxyImg.crossOrigin = "anonymous";
+        proxyImg.onload = () => resolve(proxyImg);
+        proxyImg.onerror = () => resolve(null);
+        proxyImg.src = "https://images.weserv.nl/?url=" + encodeURIComponent(url);
+      };
+      img.src = url;
+    });
+  }
+
+  async function generateBanner() {
+    const title = document.getElementById('titleText').value.trim();
+    const desc = document.getElementById('descText').value.trim();
+    const badge = document.getElementById('badgeText').value.trim() || 'TIN TỨC';
+    const author = document.getElementById('authorText').value.trim() || 'Ẩn danh';
+    const source = document.getElementById('sourceText').value.trim();
+    const bgUrl = document.getElementById('bgUrl').value.trim();
+    const logoUrl = document.getElementById('logoUrl').value.trim();
+
+    if (!title) {
+      alert('Vui lòng nhập tiêu đề bài viết!');
+      return;
+    }
+
+    let bgImg = loadedImage;
+    if (!bgImg && bgUrl) {
+      bgImg = await loadImageAsync(bgUrl);
+    }
+
+    const logoImg = await loadImageAsync(logoUrl);
+
+    renderMinimal(bgImg, logoImg, title, desc, badge, author, source);
+  }
+
+  function renderMinimal(img, logo, title, desc, badge, author, source) {
+    const canvas = document.getElementById('preview-canvas');
+    const ctx = canvas.getContext('2d');
+    const w = 1080, h = 1920;
+
+    // 1. Nền đơn sắc tối giản sâu
+    ctx.fillStyle = '#0b0d13';
+    ctx.fillRect(0, 0, w, h);
+
+    // 2. Render ảnh nền (tỷ lệ cover)
+    if (img) {
+      const imgRatio = img.width / img.height;
+      const canvasRatio = w / h;
+      let renderW, renderH, offsetX, offsetY;
+
+      if (imgRatio > canvasRatio) {
+        renderH = h;
+        renderW = h * imgRatio;
+        offsetX = (w - renderW) / 2;
+        offsetY = 0;
+      } else {
+        renderW = w;
+        renderH = w / imgRatio;
+        offsetX = 0;
+        offsetY = (h - renderH) / 2;
+      }
+      ctx.drawImage(img, offsetX, offsetY, renderW, renderH);
+    }
+
+    // 3. Phủ gradient đơn sắc tinh tế (chuyển nhẹ từ đỉnh và chuyển mượt ở nửa dưới)
+    const grad = ctx.createLinearGradient(0, 0, 0, h);
+    grad.addColorStop(0, 'rgba(11, 13, 19, 0.7)');
+    grad.addColorStop(0.18, 'rgba(11, 13, 19, 0.15)');
+    grad.addColorStop(0.48, 'rgba(11, 13, 19, 0.3)');
+    grad.addColorStop(0.68, 'rgba(11, 13, 19, 0.88)');
+    grad.addColorStop(0.9, 'rgba(11, 13, 19, 0.98)');
+    grad.addColorStop(1, '#0b0d13');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, w, h);
+
+    // 4. Logo website (Crop chuẩn reClash, nền kính mờ)
+    let nextBadgeX = 80;
+    if (logo) {
+      const srcW = logo.width;
+      const srcH = logo.height;
+      const cropX = srcW * 0.28;
+      const cropW = srcW * 0.44;
+      const cropY = 0;
+      const cropH = srcH;
+      
+      const targetH = 46;
+      const targetW = (cropW / cropH) * targetH;
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.roundRect(80, 110, targetW + 20, targetH + 14, 10);
+      ctx.fillStyle = '#ffffff';
+      ctx.fill();
+      ctx.clip();
+      ctx.drawImage(logo, cropX, cropY, cropW, cropH, 90, 117, targetW, targetH);
+      ctx.restore();
+
+      nextBadgeX = 80 + targetW + 36;
+    }
+
+    // 5. Badge tối giản (nền xám trong suốt, chữ thanh gọn)
+    ctx.font = '600 20px -apple-system, BlinkMacSystemFont, sans-serif';
+    const badgeStr = badge.toUpperCase();
+    const badgeMetrics = ctx.measureText(badgeStr);
+    const badgeBoxW = badgeMetrics.width + 36;
+    const badgeBoxH = 60;
+
+    ctx.beginPath();
+    ctx.roundRect(nextBadgeX, 110, badgeBoxW, badgeBoxH, 10);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    ctx.fillStyle = '#e2e8f0';
+    ctx.fillText(badgeStr, nextBadgeX + 18, 147);
+
+    // 6. Tiêu đề bài viết (Typography lớn, khoảng cách thoáng, bố trí vùng an toàn)
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '700 52px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+    const nextY = wrapText(ctx, title, 80, 1260, 920, 68, 3);
+
+    // 7. Đoạn trích tóm tắt (Màu chữ nhã nhặn, dễ đọc)
+    if (desc) {
+      ctx.fillStyle = '#cbd5e1';
+      ctx.font = '400 30px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      wrapText(ctx, desc, 80, nextY + 36, 920, 48, 4);
+    }
+
+    // 8. Tác giả & Nguồn (Đáy thẻ)
+    ctx.fillStyle = '#64748b';
+    ctx.font = '400 22px -apple-system, BlinkMacSystemFont, sans-serif';
+    let metaInfo = author;
+    if (source) metaInfo += ` • ${source}`;
+    ctx.fillText(metaInfo, 80, 1780);
+
+    canvas.style.display = 'block';
+    document.getElementById('btnDownload').style.display = 'block';
+  }
+
+  function wrapText(ctx, text, x, y, maxWidth, lineHeight, maxLines = 3) {
+    const words = text.split(' ');
+    let line = '';
+    let lineCount = 0;
+    let currentY = y;
+
+    for (let n = 0; n < words.length; n++) {
+      const testLine = line + words[n] + ' ';
+      const metrics = ctx.measureText(testLine);
+      if (metrics.width > maxWidth && n > 0) {
+        ctx.fillText(line, x, currentY);
+        line = words[n] + ' ';
+        currentY += lineHeight;
+        lineCount++;
+        if (lineCount >= maxLines - 1 && n < words.length - 1) {
+          line += '...';
+          break;
+        }
+      } else {
+        line = testLine;
+      }
+    }
+    ctx.fillText(line, x, currentY);
+    return currentY;
+  }
+
+  function downloadImage() {
+    const canvas = document.getElementById('preview-canvas');
+    const link = document.createElement('a');
+    link.download = 'reclash-tiktok-minimal.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  }
+</script>
+
+</body>
+</html>
