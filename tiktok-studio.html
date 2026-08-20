@@ -133,7 +133,7 @@
   <label>1. Link Logo website:</label>
   <input type="text" id="logoUrl" value="https://datnvps37587.github.io/testchoi/reClash-400x40.png">
 
-  <label>2. Ảnh ngang bài viết:</label>
+  <label>2. Ảnh bài viết:</label>
   <input type="file" id="fileInput" accept="image/*">
   <input type="text" id="bgUrl" style="margin-top: 6px;" placeholder="https://example.com/image.jpg">
 
@@ -150,7 +150,7 @@
   <label>6. Đoạn trích nổi bật:</label>
   <textarea id="descText" rows="5" placeholder="Nội dung tóm tắt chi tiết..."></textarea>
 
-  <button class="btn" onclick="generateBanner()">Tạo Ảnh TikTok Tối Ưu (1080x1920)</button>
+  <button class="btn" onclick="generateBanner()">Tạo Ảnh TikTok Hoàn Thiện (1080x1920)</button>
 
   <div style="text-align: center;">
     <canvas id="preview-canvas" width="1080" height="1920"></canvas>
@@ -234,14 +234,14 @@
     const ctx = canvas.getContext('2d');
     const w = 1080, h = 1920;
 
-    // 1. Nền đơn sắc tối căn bản
+    // 1. Nền tối sâu
     ctx.fillStyle = '#080b11';
     ctx.fillRect(0, 0, w, h);
 
     if (img) {
-      // 2. LỚP 1: Nền Blur nghệ thuật phóng to 100% màn hình dọc
+      // 2. Lớp Blur nghệ thuật phóng to toàn màn hình
       ctx.save();
-      ctx.filter = 'blur(45px) brightness(0.4) saturate(1.2)';
+      ctx.filter = 'blur(48px) brightness(0.35) saturate(1.2)';
       const imgRatio = img.width / img.height;
       const canvasRatio = w / h;
       let bgW, bgH, bgX, bgY;
@@ -257,55 +257,54 @@
       ctx.drawImage(img, bgX, bgY, bgW, bgH);
       ctx.restore();
 
-      // 3. Phủ Gradient chuyển tiếp làm dịu mắt ở nửa dưới
-      const grad = ctx.createLinearGradient(0, 700, 0, h);
+      // 3. Gradient chuyển tiếp mượt mà
+      const grad = ctx.createLinearGradient(0, 750, 0, h);
       grad.addColorStop(0, 'rgba(8, 11, 17, 0.2)');
-      grad.addColorStop(0.35, 'rgba(8, 11, 17, 0.85)');
+      grad.addColorStop(0.35, 'rgba(8, 11, 17, 0.88)');
       grad.addColorStop(0.7, 'rgba(8, 11, 17, 0.98)');
       grad.addColorStop(1, '#080b11');
       ctx.fillStyle = grad;
-      ctx.fillRect(0, 700, w, h - 700);
+      ctx.fillRect(0, 750, w, h - 750);
 
-      // 4. LỚP 2: Khung ảnh ngang nguyên bản (Hero Image) sắc nét 100%
-      const cardMargin = 70;
-      const cardW = w - (cardMargin * 2); // 940px
+      // 4. Khung ảnh ngang nguyên bản (Hero Image)
+      const cardMargin = 65;
+      const cardW = w - (cardMargin * 2); // 950px
       const cardH = (img.height / img.width) * cardW;
       const cardX = cardMargin;
-      const cardY = 220; // Đặt ngay dưới cụm Logo & Badge
+      const cardY = 220;
 
-      // Đổ bóng 3D cho ảnh chính
+      // Đổ bóng 3D
       ctx.save();
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
-      ctx.shadowBlur = 35;
-      ctx.shadowOffsetY = 15;
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.65)';
+      ctx.shadowBlur = 40;
+      ctx.shadowOffsetY = 18;
 
-      // Bo góc ảnh chính 20px
       ctx.beginPath();
       ctx.roundRect(cardX, cardY, cardW, cardH, 20);
       ctx.fillStyle = '#0f172a';
       ctx.fill();
       ctx.restore();
 
-      // Vẽ ảnh chính vào khung đã bo góc
+      // Vẽ ảnh chính
       ctx.save();
       ctx.beginPath();
       ctx.roundRect(cardX, cardY, cardW, cardH, 20);
       ctx.clip();
       ctx.drawImage(img, cardX, cardY, cardW, cardH);
       
-      // Viền kính siêu mỏng quanh ảnh chính
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+      // Viền kính siêu mỏng
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.14)';
       ctx.lineWidth = 2;
       ctx.stroke();
       ctx.restore();
 
-      var contentStartY = cardY + cardH + 70; // Tự động dời chữ theo chiều cao ảnh
+      var contentStartY = cardY + cardH + 75;
     } else {
       var contentStartY = 450;
     }
 
     // 5. Logo website
-    let nextBadgeX = 70;
+    let nextBadgeX = 65;
     if (logo) {
       const srcW = logo.width;
       const srcH = logo.height;
@@ -314,30 +313,30 @@
       const cropY = 0;
       const cropH = srcH;
       
-      const targetH = 44;
+      const targetH = 46;
       const targetW = (cropW / cropH) * targetH;
 
       ctx.save();
       ctx.beginPath();
-      ctx.roundRect(70, 110, targetW + 20, targetH + 14, 10);
+      ctx.roundRect(65, 105, targetW + 20, targetH + 14, 10);
       ctx.fillStyle = '#ffffff';
       ctx.fill();
       ctx.clip();
-      ctx.drawImage(logo, cropX, cropY, cropW, cropH, 80, 117, targetW, targetH);
+      ctx.drawImage(logo, cropX, cropY, cropW, cropH, 75, 112, targetW, targetH);
       ctx.restore();
 
-      nextBadgeX = 70 + targetW + 32;
+      nextBadgeX = 65 + targetW + 32;
     }
 
-    // 6. Badge tối giản
+    // 6. Badge thể loại
     ctx.font = '600 20px -apple-system, BlinkMacSystemFont, sans-serif';
     const badgeStr = badge.toUpperCase();
     const badgeMetrics = ctx.measureText(badgeStr);
     const badgeBoxW = badgeMetrics.width + 36;
-    const badgeBoxH = 58;
+    const badgeBoxH = 60;
 
     ctx.beginPath();
-    ctx.roundRect(nextBadgeX, 110, badgeBoxW, badgeBoxH, 10);
+    ctx.roundRect(nextBadgeX, 105, badgeBoxW, badgeBoxH, 10);
     ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
     ctx.fill();
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
@@ -345,26 +344,41 @@
     ctx.stroke();
 
     ctx.fillStyle = '#e2e8f0';
-    ctx.fillText(badgeStr, nextBadgeX + 18, 146);
+    ctx.fillText(badgeStr, nextBadgeX + 18, 142);
 
-    // 7. Tiêu đề bài viết
+    // 7. Tiêu đề chính (Tăng font 54px, cực rõ nét)
     ctx.fillStyle = '#ffffff';
-    ctx.font = '700 48px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-    const nextY = wrapText(ctx, title, 70, contentStartY, 940, 62, 3);
+    ctx.font = '700 54px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+    const nextY = wrapText(ctx, title, 65, contentStartY, 950, 70, 3);
 
-    // 8. Đoạn trích nổi bật
+    // 8. Đoạn trích nổi bật (Tăng font 31px, giãn dòng 50px giúp đọc thoải mái)
+    let descEndY = nextY;
     if (desc) {
       ctx.fillStyle = '#cbd5e1';
-      ctx.font = '400 27px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      wrapText(ctx, desc, 70, nextY + 45, 940, 42, 8);
+      ctx.font = '400 31px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      descEndY = wrapText(ctx, desc, 65, nextY + 50, 950, 50, 7);
     }
 
-    // 9. Tác giả & Nguồn
+    // 9. CTA Box: Nút kích thích tương tác lấp đầy vùng trống đáy (Vừa vặn trên thanh caption TikTok)
+    const ctaY = Math.max(descEndY + 60, 1580);
+    ctx.beginPath();
+    ctx.roundRect(65, ctaY, 950, 70, 12);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '600 22px -apple-system, BlinkMacSystemFont, sans-serif';
+    ctx.fillText('💬 Bình luận cảm nghĩ của bạn bên dưới', 95, ctaY + 44);
+
+    // 10. Tác giả & Nguồn
     ctx.fillStyle = '#64748b';
     ctx.font = '400 22px -apple-system, BlinkMacSystemFont, sans-serif';
     let metaInfo = author;
     if (source) metaInfo += ` • ${source}`;
-    ctx.fillText(metaInfo, 70, 1800);
+    ctx.fillText(metaInfo, 65, 1780);
 
     canvas.style.display = 'block';
     document.getElementById('btnDownload').style.display = 'block';
@@ -399,7 +413,7 @@
   function downloadImage() {
     const canvas = document.getElementById('preview-canvas');
     const link = document.createElement('a');
-    link.download = 'reclash-tiktok-duallayer.png';
+    link.download = 'reclash-tiktok-final.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
   }
