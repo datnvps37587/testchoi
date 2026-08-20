@@ -6,7 +6,7 @@
   <title>reClash - Minimal TikTok Poster Studio</title>
   <style>
     :root {
-      --bg: #cbd5e1;
+      --bg: #0f1115;
       --card: #161920;
       --border: #262b35;
       --text: #f1f5f9;
@@ -112,7 +112,7 @@
   <label>1. Link Logo website:</label>
   <input type="text" id="logoUrl" value="https://datnvps37587.github.io/testchoi/reClash-400x40.png">
 
-  <label>2. Ảnh nền game:</label>
+  <label>2. Ảnh nền bài viết:</label>
   <input type="file" id="fileInput" accept="image/*">
   <input type="text" id="bgUrl" style="margin-top: 6px;" placeholder="https://example.com/image.jpg">
 
@@ -126,8 +126,8 @@
   <label>5. Tiêu đề bài viết:</label>
   <textarea id="titleText" rows="2" placeholder="Tiêu đề chính..."></textarea>
 
-  <label>6. Đoạn trích nổi bật:</label>
-  <textarea id="descText" rows="4" placeholder="Nội dung tóm tắt..."></textarea>
+  <label>6. Đoạn trích nổi bật (Đã hỗ trợ đoạn dài nhiều dòng):</label>
+  <textarea id="descText" rows="5" placeholder="Nội dung tóm tắt chi tiết..."></textarea>
 
   <button class="btn" onclick="generateBanner()">Tạo Ảnh TikTok (1080x1920)</button>
 
@@ -237,18 +237,18 @@
       ctx.drawImage(img, offsetX, offsetY, renderW, renderH);
     }
 
-    // 3. Phủ Gradient tối tinh chỉnh mượt mà
+    // 3. Phủ Gradient tối mịn từ y=900 để chứa trọn cả đoạn văn dài
     const grad = ctx.createLinearGradient(0, 0, 0, h);
     grad.addColorStop(0, 'rgba(11, 13, 19, 0.7)');
     grad.addColorStop(0.18, 'rgba(11, 13, 19, 0.15)');
-    grad.addColorStop(0.48, 'rgba(11, 13, 19, 0.3)');
-    grad.addColorStop(0.68, 'rgba(11, 13, 19, 0.88)');
-    grad.addColorStop(0.9, 'rgba(11, 13, 19, 0.98)');
+    grad.addColorStop(0.48, 'rgba(11, 13, 19, 0.35)');
+    grad.addColorStop(0.65, 'rgba(11, 13, 19, 0.88)');
+    grad.addColorStop(0.85, 'rgba(11, 13, 19, 0.98)');
     grad.addColorStop(1, '#0b0d13');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, w, h);
 
-    // 4. Logo website (Crop chuẩn reClash)
+    // 4. Logo website
     let nextBadgeX = 80;
     if (logo) {
       const srcW = logo.width;
@@ -291,16 +291,16 @@
     ctx.fillStyle = '#e2e8f0';
     ctx.fillText(badgeStr, nextBadgeX + 18, 147);
 
-    // 6. Tiêu đề bài viết: Đặt vị trí thoáng (y=1240)
+    // 6. Tiêu đề bài viết: Đặt tại y=1180
     ctx.fillStyle = '#ffffff';
-    ctx.font = '700 52px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-    const nextY = wrapText(ctx, title, 80, 1240, 920, 68, 3);
+    ctx.font = '700 50px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+    const nextY = wrapText(ctx, title, 80, 1180, 920, 64, 3);
 
-    // 7. Đoạn trích nổi bật: Tăng khoảng cách tách biệt (cách 65px) và giãn dòng 50px
+    // 7. Đoạn trích nổi bật: Cho phép hiển thị tối đa 8 dòng dài chi tiết
     if (desc) {
       ctx.fillStyle = '#cbd5e1';
-      ctx.font = '400 29px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      wrapText(ctx, desc, 80, nextY + 65, 920, 50, 4);
+      ctx.font = '400 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      wrapText(ctx, desc, 80, nextY + 50, 920, 44, 8);
     }
 
     // 8. Tác giả & Nguồn
@@ -308,13 +308,13 @@
     ctx.font = '400 22px -apple-system, BlinkMacSystemFont, sans-serif';
     let metaInfo = author;
     if (source) metaInfo += ` • ${source}`;
-    ctx.fillText(metaInfo, 80, 1780);
+    ctx.fillText(metaInfo, 80, 1800);
 
     canvas.style.display = 'block';
     document.getElementById('btnDownload').style.display = 'block';
   }
 
-  function wrapText(ctx, text, x, y, maxWidth, lineHeight, maxLines = 3) {
+  function wrapText(ctx, text, x, y, maxWidth, lineHeight, maxLines = 8) {
     const words = text.split(' ');
     let line = '';
     let lineCount = 0;
@@ -343,7 +343,7 @@
   function downloadImage() {
     const canvas = document.getElementById('preview-canvas');
     const link = document.createElement('a');
-    link.download = 'reclash-tiktok-minimal.png';
+    link.download = 'reclash-tiktok-full.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
   }
