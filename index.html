@@ -159,7 +159,6 @@
     }
   });
 
-  // Tải ảnh qua Proxy để vượt chặn CORS
   function loadImageAsync(url) {
     return new Promise((resolve) => {
       if (!url) return resolve(null);
@@ -167,7 +166,6 @@
       img.crossOrigin = "anonymous";
       img.onload = () => resolve(img);
       img.onerror = () => {
-        // Nếu link gốc lỗi CORS, gọi qua proxy weserv
         const proxyImg = new Image();
         proxyImg.crossOrigin = "anonymous";
         proxyImg.onload = () => resolve(proxyImg);
@@ -225,36 +223,45 @@
     ctx.fillStyle = grad;
     ctx.fillRect(0, 260, w, h - 260);
 
-    // 4. Logo website
+    // 4. Cắt trọn phần chữ reClash (Crop 45% ở giữa, không viền, không nền thừa)
     let nextBadgeX = 40;
     if (logo) {
-      const logoH = 38;
-      const logoW = (logo.width / logo.height) * logoH;
+      const srcW = logo.width;
+      const srcH = logo.height;
       
-      ctx.fillStyle = '#e6c687';
-      ctx.fillRect(40, 40, logoW + 24, logoH + 12);
+      const cropX = srcW * 0.28;
+      const cropW = srcW * 0.44;
+      const cropY = 0;
+      const cropH = srcH;
       
-      ctx.drawImage(logo, 52, 46, logoW, logoH);
-      nextBadgeX = 40 + logoW + 36;
+      const targetH = 36;
+      const targetW = (cropW / cropH) * targetH;
+
+      ctx.drawImage(logo, cropX, cropY, cropW, cropH, 40, 40, targetW, targetH);
+      nextBadgeX = 40 + targetW + 20;
     }
 
-    // 5. Badge Nổi bật
-    ctx.font = 'bold 18px sans-serif';
+    // 5. Badge Nổi bật (Bo góc nhẹ 8px)
+    ctx.font = 'bold 16px sans-serif';
     const badgeStr = '🔥 ' + badge.toUpperCase();
     const badgeMetrics = ctx.measureText(badgeStr);
-    const badgeBoxW = Math.max(badgeMetrics.width + 30, 160);
+    const badgeBoxW = Math.max(badgeMetrics.width + 28, 140);
+    const badgeBoxH = 38;
 
-    ctx.strokeStyle = '#e6c687';
-    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.roundRect(nextBadgeX, 39, badgeBoxW, badgeBoxH, 8);
     ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
-    ctx.fillRect(nextBadgeX, 40, badgeBoxW, 50);
-    ctx.strokeRect(nextBadgeX, 40, badgeBoxW, 50);
+    ctx.fill();
+    ctx.strokeStyle = '#e6c687';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
     ctx.fillStyle = '#8f681d';
-    ctx.fillText(badgeStr, nextBadgeX + 15, 71);
+    ctx.fillText(badgeStr, nextBadgeX + 14, 63);
 
     // 6. Tiêu đề chính
     ctx.fillStyle = '#0f172a';
-    ctx.font = 'bold 36px sans-serif';
+    ctx.font = 'bold 35px sans-serif';
     const nextY = wrapText(ctx, title, 40, 390, 1120, 46, 2);
 
     // 7. Đoạn trích nổi bật
