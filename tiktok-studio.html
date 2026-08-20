@@ -257,14 +257,23 @@
       ctx.drawImage(img, bgX, bgY, bgW, bgH);
       ctx.restore();
 
-      // 3. Gradient chuyển tiếp làm mịn ở nửa dưới
-      const grad = ctx.createLinearGradient(0, 850, 0, h);
-      grad.addColorStop(0, 'rgba(8, 11, 17, 0.2)');
-      grad.addColorStop(0.4, 'rgba(8, 11, 17, 0.88)');
-      grad.addColorStop(0.75, 'rgba(8, 11, 17, 0.98)');
+      // 3. Hòa trộn màu Accent (Xanh) sang Màu Nền Tối (#080b11)
+      const startY = 700;
+      const grad = ctx.createLinearGradient(0, startY, 0, h);
+      
+      // Màu 1: Xanh nhạt trong suốt
+      grad.addColorStop(0, 'rgba(56, 189, 248, 0)');
+      grad.addColorStop(0.2, 'rgba(56, 189, 248, 0.15)');
+      
+      // Giao thoa giữa 2 màu ở khúc giữa
+      grad.addColorStop(0.5, 'rgba(15, 23, 42, 0.7)');
+      
+      // Màu 2: Nền tối hoàn toàn ở chân
+      grad.addColorStop(0.85, 'rgba(8, 11, 17, 0.98)');
       grad.addColorStop(1, '#080b11');
+      
       ctx.fillStyle = grad;
-      ctx.fillRect(0, 850, w, h - 850);
+      ctx.fillRect(0, startY, w, h - startY);
 
       // 4. Khung ảnh chính: Hạ thấp xuống y=300 để tạo bố cục cân xứng vàng
       const cardMargin = 65;
