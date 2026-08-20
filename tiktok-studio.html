@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>reClash - Modern TikTok Poster Studio</title>
+  <title>reClash - TikTok Studio</title>
   <style>
     :root {
-      /* Palette Hiện đại: Deep Slate & Glass */
       --bg: #080b11;
       --card: rgba(17, 24, 39, 0.75);
       --card-inner: #0f172a;
@@ -134,7 +133,7 @@
   <label>1. Link Logo website:</label>
   <input type="text" id="logoUrl" value="https://datnvps37587.github.io/testchoi/reClash-400x40.png">
 
-  <label>2. Ảnh nền bài viết:</label>
+  <label>2. Ảnh ngang bài viết:</label>
   <input type="file" id="fileInput" accept="image/*">
   <input type="text" id="bgUrl" style="margin-top: 6px;" placeholder="https://example.com/image.jpg">
 
@@ -151,7 +150,7 @@
   <label>6. Đoạn trích nổi bật:</label>
   <textarea id="descText" rows="5" placeholder="Nội dung tóm tắt chi tiết..."></textarea>
 
-  <button class="btn" onclick="generateBanner()">Tạo Ảnh TikTok (1080x1920)</button>
+  <button class="btn" onclick="generateBanner()">Tạo Ảnh TikTok Tối Ưu (1080x1920)</button>
 
   <div style="text-align: center;">
     <canvas id="preview-canvas" width="1080" height="1920"></canvas>
@@ -227,51 +226,86 @@
 
     const logoImg = await loadImageAsync(logoUrl);
 
-    renderMinimal(bgImg, logoImg, title, desc, badge, author, source);
+    renderDualLayer(bgImg, logoImg, title, desc, badge, author, source);
   }
 
-  function renderMinimal(img, logo, title, desc, badge, author, source) {
+  function renderDualLayer(img, logo, title, desc, badge, author, source) {
     const canvas = document.getElementById('preview-canvas');
     const ctx = canvas.getContext('2d');
     const w = 1080, h = 1920;
 
-    // 1. Nền tối sâu
+    // 1. Nền đơn sắc tối căn bản
     ctx.fillStyle = '#080b11';
     ctx.fillRect(0, 0, w, h);
 
-    // 2. Render ảnh nền (Cover)
     if (img) {
+      // 2. LỚP 1: Nền Blur nghệ thuật phóng to 100% màn hình dọc
+      ctx.save();
+      ctx.filter = 'blur(45px) brightness(0.4) saturate(1.2)';
       const imgRatio = img.width / img.height;
       const canvasRatio = w / h;
-      let renderW, renderH, offsetX, offsetY;
-
+      let bgW, bgH, bgX, bgY;
       if (imgRatio > canvasRatio) {
-        renderH = h;
-        renderW = h * imgRatio;
-        offsetX = (w - renderW) / 2;
-        offsetY = 0;
+        bgH = h + 100;
+        bgW = bgH * imgRatio;
       } else {
-        renderW = w;
-        renderH = w / imgRatio;
-        offsetX = 0;
-        offsetY = (h - renderH) / 2;
+        bgW = w + 100;
+        bgH = bgW / imgRatio;
       }
-      ctx.drawImage(img, offsetX, offsetY, renderW, renderH);
+      bgX = (w - bgW) / 2;
+      bgY = (h - bgH) / 2;
+      ctx.drawImage(img, bgX, bgY, bgW, bgH);
+      ctx.restore();
+
+      // 3. Phủ Gradient chuyển tiếp làm dịu mắt ở nửa dưới
+      const grad = ctx.createLinearGradient(0, 700, 0, h);
+      grad.addColorStop(0, 'rgba(8, 11, 17, 0.2)');
+      grad.addColorStop(0.35, 'rgba(8, 11, 17, 0.85)');
+      grad.addColorStop(0.7, 'rgba(8, 11, 17, 0.98)');
+      grad.addColorStop(1, '#080b11');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 700, w, h - 700);
+
+      // 4. LỚP 2: Khung ảnh ngang nguyên bản (Hero Image) sắc nét 100%
+      const cardMargin = 70;
+      const cardW = w - (cardMargin * 2); // 940px
+      const cardH = (img.height / img.width) * cardW;
+      const cardX = cardMargin;
+      const cardY = 220; // Đặt ngay dưới cụm Logo & Badge
+
+      // Đổ bóng 3D cho ảnh chính
+      ctx.save();
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+      ctx.shadowBlur = 35;
+      ctx.shadowOffsetY = 15;
+
+      // Bo góc ảnh chính 20px
+      ctx.beginPath();
+      ctx.roundRect(cardX, cardY, cardW, cardH, 20);
+      ctx.fillStyle = '#0f172a';
+      ctx.fill();
+      ctx.restore();
+
+      // Vẽ ảnh chính vào khung đã bo góc
+      ctx.save();
+      ctx.beginPath();
+      ctx.roundRect(cardX, cardY, cardW, cardH, 20);
+      ctx.clip();
+      ctx.drawImage(img, cardX, cardY, cardW, cardH);
+      
+      // Viền kính siêu mỏng quanh ảnh chính
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.restore();
+
+      var contentStartY = cardY + cardH + 70; // Tự động dời chữ theo chiều cao ảnh
+    } else {
+      var contentStartY = 450;
     }
 
-    // 3. Phủ Gradient tối mịn
-    const grad = ctx.createLinearGradient(0, 0, 0, h);
-    grad.addColorStop(0, 'rgba(8, 11, 17, 0.75)');
-    grad.addColorStop(0.18, 'rgba(8, 11, 17, 0.15)');
-    grad.addColorStop(0.48, 'rgba(8, 11, 17, 0.35)');
-    grad.addColorStop(0.65, 'rgba(8, 11, 17, 0.88)');
-    grad.addColorStop(0.85, 'rgba(8, 11, 17, 0.98)');
-    grad.addColorStop(1, '#080b11');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, w, h);
-
-    // 4. Logo website (Crop chuẩn)
-    let nextBadgeX = 80;
+    // 5. Logo website
+    let nextBadgeX = 70;
     if (logo) {
       const srcW = logo.width;
       const srcH = logo.height;
@@ -280,27 +314,27 @@
       const cropY = 0;
       const cropH = srcH;
       
-      const targetH = 46;
+      const targetH = 44;
       const targetW = (cropW / cropH) * targetH;
 
       ctx.save();
       ctx.beginPath();
-      ctx.roundRect(80, 110, targetW + 20, targetH + 14, 10);
+      ctx.roundRect(70, 110, targetW + 20, targetH + 14, 10);
       ctx.fillStyle = '#ffffff';
       ctx.fill();
       ctx.clip();
-      ctx.drawImage(logo, cropX, cropY, cropW, cropH, 90, 117, targetW, targetH);
+      ctx.drawImage(logo, cropX, cropY, cropW, cropH, 80, 117, targetW, targetH);
       ctx.restore();
 
-      nextBadgeX = 80 + targetW + 36;
+      nextBadgeX = 70 + targetW + 32;
     }
 
-    // 5. Badge tối giản
+    // 6. Badge tối giản
     ctx.font = '600 20px -apple-system, BlinkMacSystemFont, sans-serif';
     const badgeStr = badge.toUpperCase();
     const badgeMetrics = ctx.measureText(badgeStr);
     const badgeBoxW = badgeMetrics.width + 36;
-    const badgeBoxH = 60;
+    const badgeBoxH = 58;
 
     ctx.beginPath();
     ctx.roundRect(nextBadgeX, 110, badgeBoxW, badgeBoxH, 10);
@@ -311,26 +345,26 @@
     ctx.stroke();
 
     ctx.fillStyle = '#e2e8f0';
-    ctx.fillText(badgeStr, nextBadgeX + 18, 147);
+    ctx.fillText(badgeStr, nextBadgeX + 18, 146);
 
-    // 6. Tiêu đề bài viết
+    // 7. Tiêu đề bài viết
     ctx.fillStyle = '#ffffff';
-    ctx.font = '700 50px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-    const nextY = wrapText(ctx, title, 80, 1180, 920, 64, 3);
+    ctx.font = '700 48px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+    const nextY = wrapText(ctx, title, 70, contentStartY, 940, 62, 3);
 
-    // 7. Đoạn trích nổi bật
+    // 8. Đoạn trích nổi bật
     if (desc) {
       ctx.fillStyle = '#cbd5e1';
-      ctx.font = '400 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      wrapText(ctx, desc, 80, nextY + 50, 920, 44, 8);
+      ctx.font = '400 27px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      wrapText(ctx, desc, 70, nextY + 45, 940, 42, 8);
     }
 
-    // 8. Tác giả & Nguồn
+    // 9. Tác giả & Nguồn
     ctx.fillStyle = '#64748b';
     ctx.font = '400 22px -apple-system, BlinkMacSystemFont, sans-serif';
     let metaInfo = author;
     if (source) metaInfo += ` • ${source}`;
-    ctx.fillText(metaInfo, 80, 1800);
+    ctx.fillText(metaInfo, 70, 1800);
 
     canvas.style.display = 'block';
     document.getElementById('btnDownload').style.display = 'block';
@@ -365,7 +399,7 @@
   function downloadImage() {
     const canvas = document.getElementById('preview-canvas');
     const link = document.createElement('a');
-    link.download = 'reclash-tiktok-modern.png';
+    link.download = 'reclash-tiktok-duallayer.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
   }
