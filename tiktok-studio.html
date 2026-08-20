@@ -150,7 +150,7 @@
   <label>6. Đoạn trích nổi bật:</label>
   <textarea id="descText" rows="5" placeholder="Nội dung tóm tắt chi tiết..."></textarea>
 
-  <button class="btn" onclick="generateBanner()">Tạo Ảnh TikTok Hoàn Thiện (1080x1920)</button>
+  <button class="btn" onclick="generateBanner()">Tạo Ảnh TikTok Cân Đối (1080x1920)</button>
 
   <div style="text-align: center;">
     <canvas id="preview-canvas" width="1080" height="1920"></canvas>
@@ -239,9 +239,9 @@
     ctx.fillRect(0, 0, w, h);
 
     if (img) {
-      // 2. Lớp Blur nghệ thuật phóng to toàn màn hình
+      // 2. Lớp Blur nền toàn màn hình
       ctx.save();
-      ctx.filter = 'blur(48px) brightness(0.35) saturate(1.2)';
+      ctx.filter = 'blur(48px) brightness(0.32) saturate(1.2)';
       const imgRatio = img.width / img.height;
       const canvasRatio = w / h;
       let bgW, bgH, bgX, bgY;
@@ -257,21 +257,21 @@
       ctx.drawImage(img, bgX, bgY, bgW, bgH);
       ctx.restore();
 
-      // 3. Gradient chuyển tiếp mượt mà
-      const grad = ctx.createLinearGradient(0, 750, 0, h);
+      // 3. Gradient chuyển tiếp làm mịn ở nửa dưới
+      const grad = ctx.createLinearGradient(0, 850, 0, h);
       grad.addColorStop(0, 'rgba(8, 11, 17, 0.2)');
-      grad.addColorStop(0.35, 'rgba(8, 11, 17, 0.88)');
-      grad.addColorStop(0.7, 'rgba(8, 11, 17, 0.98)');
+      grad.addColorStop(0.4, 'rgba(8, 11, 17, 0.88)');
+      grad.addColorStop(0.75, 'rgba(8, 11, 17, 0.98)');
       grad.addColorStop(1, '#080b11');
       ctx.fillStyle = grad;
-      ctx.fillRect(0, 750, w, h - 750);
+      ctx.fillRect(0, 850, w, h - 850);
 
-      // 4. Khung ảnh ngang nguyên bản (Hero Image)
+      // 4. Khung ảnh chính: Hạ thấp xuống y=300 để tạo bố cục cân xứng vàng
       const cardMargin = 65;
       const cardW = w - (cardMargin * 2); // 950px
       const cardH = (img.height / img.width) * cardW;
       const cardX = cardMargin;
-      const cardY = 220;
+      const cardY = 300;
 
       // Đổ bóng 3D
       ctx.save();
@@ -300,10 +300,10 @@
 
       var contentStartY = cardY + cardH + 75;
     } else {
-      var contentStartY = 450;
+      var contentStartY = 500;
     }
 
-    // 5. Logo website
+    // 5. Logo website: Hạ nhẹ xuống y=160
     let nextBadgeX = 65;
     if (logo) {
       const srcW = logo.width;
@@ -318,11 +318,11 @@
 
       ctx.save();
       ctx.beginPath();
-      ctx.roundRect(65, 105, targetW + 20, targetH + 14, 10);
+      ctx.roundRect(65, 160, targetW + 20, targetH + 14, 10);
       ctx.fillStyle = '#ffffff';
       ctx.fill();
       ctx.clip();
-      ctx.drawImage(logo, cropX, cropY, cropW, cropH, 75, 112, targetW, targetH);
+      ctx.drawImage(logo, cropX, cropY, cropW, cropH, 75, 167, targetW, targetH);
       ctx.restore();
 
       nextBadgeX = 65 + targetW + 32;
@@ -336,7 +336,7 @@
     const badgeBoxH = 60;
 
     ctx.beginPath();
-    ctx.roundRect(nextBadgeX, 105, badgeBoxW, badgeBoxH, 10);
+    ctx.roundRect(nextBadgeX, 160, badgeBoxW, badgeBoxH, 10);
     ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
     ctx.fill();
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
@@ -344,34 +344,34 @@
     ctx.stroke();
 
     ctx.fillStyle = '#e2e8f0';
-    ctx.fillText(badgeStr, nextBadgeX + 18, 142);
+    ctx.fillText(badgeStr, nextBadgeX + 18, 197);
 
-    // 7. Tiêu đề chính (Tăng font 54px, cực rõ nét)
+    // 7. Tiêu đề chính
     ctx.fillStyle = '#ffffff';
     ctx.font = '700 54px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
     const nextY = wrapText(ctx, title, 65, contentStartY, 950, 70, 3);
 
-    // 8. Đoạn trích nổi bật (Tăng font 31px, giãn dòng 50px giúp đọc thoải mái)
+    // 8. Đoạn trích nổi bật
     let descEndY = nextY;
     if (desc) {
       ctx.fillStyle = '#cbd5e1';
       ctx.font = '400 31px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      descEndY = wrapText(ctx, desc, 65, nextY + 50, 950, 50, 7);
+      descEndY = wrapText(ctx, desc, 65, nextY + 48, 950, 48, 7);
     }
 
-    // 9. CTA Box: Nút kích thích tương tác lấp đầy vùng trống đáy (Vừa vặn trên thanh caption TikTok)
-    const ctaY = Math.max(descEndY + 60, 1580);
+    // 9. CTA Box: Tự động giữ khoảng cách cân đối và đổi thành lời gợi ý chia sẻ/bàn luận
+    const ctaY = Math.min(Math.max(descEndY + 60, 1500), 1640);
     ctx.beginPath();
-    ctx.roundRect(65, ctaY, 950, 70, 12);
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
+    ctx.roundRect(65, ctaY, 950, 72, 14);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
     ctx.fill();
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
     ctx.lineWidth = 1;
     ctx.stroke();
 
     ctx.fillStyle = '#94a3b8';
-    ctx.font = '600 22px -apple-system, BlinkMacSystemFont, sans-serif';
-    ctx.fillText('💬 Bình luận cảm nghĩ của bạn bên dưới', 95, ctaY + 44);
+    ctx.font = '500 24px -apple-system, BlinkMacSystemFont, sans-serif';
+    ctx.fillText('💬 Chia sẻ góc nhìn hoặc suy nghĩ của bạn', 100, ctaY + 45);
 
     // 10. Tác giả & Nguồn
     ctx.fillStyle = '#64748b';
@@ -413,7 +413,7 @@
   function downloadImage() {
     const canvas = document.getElementById('preview-canvas');
     const link = document.createElement('a');
-    link.download = 'reclash-tiktok-final.png';
+    link.download = 'reclash-tiktok-balanced.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
   }
