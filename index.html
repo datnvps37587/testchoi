@@ -89,16 +89,19 @@
 <div class="container">
   <h2>🎮 reClash Banner Studio</h2>
   
-  <label>1. Chọn ảnh từ điện thoại / máy tính:</label>
+  <label>1. Chọn ảnh từ thiết bị:</label>
   <input type="file" id="fileInput" accept="image/*">
 
-  <label>Hoặc dán Link ảnh trực tiếp (nếu không tải file):</label>
+  <label>Hoặc dán Link ảnh trực tiếp:</label>
   <input type="text" id="bgUrl" placeholder="https://example.com/image.jpg">
 
   <label>2. Nhãn nổi bật (Badge):</label>
   <input type="text" id="badgeText" value="TIN NÓNG GAMING">
 
-  <label>3. Tiêu đề bài viết:</label>
+  <label>3. Nguồn trang web / Tác giả gốc:</label>
+  <input type="text" id="sourceText" placeholder="VD: Nguồn: Gamespot / IGN / Sforum...">
+
+  <label>4. Tiêu đề bài viết:</label>
   <textarea id="titleText" rows="3" placeholder="Nhập tiêu đề bài viết vào đây..."></textarea>
 
   <button class="btn" onclick="generateBanner()">🎨 Tạo Ảnh Banner 1200x630</button>
@@ -110,7 +113,6 @@
 <script>
   let loadedImage = null;
 
-  // Lắng nghe sự kiện khi chọn file ảnh từ máy
   document.getElementById('fileInput').addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (file) {
@@ -129,6 +131,7 @@
   function generateBanner() {
     const title = document.getElementById('titleText').value.trim();
     const badge = document.getElementById('badgeText').value.trim() || 'TIN MỚI';
+    const source = document.getElementById('sourceText').value.trim();
     const bgUrl = document.getElementById('bgUrl').value.trim();
 
     if (!title) {
@@ -137,22 +140,22 @@
     }
 
     if (loadedImage) {
-      render(loadedImage, title, badge);
+      render(loadedImage, title, badge, source);
     } else if (bgUrl) {
       const img = new Image();
       img.crossOrigin = "anonymous";
-      img.onload = () => render(img, title, badge);
+      img.onload = () => render(img, title, badge, source);
       img.onerror = () => {
-        alert('Không tải được link ảnh online (do chặn CORS), hệ thống sẽ dùng nền gaming mặc định.');
-        render(null, title, badge);
+        alert('Không tải được link ảnh online (do chặn CORS), hệ thống sẽ dùng nền mặc định.');
+        render(null, title, badge, source);
       };
       img.src = bgUrl;
     } else {
-      render(null, title, badge);
+      render(null, title, badge, source);
     }
   }
 
-  function render(img, title, badge) {
+  function render(img, title, badge, source) {
     const canvas = document.getElementById('preview-canvas');
     const ctx = canvas.getContext('2d');
     const w = 1200, h = 630;
@@ -165,7 +168,7 @@
       ctx.fillRect(0, 0, w, h);
     }
 
-    // 2. Phủ gradient tối gaming (để nổi bật chữ)
+    // 2. Phủ gradient tối
     const grad = ctx.createLinearGradient(0, 0, 0, h);
     grad.addColorStop(0, 'rgba(11, 15, 25, 0.4)');
     grad.addColorStop(0.5, 'rgba(11, 15, 25, 0.7)');
@@ -195,8 +198,16 @@
 
     // 6. Tiêu đề bài viết
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 50px sans-serif';
-    wrapText(ctx, title, 60, 360, 1080, 65);
+    ctx.font = 'bold 48px sans-serif';
+    wrapText(ctx, title, 60, 340, 1080, 62);
+
+    // 7. Hiển thị Nguồn trang web ở góc dưới bên trái (nếu có nhập)
+    if (source) {
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = 'italic 20px sans-serif';
+      const sourceDisplay = source.toLowerCase().startsWith('nguồn:') ? source : `Nguồn: ${source}`;
+      ctx.fillText(sourceDisplay, 60, 575);
+    }
 
     canvas.style.display = 'block';
     document.getElementById('btnDownload').style.display = 'block';
