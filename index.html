@@ -3,120 +3,188 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>reClash - Tạo Ảnh Bìa Bài Viết</title>
+  <title>reClash - Banner Studio (1200x630)</title>
   <style>
     :root {
-      --bg: #ffffff;
-      --card: #faf9f6;
-      --accent: #e6c687;
-      --sub-accent: rgba(230, 198, 135, 0.03);
-      --text: #1a1a1a;
-      --text-dim: #666666;
+      /* Palette Modern Deep Slate & Glassmorphism */
+      --bg: #080b11;
+      --card: rgba(17, 24, 39, 0.75);
+      --card-inner: #0f172a;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(255, 255, 255, 0.25);
+      --text: #f8fafc;
+      --text-dim: #94a3b8;
+      --btn-bg: #ffffff;
+      --btn-text: #090d16;
+      --accent: #38bdf8;
     }
+
     body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      background: var(--bg);
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+      background: radial-gradient(circle at 50% 0%, #151d30 0%, var(--bg) 70%);
       color: var(--text);
       margin: 0;
-      padding: 16px;
+      padding: 24px 16px;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
+      box-sizing: border-box;
     }
+
     .container {
       width: 100%;
       max-width: 650px;
       background: var(--card);
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-      border: 1px solid var(--accent);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 28px;
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border);
     }
+
     h2 {
       margin-top: 0;
-      color: #b58d46;
-      font-size: 20px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      color: #ffffff;
+      font-size: 21px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      text-align: center;
+      margin-bottom: 20px;
     }
+
     label {
       display: block;
       font-size: 13px;
       color: var(--text-dim);
-      margin: 12px 0 6px;
-      font-weight: bold;
+      margin: 14px 0 6px;
+      font-weight: 500;
     }
+
     input, textarea {
       width: 100%;
-      background: #ffffff;
-      border: 1px solid #dcd6cd;
-      color: #1a1a1a;
-      padding: 10px;
-      border-radius: 6px;
+      background: var(--card-inner);
+      border: 1px solid var(--border);
+      color: #ffffff;
+      padding: 12px 14px;
+      border-radius: 10px;
       box-sizing: border-box;
       font-size: 14px;
+      transition: all 0.2s ease;
     }
+
     input:focus, textarea:focus {
       outline: none;
-      border-color: var(--accent);
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.05);
     }
+
     .auto-box {
-      background: rgba(230, 198, 135, 0.15);
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px dashed var(--accent);
-      margin-bottom: 15px;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px dashed rgba(255, 255, 255, 0.15);
+      margin-bottom: 18px;
     }
+
+    .bookmark-box {
+      background: rgba(56, 189, 248, 0.05);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      padding: 12px 14px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .btn-copy-bm {
+      background: #38bdf8;
+      color: #031726;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-copy-bm:active {
+      transform: scale(0.97);
+    }
+
     .btn {
       width: 100%;
-      background: var(--accent);
-      color: #2b2008;
+      background: var(--btn-bg);
+      color: var(--btn-text);
       border: none;
-      padding: 12px;
-      border-radius: 6px;
-      font-weight: bold;
-      font-size: 15px;
+      padding: 14px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 14px;
       cursor: pointer;
-      margin-top: 15px;
-      transition: 0.2s;
+      margin-top: 20px;
+      letter-spacing: 0.2px;
+      transition: transform 0.15s ease, opacity 0.2s ease;
     }
+
+    .btn:hover {
+      opacity: 0.94;
+    }
+
     .btn:active {
-      transform: scale(0.98);
+      transform: scale(0.985);
     }
+
     #preview-canvas {
       width: 100%;
       height: auto;
-      border-radius: 8px;
-      margin-top: 15px;
-      border: 1px solid #e0d8cc;
+      border-radius: 14px;
+      margin: 22px auto 0;
+      border: 1px solid var(--border);
       display: none;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
     }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <h2>🎮 reClash Banner Studio</h2>
+  <h2>reClash Banner Studio (1200x630)</h2>
+
+  <!-- Bookmarklet Copy Box -->
+  <div class="bookmark-box">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <span style="font-size: 13px; font-weight: 600; color: #bae6fd;">📱 Dấu trang cào bài:</span>
+    </div>
+    <button class="btn-copy-bm" id="btnCopyBm" onclick="copyBookmarkletCode()">📋 Sao Chép Mã Bookmarklet</button>
+  </div>
 
   <div class="auto-box">
-    <label style="margin-top:0; color:#8f681d;">⚡ Tự động điền dữ liệu (Dán từ Bookmarklet):</label>
-    <input type="text" id="autoPasteInput" placeholder="Dán mã đã copy từ Bookmarklet vào đây để tự điền..." oninput="handleAutoFill(this.value)">
+    <label style="margin-top:0; color:#cbd5e1;">⚡ Dán dữ liệu tự động từ Bookmarklet:</label>
+    <input type="text" id="autoPasteInput" placeholder="Dán mã JSON bài viết vào đây..." oninput="handleAutoFill(this.value)">
   </div>
-  <a class="btn" href="https://datnvps37587.github.io/testchoi/tiktok-studio.html">🎨 Tạo Ảnh TikTok</a>
+  
   <label>1. Link Logo website:</label>
   <input type="text" id="logoUrl" value="https://datnvps37587.github.io/testchoi/reClash-400x40.png">
 
-  <label>2. Ảnh bìa (Chọn từ máy hoặc Link ảnh):</label>
+  <label>2. Ảnh bài viết (Chọn từ máy hoặc Link ảnh):</label>
   <input type="file" id="fileInput" accept="image/*">
   <input type="text" id="bgUrl" style="margin-top: 6px;" placeholder="https://example.com/image.jpg">
 
-  <label>3. Nhãn nổi bật (Badge):</label>
-  <input type="text" id="badgeText" value="TIN NÓNG GAMING">
+  <label>3. Nhãn phân loại (Badge):</label>
+  <input type="text" id="badgeText" value="TIN NÓNG">
 
   <label>4. Tác giả bài viết:</label>
   <input type="text" id="authorText" value="Ẩn danh" placeholder="Tác giả...">
 
   <label>5. Nguồn trang web:</label>
-  <input type="text" id="sourceText" placeholder="Nguồn: IGN / Gamespot...">
+  <input type="text" id="sourceText" placeholder="Nguồn: VnExpress / Tuổi Trẻ...">
 
   <label>6. Tiêu đề bài viết:</label>
   <textarea id="titleText" rows="2" placeholder="Tiêu đề chính hiển thị trên banner..."></textarea>
@@ -127,10 +195,28 @@
   <button class="btn" onclick="generateBanner()">🎨 Tạo Ảnh Banner 1200x630</button>
 
   <canvas id="preview-canvas" width="1200" height="630"></canvas>
-  <button class="btn" id="btnDownload" style="display:none; background:#b58d46; color:#ffffff;" onclick="downloadImage()">📥 Tải Ảnh Về Máy</button>
+  <button class="btn" id="btnDownload" style="display:none; background:#e2e8f0; color:#0f172a;" onclick="downloadImage()">📥 Tải Ảnh Về Máy</button>
 </div>
 
 <script>
+  const bookmarkletCode = `javascript:(function(){try{var t=document.querySelector('h1.detail-title,h1.title-detail,h1.title-news,h1.article-title,h1.detail__title,meta[property="og:title"]')?.innerText||document.querySelector('meta[property="og:title"]')?.content||document.title||"";t=t.replace(/\\s*-\\s*Tuổi Trẻ.*$/i,'').replace(/\\s*-\\s*VnExpress.*$/i,'').replace(/\\s*-\\s*Tin Game.*$/i,'').replace(/\\s*-\\s*[^-]+$/,'').trim();var descParts=[];var sapoEl=document.querySelector('.detail-sapo,.detail__sapo,p.description,.sapo,.lead,.summary,.entry-summary');if(sapoEl&&sapoEl.innerText.trim()){descParts.push(sapoEl.innerText.trim());}var contentContainer=document.querySelector('#main-detail-body,.detail-content,.detail__content,.fck_detail,.entry-content,article');if(contentContainer){var bodyPs=contentContainer.querySelectorAll('p:not(.Image):not(.caption):not([style*="text-align:right"]):not([style*="text-align: right"])');for(var i=0;i<bodyPs.length&&descParts.length<2;i++){var pText=bodyPs[i].innerText.trim();if(pText&&pText.length>35&&!descParts.includes(pText)&&!pText.startsWith('Ảnh:')&&!pText.startsWith('Theo ')&&!pText.startsWith('TTO')&&!pText.startsWith('>>')&&!pText.startsWith('*')){descParts.push(pText);}}}var desc=descParts.join(' ');if(!desc){desc=document.querySelector('meta[property="og:description"]')?.content||document.querySelector('meta[name="description"]')?.content||"";}var img="";if(contentContainer){var firstBodyImg=contentContainer.querySelector('[type="Photo"] img,.VCSortableInPage img,figure img,img[itemprop="contentUrl"],img[data-src]');if(firstBodyImg){img=firstBodyImg.getAttribute('data-src')||firstBodyImg.getAttribute('data-original')||firstBodyImg.getAttribute('src')||"";}}if(!img||img.startsWith('data:image')){img=document.querySelector('meta[property="og:image"]')?.content||"";}var badge="";var cateEl=document.querySelector('.detail-cate a,.detail__cate a,.breadcrumb li a:last-child,.parent-cate,meta[property="article:section"],[class*="the-loai"]');if(cateEl){badge=cateEl.innerText||cateEl.content||"";}if(!badge){var metaCat=document.querySelector('meta[name="tt_category_id"],meta[name="keywords"]')?.content?.split(',')[0];if(metaCat&&isNaN(metaCat))badge=metaCat;}badge=(badge||"TIN MỚI").trim();if(badge.length>25)badge="TIN MỚI";var author="";var authorEl=document.querySelector('.author-info,.author,.detail-author,p[style*="text-align:right"] strong,p[style*="text-align: right"] strong,p.author strong,[rel="author"],.author-name,.byline,meta[name="author"]');if(authorEl){author=authorEl.innerText||authorEl.content||"";}author=author.replace(/^Theo\\s+/i,'').replace(/^Ảnh:.*$/i,'').trim();if(!author||author.length>30){author="Tổng hợp";}var src=window.location.hostname.replace('www.','');var data=JSON.stringify({title:t.trim(),desc:desc.trim(),image:img.trim(),badge:badge.trim(),author:author.trim(),source:src});var tempInput=document.createElement("textarea");tempInput.value=data;tempInput.style.position="fixed";tempInput.style.left="-9999px";tempInput.style.top="0";document.body.appendChild(tempInput);tempInput.focus();tempInput.select();var copied=false;try{copied=document.execCommand("copy");}catch(e){}document.body.removeChild(tempInput);if(copied){alert("✅ Đã cào và copy thành công!");}else if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(data).then(function(){alert("✅ Đã cào và copy thành công!");}).catch(function(){prompt("Copy dữ liệu JSON bên dưới:",data);});}else{prompt("Copy dữ liệu JSON bên dưới:",data);}}catch(err){alert("❌ Lỗi cào dữ liệu: "+err.message);}})();`;
+
+  function copyBookmarkletCode() {
+    navigator.clipboard.writeText(bookmarkletCode).then(() => {
+      const btn = document.getElementById('btnCopyBm');
+      btn.innerText = "✅ Đã Sao Chép Mã!";
+      btn.style.background = "#22c55e";
+      btn.style.color = "#ffffff";
+      setTimeout(() => {
+        btn.innerText = "📋 Sao Chép Mã Bookmarklet";
+        btn.style.background = "#38bdf8";
+        btn.style.color = "#031726";
+      }, 2500);
+    }).catch(() => {
+      prompt("Copy thủ công đoạn mã này:", bookmarkletCode);
+    });
+  }
+
   let loadedImage = null;
 
   function handleAutoFill(val) {
@@ -141,7 +227,7 @@
       if (data.image) document.getElementById('bgUrl').value = data.image;
       if (data.badge) document.getElementById('badgeText').value = data.badge;
       if (data.author) document.getElementById('authorText').value = data.author;
-      if (data.source) document.getElementById('sourceText').value = "Nguồn: " + data.source;
+      if (data.source) document.getElementById('sourceText').value = data.source;
       document.getElementById('autoPasteInput').value = "✅ Đã tự động điền đầy đủ!";
     } catch(e) {}
   }
@@ -179,7 +265,7 @@
   async function generateBanner() {
     const title = document.getElementById('titleText').value.trim();
     const desc = document.getElementById('descText').value.trim();
-    const badge = document.getElementById('badgeText').value.trim() || 'TIN NÓNG';
+    const badge = document.getElementById('badgeText').value.trim() || 'TIN MỚI';
     const author = document.getElementById('authorText').value.trim() || 'Ẩn danh';
     const source = document.getElementById('sourceText').value.trim();
     const bgUrl = document.getElementById('bgUrl').value.trim();
@@ -205,93 +291,106 @@
     const ctx = canvas.getContext('2d');
     const w = 1200, h = 630;
 
-    // 1. Nền trắng và vẽ ảnh bìa bài viết
-    ctx.fillStyle = '#ffffff';
+    // 1. Nền tối sâu đơn sắc căn bản
+    ctx.fillStyle = '#080b11';
     ctx.fillRect(0, 0, w, h);
 
+    // 2. Vẽ ảnh bìa bài viết
     if (img) {
-      ctx.drawImage(img, 0, 0, w, h);
+      const imgRatio = img.width / img.height;
+      const canvasRatio = w / h;
+      let renderW, renderH, offsetX, offsetY;
+
+      if (imgRatio > canvasRatio) {
+        renderH = h;
+        renderW = h * imgRatio;
+        offsetX = (w - renderW) / 2;
+        offsetY = 0;
+      } else {
+        renderW = w;
+        renderH = w / imgRatio;
+        offsetX = 0;
+        offsetY = (h - renderH) / 2;
+      }
+      ctx.drawImage(img, offsetX, offsetY, renderW, renderH);
     }
 
-    // 2. Gradient chân ảnh: Bắt đầu từ y=410, tập trung trắng mịn hoàn toàn ở vùng chữ
-    const grad = ctx.createLinearGradient(0, 410, 0, h);
-    grad.addColorStop(0, 'rgba(255, 255, 255, 0)');
-    grad.addColorStop(0.28, 'rgba(255, 255, 255, 0.88)');
-    grad.addColorStop(0.6, 'rgba(255, 255, 255, 0.98)');
-    grad.addColorStop(1, 'rgba(255, 255, 255, 1)');
+    // 3. Phủ Gradient tối mịn từ y=260 đến đáy
+    const grad = ctx.createLinearGradient(0, 260, 0, h);
+    grad.addColorStop(0, 'rgba(8, 11, 17, 0)');
+    grad.addColorStop(0.35, 'rgba(8, 11, 17, 0.75)');
+    grad.addColorStop(0.7, 'rgba(8, 11, 17, 0.95)');
+    grad.addColorStop(1, '#080b11');
     ctx.fillStyle = grad;
-    ctx.fillRect(0, 410, w, h - 410);
+    ctx.fillRect(0, 260, w, h - 260);
 
-    // 3. Logo website: Bo cong góc 6px
+    // 4. Logo website: Crop chuẩn reClash với nền kính mờ trắng
     let nextBadgeX = 40;
     if (logo) {
       const srcW = logo.width;
       const srcH = logo.height;
-      
       const cropX = srcW * 0.28;
       const cropW = srcW * 0.44;
       const cropY = 0;
       const cropH = srcH;
       
-      const targetH = 34;
+      const targetH = 36;
       const targetW = (cropW / cropH) * targetH;
 
       ctx.save();
       ctx.beginPath();
-      ctx.roundRect(40, 38, targetW + 12, targetH + 8, 6);
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
+      ctx.roundRect(40, 38, targetW + 16, targetH + 10, 8);
+      ctx.fillStyle = '#ffffff';
       ctx.fill();
       ctx.clip();
-      ctx.drawImage(logo, cropX, cropY, cropW, cropH, 46, 42, targetW, targetH);
+      ctx.drawImage(logo, cropX, cropY, cropW, cropH, 48, 43, targetW, targetH);
       ctx.restore();
 
-      nextBadgeX = 40 + targetW + 22;
+      nextBadgeX = 40 + targetW + 28;
     }
 
-    // 4. Badge Nổi bật (Bo góc 6px)
-    ctx.font = 'bold 15px sans-serif';
-    const badgeStr = '🔥 ' + badge.toUpperCase();
+    // 5. Badge tối giản (Dark Mode Glass)
+    ctx.font = '600 15px -apple-system, BlinkMacSystemFont, sans-serif';
+    const badgeStr = badge.toUpperCase();
     const badgeMetrics = ctx.measureText(badgeStr);
-    const badgeBoxW = Math.max(badgeMetrics.width + 24, 130);
-    const badgeBoxH = 34;
+    const badgeBoxW = Math.max(badgeMetrics.width + 28, 110);
+    const badgeBoxH = 46;
 
     ctx.beginPath();
-    ctx.roundRect(nextBadgeX, 38, badgeBoxW, badgeBoxH, 6);
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
+    ctx.roundRect(nextBadgeX, 38, badgeBoxW, badgeBoxH, 8);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
     ctx.fill();
-    ctx.strokeStyle = '#e6c687';
-    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+    ctx.lineWidth = 1;
     ctx.stroke();
 
-    ctx.fillStyle = '#8f681d';
-    ctx.fillText(badgeStr, nextBadgeX + 12, 60);
+    ctx.fillStyle = '#e2e8f0';
+    ctx.fillText(badgeStr, nextBadgeX + 14, 67);
 
-    // 5. Tiêu đề chính: Hạ thấp xuống y=475, font 31px gọn gàng
-    ctx.fillStyle = '#0f172a';
-    ctx.font = 'bold 31px sans-serif';
-    const nextY = wrapText(ctx, title, 40, 475, 1120, 38, 2);
+    // 6. Tiêu đề chính (Font chữ trắng 33px sắc nét)
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '700 33px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+    const nextY = wrapText(ctx, title, 40, 460, 1120, 42, 2);
 
-    // 6. Đoạn trích nổi bật: Hạ thấp theo tiêu đề
+    // 7. Đoạn trích nổi bật (Tone màu slate sáng dễ đọc)
     if (desc) {
-      ctx.fillStyle = '#334155';
-      ctx.font = '500 16px sans-serif';
-      wrapText(ctx, desc, 40, nextY + 22, 1120, 22, 2);
+      ctx.fillStyle = '#cbd5e1';
+      ctx.font = '400 17px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      wrapText(ctx, desc, 40, nextY + 26, 1120, 25, 2);
     }
 
-    // 7. Tác giả & Nguồn: Đẩy sát mép đáy dưới
+    // 8. Tác giả & Nguồn (Đáy ảnh)
     ctx.fillStyle = '#64748b';
-    ctx.font = 'italic 14px sans-serif';
-    let metaInfo = `Tác giả: ${author}`;
-    if (source) {
-      metaInfo += ` | ${source}`;
-    }
-    ctx.fillText(metaInfo, 40, 614);
+    ctx.font = '400 14px -apple-system, BlinkMacSystemFont, sans-serif';
+    let metaInfo = author;
+    if (source) metaInfo += ` • ${source}`;
+    ctx.fillText(metaInfo, 40, 608);
 
     canvas.style.display = 'block';
     document.getElementById('btnDownload').style.display = 'block';
   }
 
-  function wrapText(ctx, text, x, y, maxWidth, lineHeight, maxLines = 3) {
+  function wrapText(ctx, text, x, y, maxWidth, lineHeight, maxLines = 2) {
     const words = text.split(' ');
     let line = '';
     let lineCount = 0;
@@ -320,7 +419,7 @@
   function downloadImage() {
     const canvas = document.getElementById('preview-canvas');
     const link = document.createElement('a');
-    link.download = 'reclash-banner.png';
+    link.download = 'reclash-banner-dark-1200x630.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
   }
