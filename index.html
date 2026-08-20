@@ -109,13 +109,16 @@
   <label>2. Nhãn nổi bật (Badge):</label>
   <input type="text" id="badgeText" value="TIN NÓNG GAMING">
 
-  <label>3. Nguồn trang web:</label>
+  <label>3. Tác giả bài viết:</label>
+  <input type="text" id="authorText" value="Ẩn danh" placeholder="Tác giả...">
+
+  <label>4. Nguồn trang web:</label>
   <input type="text" id="sourceText" placeholder="Nguồn: IGN / Gamespot...">
 
-  <label>4. Tiêu đề bài viết:</label>
+  <label>5. Tiêu đề bài viết:</label>
   <textarea id="titleText" rows="2" placeholder="Tiêu đề chính hiển thị trên banner..."></textarea>
 
-  <label>5. Đoạn trích nổi bật:</label>
+  <label>6. Đoạn trích nổi bật:</label>
   <textarea id="descText" rows="2" placeholder="Đoạn mô tả ngắn hoặc Sapo của bài..."></textarea>
 
   <button class="btn" onclick="generateBanner()">🎨 Tạo Ảnh Banner 1200x630</button>
@@ -134,6 +137,7 @@
       if (data.desc) document.getElementById('descText').value = data.desc;
       if (data.image) document.getElementById('bgUrl').value = data.image;
       if (data.badge) document.getElementById('badgeText').value = data.badge;
+      if (data.author) document.getElementById('authorText').value = data.author;
       if (data.source) document.getElementById('sourceText').value = "Nguồn: " + data.source;
       document.getElementById('autoPasteInput').value = "✅ Đã tự động điền đầy đủ!";
     } catch(e) {}
@@ -156,6 +160,7 @@
     const title = document.getElementById('titleText').value.trim();
     const desc = document.getElementById('descText').value.trim();
     const badge = document.getElementById('badgeText').value.trim() || 'TIN MỚI';
+    const author = document.getElementById('authorText').value.trim() || 'Ẩn danh';
     const source = document.getElementById('sourceText').value.trim();
     const bgUrl = document.getElementById('bgUrl').value.trim();
 
@@ -165,21 +170,21 @@
     }
 
     if (loadedImage) {
-      render(loadedImage, title, desc, badge, source);
+      render(loadedImage, title, desc, badge, author, source);
     } else if (bgUrl) {
       const img = new Image();
       img.crossOrigin = "anonymous";
-      img.onload = () => render(img, title, desc, badge, source);
+      img.onload = () => render(img, title, desc, badge, author, source);
       img.onerror = () => {
-        render(null, title, desc, badge, source);
+        render(null, title, desc, badge, author, source);
       };
       img.src = bgUrl;
     } else {
-      render(null, title, desc, badge, source);
+      render(null, title, desc, badge, author, source);
     }
   }
 
-  function render(img, title, desc, badge, source) {
+  function render(img, title, desc, badge, author, source) {
     const canvas = document.getElementById('preview-canvas');
     const ctx = canvas.getContext('2d');
     const w = 1200, h = 630;
@@ -196,7 +201,7 @@
     ctx.fillStyle = 'rgba(230, 198, 135, 0.03)';
     ctx.fillRect(0, 0, w, h);
 
-    // 2. Phủ gradient trắng dồn xuống đáy để lộ nhiều ảnh hơn
+    // 2. Phủ gradient trắng dồn xuống đáy
     const grad = ctx.createLinearGradient(0, 0, 0, h);
     grad.addColorStop(0, 'rgba(255, 255, 255, 0.15)');
     grad.addColorStop(0.5, 'rgba(255, 255, 255, 0.65)');
@@ -231,24 +236,26 @@
     ctx.fillStyle = '#8f681d';
     ctx.fillText(badgeStr, 293, 81);
 
-    // 6. Tiêu đề chính: Dời xuống y=365, font 38px, cho phép hiển thị dài/nhiều từ hơn
+    // 6. Tiêu đề chính
     ctx.fillStyle = '#111827';
     ctx.font = 'bold 38px sans-serif';
     const nextY = wrapText(ctx, title, 50, 365, 1100, 48, 2);
 
-    // 7. Đoạn trích nổi bật: Dời xuống sát chân ảnh, font 19px thanh mảnh
+    // 7. Đoạn trích nổi bật
     if (desc) {
       ctx.fillStyle = '#374151';
       ctx.font = '500 19px sans-serif';
       wrapText(ctx, desc, 50, nextY + 24, 1100, 27, 2);
     }
 
-    // 8. Nguồn bài viết
+    // 8. Tác giả & Nguồn bài viết
+    ctx.fillStyle = '#6b7280';
+    ctx.font = 'italic 16px sans-serif';
+    let metaInfo = `Tác giả: ${author}`;
     if (source) {
-      ctx.fillStyle = '#6b7280';
-      ctx.font = 'italic 16px sans-serif';
-      ctx.fillText(source, 50, 582);
+      metaInfo += ` | ${source}`;
     }
+    ctx.fillText(metaInfo, 50, 582);
 
     canvas.style.display = 'block';
     document.getElementById('btnDownload').style.display = 'block';
