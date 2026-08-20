@@ -95,7 +95,28 @@
       margin-bottom: 16px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
+    }
+
+    .switch-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      color: #38bdf8;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      transition: all 0.2s ease;
+    }
+
+    .switch-link:hover {
+      background: rgba(56, 189, 248, 0.2);
+      color: #ffffff;
     }
 
     .btn-copy-bm {
@@ -157,11 +178,11 @@
 <div class="container">
   <h2>reClash Banner Studio (1200x630)</h2>
 
-  <!-- Bookmarklet Copy Box -->
+  <!-- Chuyển hướng sang TikTok Studio & Copy Bookmarklet -->
   <div class="bookmark-box">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <span style="font-size: 13px; font-weight: 600; color: #bae6fd;">📱 Dấu trang cào bài:</span>
-    </div>
+    <a href="https://datnvps37587.github.io/testchoi/tiktok-studio.html" class="switch-link">
+      🎵 Chuyển sang công cụ tạo ảnh TikTok (1080x1920) ↗
+    </a>
     <button class="btn-copy-bm" id="btnCopyBm" onclick="copyBookmarkletCode()">📋 Sao Chép Mã Bookmarklet</button>
   </div>
 
@@ -190,7 +211,7 @@
   <textarea id="titleText" rows="2" placeholder="Tiêu đề chính hiển thị trên banner..."></textarea>
 
   <label>7. Đoạn trích nổi bật:</label>
-  <textarea id="descText" rows="5" placeholder="Đoạn mô tả ngắn hoặc Sapo của bài..."></textarea>
+  <textarea id="descText" rows="3" placeholder="Đoạn mô tả ngắn hoặc Sapo của bài..."></textarea>
 
   <button class="btn" onclick="generateBanner()">🎨 Tạo Ảnh Banner 1200x630</button>
 
