@@ -6,9 +6,8 @@
   <title>reClash - Minimal TikTok Poster Studio</title>
   <style>
     :root {
-      --bg: #0f1115;
+      --bg: #cbd5e1;
       --card: #161920;
-      --accent: #d4af37;
       --border: #262b35;
       --text: #f1f5f9;
       --text-dim: #94a3b8;
@@ -118,7 +117,7 @@
   <input type="text" id="bgUrl" style="margin-top: 6px;" placeholder="https://example.com/image.jpg">
 
   <label>3. Nhãn phân loại:</label>
-  <input type="text" id="badgeText" value="TIN TỨC">
+  <input type="text" id="badgeText" value="TIN NÓNG GAMING">
 
   <label>4. Tác giả & Nguồn:</label>
   <input type="text" id="authorText" value="Ẩn danh" placeholder="Tác giả...">
@@ -214,11 +213,11 @@
     const ctx = canvas.getContext('2d');
     const w = 1080, h = 1920;
 
-    // 1. Nền đơn sắc tối giản sâu
+    // 1. Nền tối
     ctx.fillStyle = '#0b0d13';
     ctx.fillRect(0, 0, w, h);
 
-    // 2. Render ảnh nền (tỷ lệ cover)
+    // 2. Render ảnh nền (cover toàn khung)
     if (img) {
       const imgRatio = img.width / img.height;
       const canvasRatio = w / h;
@@ -238,7 +237,7 @@
       ctx.drawImage(img, offsetX, offsetY, renderW, renderH);
     }
 
-    // 3. Phủ gradient đơn sắc tinh tế (chuyển nhẹ từ đỉnh và chuyển mượt ở nửa dưới)
+    // 3. Phủ Gradient tối tinh chỉnh mượt mà
     const grad = ctx.createLinearGradient(0, 0, 0, h);
     grad.addColorStop(0, 'rgba(11, 13, 19, 0.7)');
     grad.addColorStop(0.18, 'rgba(11, 13, 19, 0.15)');
@@ -249,7 +248,7 @@
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, w, h);
 
-    // 4. Logo website (Crop chuẩn reClash, nền kính mờ)
+    // 4. Logo website (Crop chuẩn reClash)
     let nextBadgeX = 80;
     if (logo) {
       const srcW = logo.width;
@@ -274,7 +273,7 @@
       nextBadgeX = 80 + targetW + 36;
     }
 
-    // 5. Badge tối giản (nền xám trong suốt, chữ thanh gọn)
+    // 5. Badge tối giản
     ctx.font = '600 20px -apple-system, BlinkMacSystemFont, sans-serif';
     const badgeStr = badge.toUpperCase();
     const badgeMetrics = ctx.measureText(badgeStr);
@@ -292,19 +291,19 @@
     ctx.fillStyle = '#e2e8f0';
     ctx.fillText(badgeStr, nextBadgeX + 18, 147);
 
-    // 6. Tiêu đề bài viết (Typography lớn, khoảng cách thoáng, bố trí vùng an toàn)
+    // 6. Tiêu đề bài viết: Đặt vị trí thoáng (y=1240)
     ctx.fillStyle = '#ffffff';
     ctx.font = '700 52px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-    const nextY = wrapText(ctx, title, 80, 1260, 920, 68, 3);
+    const nextY = wrapText(ctx, title, 80, 1240, 920, 68, 3);
 
-    // 7. Đoạn trích tóm tắt (Màu chữ nhã nhặn, dễ đọc)
+    // 7. Đoạn trích nổi bật: Tăng khoảng cách tách biệt (cách 65px) và giãn dòng 50px
     if (desc) {
       ctx.fillStyle = '#cbd5e1';
-      ctx.font = '400 30px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      wrapText(ctx, desc, 80, nextY + 36, 920, 48, 4);
+      ctx.font = '400 29px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      wrapText(ctx, desc, 80, nextY + 65, 920, 50, 4);
     }
 
-    // 8. Tác giả & Nguồn (Đáy thẻ)
+    // 8. Tác giả & Nguồn
     ctx.fillStyle = '#64748b';
     ctx.font = '400 22px -apple-system, BlinkMacSystemFont, sans-serif';
     let metaInfo = author;
