@@ -257,19 +257,16 @@
       ctx.drawImage(img, bgX, bgY, bgW, bgH);
       ctx.restore();
 
-      // 3. Hòa trộn màu Accent (Xanh) sang Màu Nền Tối (#080b11)
+      // 3. Gradient chuyển tiếp siêu mịn
       const startY = 700;
       const grad = ctx.createLinearGradient(0, startY, 0, h);
       
-      // Màu 1: Xanh nhạt trong suốt
-      grad.addColorStop(0, 'rgba(56, 189, 248, 0)');
-      grad.addColorStop(0.2, 'rgba(56, 189, 248, 0.15)');
+      grad.addColorStop(0, 'rgba(8, 11, 17, 0)');
       
-      // Giao thoa giữa 2 màu ở khúc giữa
-      grad.addColorStop(0.5, 'rgba(15, 23, 42, 0.7)');
-      
-      // Màu 2: Nền tối hoàn toàn ở chân
-      grad.addColorStop(0.85, 'rgba(8, 11, 17, 0.98)');
+      // Chuyển mờ rất êm theo đường cong tự nhiên
+      grad.addColorStop(0.25, 'rgba(8, 11, 17, 0.35)');
+      grad.addColorStop(0.55, 'rgba(8, 11, 17, 0.85)');
+      grad.addColorStop(0.8, 'rgba(8, 11, 17, 0.98)');
       grad.addColorStop(1, '#080b11');
       
       ctx.fillStyle = grad;
