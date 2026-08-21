@@ -366,20 +366,20 @@
       var contentStartY = 500;
     }
 
-    // 5. Khung Logo: Tự động căn chỉnh chuẩn chữ reNews nằm ngang
+    // 5. Khung Logo reNews (Đã phóng to tối đa & căn chỉnh sắc nét)
     let nextBadgeX = 65;
     if (logo) {
       const srcW = logo.width;
       const srcH = logo.height;
-      const isSquare = Math.abs(srcW - srcH) < (srcW * 0.2); // Kiểm tra nếu ảnh vuông
+      const isSquare = Math.abs(srcW - srcH) < (srcW * 0.25);
 
-      // Tọa độ cắt lấy riêng dòng chữ reNews ở giữa
+      // Cắt sát viền vùng chữ reNews ở giữa (Loại bỏ khoảng trắng thừa)
       let cropX, cropY, cropW, cropH;
       if (isSquare) {
-        cropX = srcW * 0.08;
-        cropY = srcH * 0.38;
-        cropW = srcW * 0.84;
-        cropH = srcH * 0.24;
+        cropX = srcW * 0.10;
+        cropY = srcH * 0.41;
+        cropW = srcW * 0.80;
+        cropH = srcH * 0.18;
       } else {
         cropX = 0;
         cropY = 0;
@@ -387,21 +387,20 @@
         cropH = srcH;
       }
 
-      const boxH = 60;
-      const boxW = 190;
-      const padX = 14;
-      const padY = 10;
+      const boxH = 68;
+      const boxW = 230;
+      const padX = 8;
+      const padY = 6;
       const drawW = boxW - (padX * 2);
       const drawH = boxH - (padY * 2);
 
       ctx.save();
       ctx.beginPath();
-      ctx.roundRect(65, 160, boxW, boxH, 10);
+      ctx.roundRect(65, 160, boxW, boxH, 12);
       ctx.fillStyle = '#ffffff';
       ctx.fill();
       ctx.clip();
 
-      // Giữ đúng tỉ lệ chữ, không bị méo/biến dạng
       const scale = Math.min(drawW / cropW, drawH / cropH);
       const finalW = cropW * scale;
       const finalH = cropH * scale;
@@ -419,10 +418,10 @@
     const badgeStr = badge.toUpperCase();
     const badgeMetrics = ctx.measureText(badgeStr);
     const badgeBoxW = badgeMetrics.width + 36;
-    const badgeBoxH = 60;
+    const badgeBoxH = 68;
 
     ctx.beginPath();
-    ctx.roundRect(nextBadgeX, 160, badgeBoxW, badgeBoxH, 10);
+    ctx.roundRect(nextBadgeX, 160, badgeBoxW, badgeBoxH, 12);
     ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
     ctx.fill();
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
@@ -430,7 +429,7 @@
     ctx.stroke();
 
     ctx.fillStyle = '#e2e8f0';
-    ctx.fillText(badgeStr, nextBadgeX + 18, 197);
+    ctx.fillText(badgeStr, nextBadgeX + 18, 202);
 
     // 7. Tiêu đề chính
     ctx.save();
@@ -516,4 +515,3 @@
 
 </body>
 </html>
-
