@@ -476,7 +476,107 @@
   document.getElementById('dateText').value = getTodayString();
 
   // Mã Bookmarklet chuẩn để cào nội dung mọi trang báo và copy an toàn
-  const bookmarkletCode = `javascript:(function(){try{var t=document.querySelector('h1.detail-title,h1.title-detail,h1.title-news,h1.article-title,h1.detail__title,meta[property=\\\"og:title\\\"]')?.innerText||document.querySelector('meta[property=\\\"og:title\\\"]')?.content||document.title||\\\"\\\";t=t.replace(/\\\\\\\\s*-\\\\\\\\s*Tuổi Trẻ.*$/i,'').replace(/\\\\\\\\s*-\\\\\\\\s*VnExpress.*$/i,'').replace(/\\\\\\\\s*-\\\\\\\\s*Tin Game.*$/i,'').replace(/\\\\\\\\s*-\\\\\\\\s*[^-]+$/,'').trim();var descParts=[];var sapoEl=document.querySelector('.detail-sapo,.detail__sapo,p.description,.sapo,.lead,.summary,.entry-summary');if(sapoEl&&sapoEl.innerText.trim()){descParts.push(sapoEl.innerText.trim());}var contentContainer=document.querySelector('#main-detail-body,.detail-content,.detail__content,.fck_detail,.entry-content,article');if(contentContainer){var bodyPs=contentContainer.querySelectorAll('p:not(.Image):not(.caption):not([style*=\\\"text-align:right\\\"]):not([style*=\\\"text-align: right\\\"])');for(var i=0;i<bodyPs.length&&descParts.length<3;i++){var pText=bodyPs[i].innerText.trim();if(pText&&pText.length>35&&!descParts.includes(pText)&&!pText.startsWith('Ảnh:')&&!pText.startsWith('Theo ')&&!pText.startsWith('TTO')&&!pText.startsWith('>>')&&!pText.startsWith('*')){descParts.push(pText);}}}var desc=descParts.join(' ');if(!desc){desc=document.querySelector('meta[property=\\\"og:description\\\"]')?.content||document.querySelector('meta[name=\\\"description\\\"]')?.content||\\\"\\\";}var img=\\\"\\\";if(contentContainer){var firstBodyImg=contentContainer.querySelector('[type=\\\"Photo\\\"] img,.VCSortableInPage img,figure img,img[itemprop=\\\"contentUrl\\\"],img[data-src]');if(firstBodyImg){img=firstBodyImg.getAttribute('data-src')||firstBodyImg.getAttribute('data-original')||firstBodyImg.getAttribute('src')||\\\"\\\";}}if(!img||img.startsWith('data:image')){img=document.querySelector('meta[property=\\\"og:image\\\"]')?.content||\\\"\\\";}var badge=\\\"\\\";var cateEl=document.querySelector('.detail-cate a,.detail__cate a,.breadcrumb li a:last-child,.parent-cate,meta[property=\\\"article:section\\\"],[class*=\\\"the-loai\\\"]');if(cateEl){badge=cateEl.innerText||cateEl.content||\\\"\\\";}if(!badge){var metaCat=document.querySelector('meta[name=\\\"tt_category_id\\\"],meta[name=\\\"keywords\\\"]')?.content?.split(',')[0];if(metaCat&&isNaN(metaCat))badge=metaCat;}badge=(badge||\\\"TIN MỚI\\\").trim();if(badge.length>25)badge=\\\"TIN MỚI\\\";var author=\\\"\\\";var authorEl=document.querySelector('.author-info,.author,.detail-author,p[style*=\\\"text-align:right\\\"] strong,p[style*=\\\"text-align: right\\\"] strong,p.author strong,[rel=\\\"author\\\"],.author-name,.byline,meta[name=\\\"author\\\"]');if(authorEl){author=authorEl.innerText||authorEl.content||\\\"\\\";}author=author.replace(/^Theo\\\\\\\\s+/i,'').replace(/^Ảnh:.*$/i,'').trim();if(!author||author.length>30){author=\\\"Tổng hợp\\\";}var src=window.location.hostname.replace('www.','');var data=JSON.stringify({title:t.trim(),desc:desc.trim(),image:img.trim(),badge:badge.trim(),author:author.trim(),source:src});var tempInput=document.createElement(\\\"textarea\\\");tempInput.value=data;tempInput.style.position=\\\"fixed\\\";tempInput.style.left=\\\"-9999px\\\";tempInput.style.top=\\\"0\\\";document.body.appendChild(tempInput);tempInput.focus();tempInput.select();var copied=false;try{copied=document.execCommand(\\\"copy\\\");}catch(e){}document.body.removeChild(tempInput);if(copied){alert(\\\"✅ Đã cào và copy thành công!\\\");}else if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(data).then(function(){alert(\\\"✅ Đã cào và copy thành công!\\\");}).catch(function(){prompt(\\\"Copy dữ liệu JSON bên dưới:\\\",data);});}else{prompt(\\\"Copy dữ liệu JSON bên dưới:\\\",data);}}catch(err){alert(\\\"❌ Lỗi cào dữ liệu: \\\"+err.message);}})();`;
+  const bookmarkletCode = `javascript:(function(){
+  try {
+    /* 1. Tiêu đề */
+    var t = document.querySelector('h1.detail-title, h1.title-detail, h1.title-news, h1.article-title, h1.detail__title, meta[property="og:title"]')?.innerText || document.querySelector('meta[property="og:title"]')?.content || document.title || "";
+    t = t.replace(/\\s*-\\s*Tuổi Trẻ.*$/i, '').replace(/\\s*-\\s*VnExpress.*$/i, '').replace(/\\s*-\\s*Tin Game.*$/i, '').replace(/\\s*-\\s*[^-]+$/, '').trim();
+
+    /* 2. Sapo & Đoạn văn chính */
+    var descParts = [];
+    var sapoEl = document.querySelector('.detail-sapo, .detail__sapo, p.description, .sapo, .lead, .summary, .entry-summary');
+    if(sapoEl && sapoEl.innerText.trim()){
+      descParts.push(sapoEl.innerText.trim());
+    }
+
+    var contentContainer = document.querySelector('#main-detail-body, .detail-content, .detail__content, .fck_detail, .entry-content, article');
+    if(contentContainer){
+      var bodyPs = contentContainer.querySelectorAll('p:not(.Image):not(.caption):not([style*="text-align:right"]):not([style*="text-align: right"])');
+      for(var i = 0; i < bodyPs.length && descParts.length < 3; i++){
+        var pText = bodyPs[i].innerText.trim();
+        if(pText && pText.length > 35 && !descParts.includes(pText) && !pText.startsWith('Ảnh:') && !pText.startsWith('Theo ') && !pText.startsWith('TTO') && !pText.startsWith('>>') && !pText.startsWith('*')){
+          descParts.push(pText);
+        }
+      }
+    }
+    var desc = descParts.join(' ');
+    if(!desc){
+      desc = document.querySelector('meta[property="og:description"]')?.content || document.querySelector('meta[name="description"]')?.content || "";
+    }
+
+    /* 3. Ảnh bài viết: Ưu tiên ảnh đầu tiên trong thân bài */
+    var img = "";
+    if(contentContainer){
+      var firstBodyImg = contentContainer.querySelector('[type="Photo"] img, .VCSortableInPage img, figure img, img[itemprop="contentUrl"], img[data-src]');
+      if(firstBodyImg){
+        img = firstBodyImg.getAttribute('data-src') || firstBodyImg.getAttribute('data-original') || firstBodyImg.getAttribute('src') || "";
+      }
+    }
+    if(!img || img.startsWith('data:image')){
+      img = document.querySelector('meta[property="og:image"]')?.content || "";
+    }
+
+    /* 4. Nhãn phân loại */
+    var badge = "";
+    var cateEl = document.querySelector('.detail-cate a, .detail__cate a, .breadcrumb li a:last-child, .parent-cate, meta[property="article:section"], [class*="the-loai"]');
+    if(cateEl){ badge = cateEl.innerText || cateEl.content || ""; }
+    if(!badge){
+      var metaCat = document.querySelector('meta[name="tt_category_id"], meta[name="keywords"]')?.content?.split(',')[0];
+      if(metaCat && isNaN(metaCat)) badge = metaCat;
+    }
+    badge = (badge || "TIN MỚI").trim();
+    if(badge.length > 25) badge = "TIN MỚI";
+
+    /* 5. Tác giả */
+    var author = "";
+    var authorEl = document.querySelector('.author-info, .author, .detail-author, p[style*="text-align:right"] strong, p[style*="text-align: right"] strong, p.author strong, [rel="author"], .author-name, .byline, meta[name="author"]');
+    if(authorEl){ author = authorEl.innerText || authorEl.content || ""; }
+    author = author.replace(/^Theo\\s+/i, '').replace(/^Ảnh:.*$/i, '').trim();
+    if(!author || author.length > 30){ author = "Tổng hợp"; }
+
+    /* 6. Nguồn */
+    var src = window.location.hostname.replace('www.', '');
+
+    /* 7. Đóng gói JSON */
+    var data = JSON.stringify({
+      title: t.trim(),
+      desc: desc.trim(),
+      image: img.trim(),
+      badge: badge.trim(),
+      author: author.trim(),
+      source: src
+    });
+
+    /* 8. Copy an toàn (Fallback đa nền tảng) */
+    var tempInput = document.createElement("textarea");
+    tempInput.value = data;
+    tempInput.style.position = "fixed";
+    tempInput.style.left = "-9999px";
+    tempInput.style.top = "0";
+    document.body.appendChild(tempInput);
+    tempInput.focus();
+    tempInput.select();
+    var copied = false;
+    try {
+      copied = document.execCommand("copy");
+    } catch (e) {}
+    document.body.removeChild(tempInput);
+
+    if (copied) {
+      alert("✅ Đã cào và copy thành công!");
+    } else if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(data).then(function(){
+        alert("✅ Đã cào và copy thành công!");
+      }).catch(function(){
+        prompt("Copy dữ liệu JSON bên dưới:", data);
+      });
+    } else {
+      prompt("Copy dữ liệu JSON bên dưới:", data);
+    }
+  } catch (err) {
+    alert("❌ Lỗi cào dữ liệu: " + err.message);
+  }
+})();`;
 
   function copyBookmarkletCode() {
     navigator.clipboard.writeText(bookmarkletCode).then(() => {
