@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>reClash - TikTok Studio</title>
+  <title>reClash - TikTok Studio Ultra HD</title>
   <style>
     :root {
       --bg: #080b11;
@@ -15,6 +15,7 @@
       --text-dim: #94a3b8;
       --btn-bg: #ffffff;
       --btn-text: #090d16;
+      --accent: #38bdf8;
     }
 
     body {
@@ -85,6 +86,37 @@
       margin-bottom: 18px;
     }
 
+    .bookmark-box {
+      background: rgba(56, 189, 248, 0.05);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      padding: 12px 14px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .btn-copy-bm {
+      background: #38bdf8;
+      color: #031726;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-copy-bm:active {
+      transform: scale(0.97);
+    }
+
     .btn {
       width: 100%;
       background: var(--btn-bg);
@@ -123,7 +155,14 @@
 <body>
 
 <div class="container">
-  <h2>reClash TikTok Studio</h2>
+  <h2>reClash TikTok Studio (HD)</h2>
+
+  <div class="bookmark-box">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <span style="font-size: 13px; font-weight: 600; color: #bae6fd;">📱 Dấu trang cào bài (Điện thoại):</span>
+    </div>
+    <button class="btn-copy-bm" id="btnCopyBm" onclick="copyBookmarkletCode()">📋 Sao Chép Mã Bookmarklet</button>
+  </div>
 
   <div class="auto-box">
     <label style="margin-top:0; color:#cbd5e1;">⚡ Dán dữ liệu tự động từ Bookmarklet:</label>
@@ -145,21 +184,39 @@
   <input type="text" id="sourceText" style="margin-top: 6px;" placeholder="Nguồn...">
 
   <label>5. Tiêu đề bài viết:</label>
-  <textarea id="titleText" rows="3" placeholder="Tiêu đề chính..."></textarea>
+  <textarea id="titleText" rows="2" placeholder="Tiêu đề chính..."></textarea>
 
   <label>6. Đoạn trích nổi bật:</label>
-  <textarea id="descText" rows="8" placeholder="Nội dung tóm tắt chi tiết..."></textarea>
+  <textarea id="descText" rows="5" placeholder="Nội dung tóm tắt chi tiết..."></textarea>
 
-  <button class="btn" onclick="generateBanner()">Tạo Ảnh TikTok (1080x1920)</button>
+  <button class="btn" onclick="generateBanner()">Tạo Ảnh Chuẩn Nét TikTok (1080x1920)</button>
 
   <div style="text-align: center;">
     <canvas id="preview-canvas" width="1080" height="1920"></canvas>
   </div>
   
-  <button class="btn" id="btnDownload" style="display:none; background: #e2e8f0; color:#0f172a;" onclick="downloadImage()">Tải Ảnh Về Máy</button>
+  <button class="btn" id="btnDownload" style="display:none; background: #e2e8f0; color:#0f172a;" onclick="downloadImage()">📥 Tải Ảnh HD Về Máy</button>
 </div>
 
 <script>
+  const bookmarkletCode = `javascript:(function(){try{var t=document.querySelector('h1.detail-title,h1.title-detail,h1.title-news,h1.article-title,h1.detail__title,meta[property="og:title"]')?.innerText||document.querySelector('meta[property="og:title"]')?.content||document.title||"";t=t.replace(/\\s*-\\s*Tuổi Trẻ.*$/i,'').replace(/\\s*-\\s*VnExpress.*$/i,'').replace(/\\s*-\\s*Tin Game.*$/i,'').replace(/\\s*-\\s*[^-]+$/,'').trim();var descParts=[];var sapoEl=document.querySelector('.detail-sapo,.detail__sapo,p.description,.sapo,.lead,.summary,.entry-summary');if(sapoEl&&sapoEl.innerText.trim()){descParts.push(sapoEl.innerText.trim());}var contentContainer=document.querySelector('#main-detail-body,.detail-content,.detail__content,.fck_detail,.entry-content,article');if(contentContainer){var bodyPs=contentContainer.querySelectorAll('p:not(.Image):not(.caption):not([style*="text-align:right"]):not([style*="text-align: right"])');for(var i=0;i<bodyPs.length&&descParts.length<2;i++){var pText=bodyPs[i].innerText.trim();if(pText&&pText.length>35&&!descParts.includes(pText)&&!pText.startsWith('Ảnh:')&&!pText.startsWith('Theo ')&&!pText.startsWith('TTO')&&!pText.startsWith('>>')&&!pText.startsWith('*')){descParts.push(pText);}}}var desc=descParts.join(' ');if(!desc){desc=document.querySelector('meta[property="og:description"]')?.content||document.querySelector('meta[name="description"]')?.content||"";}var img="";if(contentContainer){var firstBodyImg=contentContainer.querySelector('[type="Photo"] img,.VCSortableInPage img,figure img,img[itemprop="contentUrl"],img[data-src]');if(firstBodyImg){img=firstBodyImg.getAttribute('data-src')||firstBodyImg.getAttribute('data-original')||firstBodyImg.getAttribute('src')||"";}}if(!img||img.startsWith('data:image')){img=document.querySelector('meta[property="og:image"]')?.content||"";}var badge="";var cateEl=document.querySelector('.detail-cate a,.detail__cate a,.breadcrumb li a:last-child,.parent-cate,meta[property="article:section"],[class*="the-loai"]');if(cateEl){badge=cateEl.innerText||cateEl.content||"";}if(!badge){var metaCat=document.querySelector('meta[name="tt_category_id"],meta[name="keywords"]')?.content?.split(',')[0];if(metaCat&&isNaN(metaCat))badge=metaCat;}badge=(badge||"TIN MỚI").trim();if(badge.length>25)badge="TIN MỚI";var author="";var authorEl=document.querySelector('.author-info,.author,.detail-author,p[style*="text-align:right"] strong,p[style*="text-align: right"] strong,p.author strong,[rel="author"],.author-name,.byline,meta[name="author"]');if(authorEl){author=authorEl.innerText||authorEl.content||"";}author=author.replace(/^Theo\\s+/i,'').replace(/^Ảnh:.*$/i,'').trim();if(!author||author.length>30){author="Tổng hợp";}var src=window.location.hostname.replace('www.','');var data=JSON.stringify({title:t.trim(),desc:desc.trim(),image:img.trim(),badge:badge.trim(),author:author.trim(),source:src});var tempInput=document.createElement("textarea");tempInput.value=data;tempInput.style.position="fixed";tempInput.style.left="-9999px";tempInput.style.top="0";document.body.appendChild(tempInput);tempInput.focus();tempInput.select();var copied=false;try{copied=document.execCommand("copy");}catch(e){}document.body.removeChild(tempInput);if(copied){alert("✅ Đã cào và copy thành công!");}else if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(data).then(function(){alert("✅ Đã cào và copy thành công!");}).catch(function(){prompt("Copy dữ liệu JSON bên dưới:",data);});}else{prompt("Copy dữ liệu JSON bên dưới:",data);}}catch(err){alert("❌ Lỗi cào dữ liệu: "+err.message);}})();`;
+
+  function copyBookmarkletCode() {
+    navigator.clipboard.writeText(bookmarkletCode).then(() => {
+      const btn = document.getElementById('btnCopyBm');
+      btn.innerText = "✅ Đã Sao Chép Mã!";
+      btn.style.background = "#22c55e";
+      btn.style.color = "#ffffff";
+      setTimeout(() => {
+        btn.innerText = "📋 Sao Chép Mã Bookmarklet";
+        btn.style.background = "#38bdf8";
+        btn.style.color = "#031726";
+      }, 2500);
+    }).catch(() => {
+      prompt("Copy thủ công đoạn mã này:", bookmarkletCode);
+    });
+  }
+
   let loadedImage = null;
 
   function handleAutoFill(val) {
@@ -234,7 +291,11 @@
     const ctx = canvas.getContext('2d');
     const w = 1080, h = 1920;
 
-    // 1. Nền tối sâu
+    // Bật khử răng cưa chất lượng cao nhất cho Canvas
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+
+    // 1. Nền đơn sắc tối căn bản
     ctx.fillStyle = '#080b11';
     ctx.fillRect(0, 0, w, h);
 
@@ -257,22 +318,18 @@
       ctx.drawImage(img, bgX, bgY, bgW, bgH);
       ctx.restore();
 
-      // 3. Gradient chuyển tiếp siêu mịn
-      const startY = 700;
-      const grad = ctx.createLinearGradient(0, startY, 0, h);
-      
+      // 3. Gradient chuyển tiếp siêu mịn (Bắt đầu từ y=700 với alpha = 0)
+      const startGradY = 700;
+      const grad = ctx.createLinearGradient(0, startGradY, 0, h);
       grad.addColorStop(0, 'rgba(8, 11, 17, 0)');
-      
-      // Chuyển mờ rất êm theo đường cong tự nhiên
-      grad.addColorStop(0.25, 'rgba(8, 11, 17, 0.35)');
-      grad.addColorStop(0.55, 'rgba(8, 11, 17, 0.85)');
-      grad.addColorStop(0.8, 'rgba(8, 11, 17, 0.98)');
+      grad.addColorStop(0.25, 'rgba(8, 11, 17, 0.45)');
+      grad.addColorStop(0.6, 'rgba(8, 11, 17, 0.92)');
+      grad.addColorStop(0.85, 'rgba(8, 11, 17, 0.99)');
       grad.addColorStop(1, '#080b11');
-      
       ctx.fillStyle = grad;
-      ctx.fillRect(0, startY, w, h - startY);
+      ctx.fillRect(0, startGradY, w, h - startGradY);
 
-      // 4. Khung ảnh chính: Hạ thấp xuống y=300 để tạo bố cục cân xứng vàng
+      // 4. Khung ảnh ngang nguyên bản (Hero Image)
       const cardMargin = 65;
       const cardW = w - (cardMargin * 2); // 950px
       const cardH = (img.height / img.width) * cardW;
@@ -281,7 +338,7 @@
 
       // Đổ bóng 3D
       ctx.save();
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.65)';
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
       ctx.shadowBlur = 40;
       ctx.shadowOffsetY = 18;
 
@@ -298,8 +355,8 @@
       ctx.clip();
       ctx.drawImage(img, cardX, cardY, cardW, cardH);
       
-      // Viền kính siêu mỏng
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.14)';
+      // Viền kính tinh xảo
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.16)';
       ctx.lineWidth = 2;
       ctx.stroke();
       ctx.restore();
@@ -309,7 +366,7 @@
       var contentStartY = 500;
     }
 
-    // 5. Logo website: Hạ nhẹ xuống y=160
+    // 5. Logo website
     let nextBadgeX = 65;
     if (logo) {
       const srcW = logo.width;
@@ -335,7 +392,7 @@
     }
 
     // 6. Badge thể loại
-    ctx.font = '600 20px -apple-system, BlinkMacSystemFont, sans-serif';
+    ctx.font = '600 20px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
     const badgeStr = badge.toUpperCase();
     const badgeMetrics = ctx.measureText(badgeStr);
     const badgeBoxW = badgeMetrics.width + 36;
@@ -352,20 +409,28 @@
     ctx.fillStyle = '#e2e8f0';
     ctx.fillText(badgeStr, nextBadgeX + 18, 197);
 
-    // 7. Tiêu đề chính
+    // 7. Tiêu đề chính (Có bóng mờ giúp chống nhòe nét chữ khi TikTok nén)
+    ctx.save();
     ctx.fillStyle = '#ffffff';
     ctx.font = '700 54px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+    ctx.shadowBlur = 10;
     const nextY = wrapText(ctx, title, 65, contentStartY, 950, 70, 3);
+    ctx.restore();
 
     // 8. Đoạn trích nổi bật
     let descEndY = nextY;
     if (desc) {
+      ctx.save();
       ctx.fillStyle = '#cbd5e1';
       ctx.font = '400 31px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+      ctx.shadowBlur = 6;
       descEndY = wrapText(ctx, desc, 65, nextY + 48, 950, 48, 7);
+      ctx.restore();
     }
 
-    // 9. CTA Box: Tự động giữ khoảng cách cân đối và đổi thành lời gợi ý chia sẻ/bàn luận
+    // 9. CTA Box: Gợi ý bình luận/chia sẻ
     const ctaY = Math.min(Math.max(descEndY + 60, 1500), 1640);
     ctx.beginPath();
     ctx.roundRect(65, ctaY, 950, 72, 14);
@@ -376,12 +441,12 @@
     ctx.stroke();
 
     ctx.fillStyle = '#94a3b8';
-    ctx.font = '500 24px -apple-system, BlinkMacSystemFont, sans-serif';
-    ctx.fillText('💬 Chia sẻ góc nhìn của bạn ngay nhé!', 100, ctaY + 45);
+    ctx.font = '500 24px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+    ctx.fillText('💬 Chia sẻ góc nhìn hoặc suy nghĩ của bạn', 100, ctaY + 45);
 
     // 10. Tác giả & Nguồn
     ctx.fillStyle = '#64748b';
-    ctx.font = '400 22px -apple-system, BlinkMacSystemFont, sans-serif';
+    ctx.font = '400 22px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
     let metaInfo = author;
     if (source) metaInfo += ` • ${source}`;
     ctx.fillText(metaInfo, 65, 1780);
@@ -416,10 +481,11 @@
     return currentY;
   }
 
+  // Tải file PNG chất lượng tối ưu nhất cho TikTok
   function downloadImage() {
     const canvas = document.getElementById('preview-canvas');
     const link = document.createElement('a');
-    link.download = 'reclash-tiktok-balanced.png';
+    link.download = 'reclash-tiktok-hd.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
   }
