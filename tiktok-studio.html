@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>reNews - TikTok Studio Ultra HD v3</title>
+  <title>reNews - TikTok Studio Ultra HD (Bản Hoàn Chỉnh)</title>
   <style>
     :root {
       --bg: #080b11;
@@ -15,7 +15,9 @@
       --text-dim: #94a3b8;
       --btn-bg: #ffffff;
       --btn-text: #090d16;
+      --accent: #38bdf8;
     }
+
     body {
       font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
       background: radial-gradient(circle at 50% 0%, #151d30 0%, var(--bg) 70%);
@@ -27,6 +29,7 @@
       justify-content: center;
       box-sizing: border-box;
     }
+
     .container {
       width: 100%;
       max-width: 600px;
@@ -38,14 +41,17 @@
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
       border: 1px solid var(--border);
     }
+
     h2 {
       margin-top: 0;
       color: #ffffff;
       font-size: 21px;
       font-weight: 700;
+      letter-spacing: -0.3px;
       text-align: center;
       margin-bottom: 20px;
     }
+
     label {
       display: block;
       font-size: 13px;
@@ -53,6 +59,7 @@
       margin: 14px 0 6px;
       font-weight: 500;
     }
+
     input, textarea, select {
       width: 100%;
       background: var(--card-inner);
@@ -62,8 +69,62 @@
       border-radius: 10px;
       box-sizing: border-box;
       font-size: 14px;
-      margin-bottom: 8px;
+      transition: all 0.2s ease;
     }
+
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.05);
+    }
+
+    .bookmark-box {
+      background: rgba(56, 189, 248, 0.05);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      padding: 12px 14px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .auto-box {
+      background: rgba(255, 255, 255, 0.02);
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px dashed rgba(255, 255, 255, 0.15);
+      margin-bottom: 18px;
+    }
+
+    .highlight-box {
+      background: rgba(245, 158, 11, 0.05);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      padding: 14px;
+      border-radius: 12px;
+      margin-bottom: 18px;
+    }
+
+    .btn-copy-bm {
+      background: #38bdf8;
+      color: #031726;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-copy-bm:active {
+      transform: scale(0.97);
+    }
+
     .btn {
       width: 100%;
       background: var(--btn-bg);
@@ -75,70 +136,137 @@
       font-size: 14px;
       cursor: pointer;
       margin-top: 20px;
+      letter-spacing: 0.2px;
+      transition: transform 0.15s ease, opacity 0.2s ease;
     }
+
+    .btn:hover {
+      opacity: 0.94;
+    }
+
+    .btn:active {
+      transform: scale(0.985);
+    }
+
     #preview-canvas {
       width: 100%;
       max-width: 360px;
+      height: auto;
       border-radius: 14px;
       margin: 22px auto 0;
       border: 1px solid var(--border);
       display: none;
-    }
-    .highlight-box {
-      background: rgba(56, 189, 248, 0.1);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      padding: 15px;
-      border-radius: 10px;
-      margin-top: 15px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
     }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <h2>reNews TikTok Studio v3</h2>
+  <h2>reNews TikTok Studio</h2>
 
-  <!-- Tính năng mới v3 -->
+  <!-- KHU VỰC CÀO BÀI ĐÃ ĐƯỢC KHÔI PHỤC -->
+  <div class="bookmark-box">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <span style="font-size: 13px; font-weight: 600; color: #bae6fd;">📱 Dấu trang cào bài (Điện thoại):</span>
+    </div>
+    <button class="btn-copy-bm" id="btnCopyBm" onclick="copyBookmarkletCode()">📋 Sao Chép Mã Bookmarklet</button>
+  </div>
+
+  <div class="auto-box">
+    <label style="margin-top:0; color:#cbd5e1;">⚡ Dán dữ liệu tự động từ Bookmarklet:</label>
+    <input type="text" id="autoPasteInput" placeholder="Dán mã JSON bài viết vào đây..." oninput="handleAutoFill(this.value)">
+  </div>
+
+  <!-- TÍNH NĂNG V3: WATERMARK & PHÔNG CHỮ -->
   <div class="highlight-box">
-    <label style="color: #38bdf8; font-weight: bold; margin-top:0;">🌟 Nâng cấp v3 (Chuyên nghiệp hơn):</label>
-    
-    <label>Watermark (Chống re-up TikTok):</label>
-    <input type="text" id="watermarkText" placeholder="@id_tiktok_cua_ban" value="@reNews_Gaming">
+    <label style="color: #fbbf24; font-weight: bold; margin-top:0;">🌟 Tùy chỉnh Nâng cao:</label>
+    <label>Chữ ký chìm (Chống re-up):</label>
+    <input type="text" id="watermarkText" placeholder="@id_tiktok_cua_ban" value="@reNews_Official">
     
     <label>Phông chữ Tiêu đề:</label>
     <select id="fontSelect">
-      <option value="-apple-system, BlinkMacSystemFont, sans-serif">Mặc định (Hiện đại, Dễ đọc)</option>
+      <option value="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Mặc định (Hiện đại, Dễ đọc)</option>
       <option value="Impact, sans-serif">Impact (Bản tin nóng, Giật tít)</option>
       <option value="Georgia, serif">Georgia (Báo chí truyền thống)</option>
     </select>
   </div>
-
+  
   <label>1. Link Logo website:</label>
   <input type="text" id="logoUrl" value="https://datnvps37587.github.io/testchoi/renews.png">
 
   <label>2. Ảnh bài viết:</label>
   <input type="file" id="fileInput" accept="image/*">
-  <input type="text" id="bgUrl" placeholder="Hoặc dán link ảnh...">
+  <input type="text" id="bgUrl" style="margin-top: 6px;" placeholder="https://example.com/image.jpg">
 
   <label>3. Nhãn phân loại:</label>
   <input type="text" id="badgeText" value="TIN NÓNG">
 
-  <label>4. Tác giả & Nguồn:</label>
-  <input type="text" id="authorText" value="Ẩn danh">
+  <label>4. Tác giả, Nguồn & Ngày đăng:</label>
+  <input type="text" id="authorText" value="Ẩn danh" placeholder="Tác giả...">
+  <input type="text" id="sourceText" style="margin-top: 6px;" placeholder="Nguồn (vd: VnExpress)...">
+  <input type="text" id="dateText" style="margin-top: 6px;" placeholder="Ngày đăng (vd: 21/08/2026)...">
 
   <label>5. Tiêu đề bài viết:</label>
-  <textarea id="titleText" rows="2" placeholder="Nhập tiêu đề..."></textarea>
+  <textarea id="titleText" rows="2" placeholder="Tiêu đề chính..."></textarea>
 
   <label>6. Đoạn trích nổi bật:</label>
-  <textarea id="descText" rows="4" placeholder="Nhập tóm tắt..."></textarea>
+  <textarea id="descText" rows="5" placeholder="Nội dung tóm tắt chi tiết..."></textarea>
 
-  <button class="btn" onclick="generateBanner()">Tạo Ảnh TikTok Chuẩn Nét</button>
-  <canvas id="preview-canvas" width="1080" height="1920"></canvas>
-  <button class="btn" id="btnDownload" style="display:none; background: #38bdf8; color: #fff;" onclick="downloadImage()">📥 Tải Ảnh HD Về Máy</button>
+  <button class="btn" onclick="generateBanner()">Tạo Ảnh Chuẩn Nét TikTok (1080x1920)</button>
+
+  <div style="text-align: center;">
+    <canvas id="preview-canvas" width="1080" height="1920"></canvas>
+  </div>
+  
+  <button class="btn" id="btnDownload" style="display:none; background: #e2e8f0; color:#0f172a;" onclick="downloadImage()">📥 Tải Ảnh HD Về Máy</button>
 </div>
 
 <script>
+  // Khởi tạo ngày hiện tại
+  function getTodayString() {
+    const today = new Date();
+    const d = String(today.getDate()).padStart(2, '0');
+    const m = String(today.getMonth() + 1).padStart(2, '0');
+    const y = today.getFullYear();
+    return `${d}/${m}/${y}`;
+  }
+  document.getElementById('dateText').value = getTodayString();
+
+  // Mã Bookmarklet chuẩn để cào nội dung mọi trang báo
+  const bookmarkletCode = `javascript:(function(){try{var t=document.querySelector('h1.detail-title,h1.title-detail,h1.title-news,h1.article-title,h1.detail__title,meta[property="og:title"]')?.innerText||document.querySelector('meta[property="og:title"]')?.content||document.title||"";t=t.replace(/\\s*-\\s*Tuổi Trẻ.*$/i,'').replace(/\\s*-\\s*VnExpress.*$/i,'').replace(/\\s*-\\s*Tin Game.*$/i,'').replace(/\\s*-\\s*[^-]+$/,'').trim();var descParts=[];var sapoEl=document.querySelector('.detail-sapo,.detail__sapo,p.description,.sapo,.lead,.summary,.entry-summary');if(sapoEl&&sapoEl.innerText.trim()){descParts.push(sapoEl.innerText.trim());}var contentContainer=document.querySelector('#main-detail-body,.detail-content,.detail__content,.fck_detail,.entry-content,article');if(contentContainer){var bodyPs=contentContainer.querySelectorAll('p:not(.Image):not(.caption):not([style*="text-align:right"]):not([style*="text-align: right"])');for(var i=0;i<bodyPs.length&&descParts.length<2;i++){var pText=bodyPs[i].innerText.trim();if(pText&&pText.length>35&&!descParts.includes(pText)&&!pText.startsWith('Ảnh:')&&!pText.startsWith('Theo ')&&!pText.startsWith('TTO')&&!pText.startsWith('>>')&&!pText.startsWith('*')){descParts.push(pText);}}}var desc=descParts.join(' ');if(!desc){desc=document.querySelector('meta[property="og:description"]')?.content||document.querySelector('meta[name="description"]')?.content||"";}var img="";if(contentContainer){var firstBodyImg=contentContainer.querySelector('[type="Photo"] img,.VCSortableInPage img,figure img,img[itemprop="contentUrl"],img[data-src]');if(firstBodyImg){img=firstBodyImg.getAttribute('data-src')||firstBodyImg.getAttribute('data-original')||firstBodyImg.getAttribute('src')||"";}}if(!img||img.startsWith('data:image')){img=document.querySelector('meta[property="og:image"]')?.content||"";}var badge="";var cateEl=document.querySelector('.detail-cate a,.detail__cate a,.breadcrumb li a:last-child,.parent-cate,meta[property="article:section"],[class*="the-loai"]');if(cateEl){badge=cateEl.innerText||cateEl.content||"";}if(!badge){var metaCat=document.querySelector('meta[name="tt_category_id"],meta[name="keywords"]')?.content?.split(',')[0];if(metaCat&&isNaN(metaCat))badge=metaCat;}badge=(badge||"TIN MỚI").trim();if(badge.length>25)badge="TIN MỚI";var author="";var authorEl=document.querySelector('.author-info,.author,.detail-author,p[style*="text-align:right"] strong,p[style*="text-align: right"] strong,p.author strong,[rel="author"],.author-name,.byline,meta[name="author"]');if(authorEl){author=authorEl.innerText||authorEl.content||"";}author=author.replace(/^Theo\\s+/i,'').replace(/^Ảnh:.*$/i,'').trim();if(!author||author.length>30){author="Tổng hợp";}var dateStr="";var dateEl=document.querySelector('meta[property="article:published_time"],meta[name="pubdate"],meta[name="publish_date"],time,.date,.detail-time,.detail__time');if(dateEl){var rawDate=dateEl.getAttribute('content')||dateEl.getAttribute('datetime')||dateEl.innerText||"";var match=rawDate.match(/(\\d{1,2}[\\/\\-\\.]\\d{1,2}[\\/\\-\\.]\\d{4})|(\\d{4}[\\/\\-\\.]\\d{1,2}[\\/\\-\\.]\\d{1,2})/);if(match){dateStr=match[0].replace(/-/g,'/').replace(/\\./g,'/');}}if(!dateStr){var now=new Date();dateStr=String(now.getDate()).padStart(2,'0')+'/'+String(now.getMonth()+1).padStart(2,'0')+'/'+now.getFullYear();}var src=window.location.hostname.replace('www.','');var data=JSON.stringify({title:t.trim(),desc:desc.trim(),image:img.trim(),badge:badge.trim(),author:author.trim(),source:src,date:dateStr.trim()});var tempInput=document.createElement("textarea");tempInput.value=data;tempInput.style.position="fixed";tempInput.style.left="-9999px";tempInput.style.top="0";document.body.appendChild(tempInput);tempInput.focus();tempInput.select();var copied=false;try{copied=document.execCommand("copy");}catch(e){}document.body.removeChild(tempInput);if(copied){alert("✅ Đã cào và copy thành công!");}else if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(data).then(function(){alert("✅ Đã cào và copy thành công!");}).catch(function(){prompt("Copy dữ liệu JSON bên dưới:",data);});}else{prompt("Copy dữ liệu JSON bên dưới:",data);}}catch(err){alert("❌ Lỗi cào dữ liệu: "+err.message);}})();`;
+
+  function copyBookmarkletCode() {
+    navigator.clipboard.writeText(bookmarkletCode).then(() => {
+      const btn = document.getElementById('btnCopyBm');
+      btn.innerText = "✅ Đã Sao Chép Mã!";
+      btn.style.background = "#22c55e";
+      btn.style.color = "#ffffff";
+      setTimeout(() => {
+        btn.innerText = "📋 Sao Chép Mã Bookmarklet";
+        btn.style.background = "#38bdf8";
+        btn.style.color = "#031726";
+      }, 2500);
+    }).catch(() => {
+      prompt("Copy thủ công đoạn mã này:", bookmarkletCode);
+    });
+  }
+
   let loadedImage = null;
+
+  function handleAutoFill(val) {
+    try {
+      const data = JSON.parse(val);
+      if (data.title) document.getElementById('titleText').value = data.title;
+      if (data.desc) document.getElementById('descText').value = data.desc;
+      if (data.image) document.getElementById('bgUrl').value = data.image;
+      if (data.badge) document.getElementById('badgeText').value = data.badge;
+      if (data.author) document.getElementById('authorText').value = data.author;
+      if (data.source) document.getElementById('sourceText').value = data.source;
+      if (data.date) document.getElementById('dateText').value = data.date;
+      document.getElementById('autoPasteInput').value = "✅ Đã nhận diện nội dung!";
+    } catch(e) {}
+  }
 
   document.getElementById('fileInput').addEventListener('change', function(e) {
     const file = e.target.files[0];
@@ -173,8 +301,10 @@
   async function generateBanner() {
     const title = document.getElementById('titleText').value.trim();
     const desc = document.getElementById('descText').value.trim();
-    const badge = document.getElementById('badgeText').value.trim() || 'TIN NÓNG';
-    const author = document.getElementById('authorText').value.trim();
+    const badge = document.getElementById('badgeText').value.trim() || 'TIN TỨC';
+    const author = document.getElementById('authorText').value.trim() || 'Ẩn danh';
+    const source = document.getElementById('sourceText').value.trim();
+    const dateStr = document.getElementById('dateText').value.trim();
     const bgUrl = document.getElementById('bgUrl').value.trim();
     const logoUrl = document.getElementById('logoUrl').value.trim();
     const font = document.getElementById('fontSelect').value;
@@ -186,90 +316,209 @@
     }
 
     let bgImg = loadedImage;
-    if (!bgImg && bgUrl) bgImg = await loadImageAsync(bgUrl);
+    if (!bgImg && bgUrl) {
+      bgImg = await loadImageAsync(bgUrl);
+    }
+
     const logoImg = await loadImageAsync(logoUrl);
 
-    renderCanvas(bgImg, logoImg, title, desc, badge, author, font, watermark);
+    renderDualLayer(bgImg, logoImg, title, desc, badge, author, source, dateStr, font, watermark);
   }
 
-  function renderCanvas(img, logo, title, desc, badge, author, font, watermark) {
+  function renderDualLayer(img, logo, title, desc, badge, author, source, dateStr, font, watermark) {
     const canvas = document.getElementById('preview-canvas');
     const ctx = canvas.getContext('2d');
     const w = 1080, h = 1920;
 
-    // Background
+    // Khử răng cưa chất lượng cao
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+
+    // 1. Nền đơn sắc tối căn bản
     ctx.fillStyle = '#080b11';
     ctx.fillRect(0, 0, w, h);
 
     if (img) {
+      // 2. Lớp Blur nền toàn màn hình
       ctx.save();
-      ctx.filter = 'blur(40px) brightness(0.3)';
-      ctx.drawImage(img, -100, -100, w + 200, h + 200);
+      ctx.filter = 'blur(48px) brightness(0.32) saturate(1.2)';
+      const imgRatio = img.width / img.height;
+      const canvasRatio = w / h;
+      let bgW, bgH, bgX, bgY;
+      if (imgRatio > canvasRatio) {
+        bgH = h + 100;
+        bgW = bgH * imgRatio;
+      } else {
+        bgW = w + 100;
+        bgH = bgW / imgRatio;
+      }
+      bgX = (w - bgW) / 2;
+      bgY = (h - bgH) / 2;
+      ctx.drawImage(img, bgX, bgY, bgW, bgH);
       ctx.restore();
 
-      const grad = ctx.createLinearGradient(0, 800, 0, h);
-      grad.addColorStop(0, 'rgba(8, 11, 17, 0.1)');
+      // 3. Gradient chuyển tiếp siêu mịn
+      const startGradY = 700;
+      const grad = ctx.createLinearGradient(0, startGradY, 0, h);
+      grad.addColorStop(0, 'rgba(8, 11, 17, 0)');
+      grad.addColorStop(0.25, 'rgba(8, 11, 17, 0.45)');
+      grad.addColorStop(0.6, 'rgba(8, 11, 17, 0.92)');
+      grad.addColorStop(0.85, 'rgba(8, 11, 17, 0.99)');
       grad.addColorStop(1, '#080b11');
       ctx.fillStyle = grad;
-      ctx.fillRect(0, 800, w, h - 800);
+      ctx.fillRect(0, startGradY, w, h - startGradY);
 
-      const cardW = 950;
+      // 4. Khung ảnh chính (Hero Image)
+      const cardMargin = 65;
+      const cardW = w - (cardMargin * 2); // 950px
       const cardH = (img.height / img.width) * cardW;
-      const cardX = (w - cardW) / 2;
-      const cardY = 280;
+      const cardX = cardMargin;
+      const cardY = 300;
 
+      // Đổ bóng 3D
+      ctx.save();
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+      ctx.shadowBlur = 40;
+      ctx.shadowOffsetY = 18;
+
+      ctx.beginPath();
+      ctx.roundRect(cardX, cardY, cardW, cardH, 20);
+      ctx.fillStyle = '#0f172a';
+      ctx.fill();
+      ctx.restore();
+
+      // Vẽ ảnh chính
       ctx.save();
       ctx.beginPath();
       ctx.roundRect(cardX, cardY, cardW, cardH, 20);
       ctx.clip();
       ctx.drawImage(img, cardX, cardY, cardW, cardH);
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-      ctx.lineWidth = 3;
+      
+      // Viền kính
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.16)';
+      ctx.lineWidth = 2;
       ctx.stroke();
       ctx.restore();
 
-      var contentStartY = cardY + cardH + 80;
+      var contentStartY = cardY + cardH + 75;
     } else {
-      var contentStartY = 600;
+      var contentStartY = 500;
     }
 
-    // Logo & Badge
+    // 5. Khung Logo
     let nextBadgeX = 65;
     if (logo) {
-      const targetH = 46;
-      const targetW = (logo.width / logo.height) * targetH;
-      ctx.drawImage(logo, 65, 167, targetW, targetH);
-      nextBadgeX = 65 + targetW + 30;
+      const srcW = logo.width;
+      const srcH = logo.height;
+      const isSquare = Math.abs(srcW - srcH) < (srcW * 0.25);
+
+      let cropX, cropY, cropW, cropH;
+      if (isSquare) {
+        cropX = srcW * 0.10;
+        cropY = srcH * 0.41;
+        cropW = srcW * 0.80;
+        cropH = srcH * 0.18;
+      } else {
+        cropX = 0;
+        cropY = 0;
+        cropW = srcW;
+        cropH = srcH;
+      }
+
+      const boxH = 68;
+      const boxW = 230;
+      const padX = 8;
+      const padY = 6;
+      const drawW = boxW - (padX * 2);
+      const drawH = boxH - (padY * 2);
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.roundRect(65, 160, boxW, boxH, 12);
+      ctx.fillStyle = '#ffffff';
+      ctx.fill();
+      ctx.clip();
+
+      const scale = Math.min(drawW / cropW, drawH / cropH);
+      const finalW = cropW * scale;
+      const finalH = cropH * scale;
+      const drawX = 65 + padX + (drawW - finalW) / 2;
+      const drawY = 160 + padY + (drawH - finalH) / 2;
+
+      ctx.drawImage(logo, cropX, cropY, cropW, cropH, drawX, drawY, finalW, finalH);
+      ctx.restore();
+
+      nextBadgeX = 65 + boxW + 20;
     }
 
-    ctx.font = 'bold 22px sans-serif';
-    ctx.fillStyle = '#38bdf8';
-    ctx.fillText('🔥 ' + badge.toUpperCase(), nextBadgeX, 197);
+    // 6. Badge thể loại
+    ctx.font = '600 20px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+    const badgeStr = badge.toUpperCase();
+    const badgeMetrics = ctx.measureText(badgeStr);
+    const badgeBoxW = badgeMetrics.width + 36;
+    const badgeBoxH = 68;
 
-    // Title (Dùng Font tuỳ chọn)
+    ctx.beginPath();
+    ctx.roundRect(nextBadgeX, 160, badgeBoxW, badgeBoxH, 12);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    ctx.fillStyle = '#e2e8f0';
+    ctx.fillText(badgeStr, nextBadgeX + 18, 202);
+
+    // 7. Tiêu đề chính (Áp dụng phông chữ tùy chọn)
+    ctx.save();
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 56px ' + font;
-    const nextY = wrapText(ctx, title, 65, contentStartY, 950, 75, 4);
+    ctx.font = 'bold 54px ' + font; 
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+    ctx.shadowBlur = 10;
+    const nextY = wrapText(ctx, title, 65, contentStartY, 950, 70, 3);
+    ctx.restore();
 
-    // Description
+    // 8. Đoạn trích nổi bật
+    let descEndY = nextY;
     if (desc) {
+      ctx.save();
       ctx.fillStyle = '#cbd5e1';
-      ctx.font = '400 32px -apple-system, BlinkMacSystemFont, sans-serif';
-      wrapText(ctx, desc, 65, nextY + 40, 950, 48, 6);
+      ctx.font = '400 31px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+      ctx.shadowBlur = 6;
+      descEndY = wrapText(ctx, desc, 65, nextY + 48, 950, 48, 8);
+      ctx.restore();
     }
 
-    // Author
-    ctx.fillStyle = '#64748b';
-    ctx.font = '400 24px sans-serif';
-    ctx.fillText(author, 65, 1800);
+    // 9. CTA Box: Gợi ý bình luận/chia sẻ
+    const ctaY = Math.min(Math.max(descEndY + 60, 1500), 1640);
+    ctx.beginPath();
+    ctx.roundRect(65, ctaY, 950, 72, 14);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
 
-    // Watermark (Chữ ký mờ chống re-up)
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '500 24px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+    ctx.fillText('💬 Chia sẻ góc nhìn hoặc suy nghĩ của bạn', 100, ctaY + 45);
+
+    // 10. Tác giả & Nguồn & Ngày đăng
+    ctx.fillStyle = '#64748b';
+    ctx.font = '400 22px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+    let metaInfo = author;
+    if (source) metaInfo += ` • ${source}`;
+    if (dateStr) metaInfo += ` • ${dateStr}`;
+    ctx.fillText(metaInfo, 65, 1780);
+
+    // 11. Đóng dấu Bản quyền (Watermark)
     if (watermark) {
       ctx.save();
       ctx.translate(w / 2, h / 2);
       ctx.rotate(-Math.PI / 4);
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.06)';
-      ctx.font = 'bold 100px sans-serif';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.05)'; 
+      ctx.font = 'bold 90px sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText(watermark, 0, 0);
       ctx.restore();
@@ -279,32 +528,41 @@
     document.getElementById('btnDownload').style.display = 'block';
   }
 
-  function wrapText(ctx, text, x, y, maxWidth, lineHeight, maxLines) {
+  function wrapText(ctx, text, x, y, maxWidth, lineHeight, maxLines = 8) {
     const words = text.split(' ');
-    let line = '', currentY = y, lineCount = 0;
+    let line = '';
+    let lineCount = 0;
+    let currentY = y;
+
     for (let n = 0; n < words.length; n++) {
       const testLine = line + words[n] + ' ';
-      if (ctx.measureText(testLine).width > maxWidth && n > 0) {
+      const metrics = ctx.measureText(testLine);
+      if (metrics.width > maxWidth && n > 0) {
         ctx.fillText(line, x, currentY);
         line = words[n] + ' ';
         currentY += lineHeight;
         lineCount++;
         if (lineCount >= maxLines - 1 && n < words.length - 1) {
-          line += '...'; break;
+          line += '...';
+          break;
         }
-      } else { line = testLine; }
+      } else {
+        line = testLine;
+      }
     }
     ctx.fillText(line, x, currentY);
     return currentY;
   }
 
   function downloadImage() {
+    const canvas = document.getElementById('preview-canvas');
     const link = document.createElement('a');
-    link.download = 'tiktok-studio-v3.png';
-    link.href = document.getElementById('preview-canvas').toDataURL('image/png');
+    link.download = 'renews-tiktok-hd-v3-1.png';
+    link.href = canvas.toDataURL('image/png');
     link.click();
   }
 </script>
+
 </body>
 </html>
 
