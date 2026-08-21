@@ -170,7 +170,7 @@
   </div>
   
   <label>1. Link Logo website:</label>
-  <input type="text" id="logoUrl" value="https://datnvps37587.github.io/testchoi/reClash-400x40.png">
+  <input type="text" id="logoUrl" value="https://datnvps37587.github.io/testchoi/renews.png">
 
   <label>2. Ảnh bài viết:</label>
   <input type="file" id="fileInput" accept="image/*">
@@ -366,14 +366,14 @@
       var contentStartY = 500;
     }
 
-    // 5. Khung Logo reNews (Đã phóng to tối đa & căn chỉnh sắc nét)
+    // 5. Khung Logo reNews (Phóng to chữ tối đa, ôm sát viền)
     let nextBadgeX = 65;
     if (logo) {
       const srcW = logo.width;
       const srcH = logo.height;
       const isSquare = Math.abs(srcW - srcH) < (srcW * 0.25);
 
-      // Cắt sát viền vùng chữ reNews ở giữa (Loại bỏ khoảng trắng thừa)
+      // Cắt sát viền vùng chữ reNews ở giữa
       let cropX, cropY, cropW, cropH;
       if (isSquare) {
         cropX = srcW * 0.10;
