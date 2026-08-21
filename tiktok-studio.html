@@ -3,10 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>reNews - TikTok Studio Ultra HD v3.1</title>
+  <title>reNews - TikTok Studio Ultra HD v3.1 (Liquid Glass & Carousel)</title>
+  <!-- Kết nối các phông chữ Google Fonts phổ biến cho Typography và eSports -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Lexend:wght@400;700;900&family=Chakra+Petch:wght@400;700&family=Montserrat:wght@400;700;900&family=Playfair+Display:ital,wght@0,700;1,400&family=Patrick+Hand&display=swap" rel="stylesheet">
   <style>
     :root {
-      /* Giao diện mặc định (Giữ nguyên chuẩn từ Code Tool Tạo Ảnh) */
+      /* Giao diện mặc định: Modern Deep Slate */
       --bg: #080b11;
       --card: rgba(17, 24, 39, 0.75);
       --card-inner: #0f172a;
@@ -122,10 +124,19 @@
       flex-direction: column;
       gap: 8px;
     }
-    
+
     .highlight-box {
       background: rgba(245, 158, 11, 0.05);
       border: 1px solid rgba(245, 158, 11, 0.2);
+      padding: 14px;
+      border-radius: 12px;
+      margin-bottom: 18px;
+    }
+
+    /* Khung Carousel */
+    .carousel-box {
+      background: rgba(16, 185, 129, 0.05);
+      border: 1px solid rgba(16, 185, 129, 0.2);
       padding: 14px;
       border-radius: 12px;
       margin-bottom: 18px;
@@ -174,6 +185,46 @@
       transform: scale(0.985);
     }
 
+    /* Các nút điều khiển trang Carousel khi preview */
+    .carousel-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .btn-nav-page {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border);
+      color: #ffffff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-nav-page:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-nav-page:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    #pageIndicator {
+      font-size: 13px;
+      font-weight: bold;
+      color: var(--accent);
+    }
+
     #preview-canvas {
       width: 100%;
       max-width: 360px;
@@ -203,12 +254,76 @@
       border-color: rgba(255, 255, 255, 0.5);
       text-shadow: 0 0 8px rgba(255,255,255,0.5);
     }
+
+    /* CSS Switch Toggle */
+    .switch-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255, 255, 255, 0.1);
+      transition: .3s;
+      border-radius: 24px;
+      border: 1px solid var(--border);
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #10b981;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+
+    .flex-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .flex-col {
+      flex: 1;
+    }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <h2>reNews TikTok Studio</h2>
+  <h2>reNews TikTok Studio (v3.1)</h2>
 
   <!-- Nút Bật/Tắt Liquid Glass -->
   <button class="btn btn-toggle-theme" id="themeToggleBtn" onclick="toggleLiquidGlass()">
@@ -224,68 +339,144 @@
 
   <div class="auto-box">
     <label style="margin-top:0; color:#cbd5e1;">⚡ Dán dữ liệu tự động từ Bookmarklet:</label>
-    <input type="text" id="autoPasteInput" placeholder="Dán mã JSON bài viết vào đây..." oninput="handleAutoFill(this.value)">
+    <input type="text" id="autoPasteInput" placeholder="Dán mã JSON bài viết vào đây..." oninput="handleAutoFill(this.value)" onchange="handleAutoFill(this.value)">
   </div>
 
+  <!-- TÍNH NĂNG MỚI: CHẾ ĐỘ CAROUSEL -->
+  <div class="carousel-box">
+    <div class="switch-container">
+      <span style="color: #34d399; font-weight: bold; font-size: 13px;">🎠 Chế độ Carousel (Ảnh trượt ngang TikTok):</span>
+      <label class="switch">
+        <input type="checkbox" id="carouselToggle" onchange="toggleCarouselMode()">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div id="carouselSettings" style="display: none; margin-top: 10px;">
+      <div class="flex-row">
+        <div class="flex-col">
+          <label style="margin-top:0;">Số lượng trang ảnh:</label>
+          <select id="carouselPageCount" onchange="updateCarouselPages()">
+            <option value="3">3 trang liền mạch (Tối ưu)</option>
+            <option value="4">4 trang chi tiết</option>
+            <option value="5">5 trang (Tối đa retention)</option>
+          </select>
+        </div>
+      </div>
+      <p style="font-size: 11px; color: #a7f3d0; margin: 8px 0 0 0; line-height: 1.4;">
+        * Hệ thống sẽ tự động chia nhỏ đoạn trích dài thành các trang hợp lý và liền mạch.
+      </p>
+    </div>
+  </div>
+
+  <!-- TÌNH NĂNG V3 & v3.1: WATERMARK, PHÔNG CHỮ & AUTO-HIGHLIGHT -->
   <div class="highlight-box">
-    <label style="color: #fbbf24; font-weight: bold; margin-top:0;">🌟 Tùy chỉnh Nâng cao:</label>
-    <label>Chữ ký chìm (Chống re-up):</label>
-    <input type="text" id="watermarkText" placeholder="@id_tiktok_cua_ban" value="@reNews_Official">
+    <label style="color: #fbbf24; font-weight: bold; margin-top:0;">🌟 Tùy chỉnh Nâng cao (v3.1):</label>
     
-    <label>Phông chữ Tiêu đề:</label>
-    <select id="fontSelect">
-      <option value="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Mặc định (Hiện đại, Dễ đọc)</option>
-      <option value="Impact, sans-serif">Impact (Bản tin nóng, Giật tít)</option>
-      <option value="Georgia, serif">Georgia (Báo chí truyền thống)</option>
-    </select>
+    <div class="flex-row">
+      <div class="flex-col">
+        <label>Chữ ký chìm (Watermark):</label>
+        <input type="text" id="watermarkText" placeholder="@id_tiktok_cua_ban" value="@reNews_Official">
+      </div>
+      <div class="flex-col">
+        <label>Phông chữ Tiêu đề:</label>
+        <select id="fontSelect" onchange="handleFontChange()">
+          <option value="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Mặc định (Hệ thống)</option>
+          <option value="Impact, sans-serif">Impact (Bản tin nóng)</option>
+          <option value="Georgia, serif">Georgia (Báo chí truyền thống)</option>
+          <option value="'Inter', sans-serif">Inter (Google Fonts)</option>
+          <option value="'Lexend', sans-serif">Lexend (Google Fonts - Trẻ trung)</option>
+          <option value="'Chakra Petch', sans-serif">Chakra Petch (Google Fonts - eSports)</option>
+          <option value="'Montserrat', sans-serif">Montserrat (Google Fonts - Thể thao)</option>
+          <option value="'Playfair Display', serif">Playfair Display (Cổ điển)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Tự động bôi sáng từ khóa -->
+    <div class="flex-row" style="margin-top: 10px;">
+      <div class="flex-col">
+        <label>Bôi sáng từ khóa (Auto-Highlight):</label>
+        <select id="highlightStyle" onchange="triggerRender()">
+          <option value="none">Tắt</option>
+          <option value="#fbbf24" selected>Màu Vàng Gold ✨</option>
+          <option value="#06b6d4">Màu Xanh Cyan 💎</option>
+          <option value="#10b981">Màu Xanh Lá Neon ❇️</option>
+        </select>
+      </div>
+    </div>
+    <label>Danh sách từ khóa bôi sáng thêm (Ngăn cách bằng dấu phẩy):</label>
+    <input type="text" id="customKeywords" placeholder="VD: GTA VI, reNews, Vietgame, 4 ngày" value="GTA VI, reNews, reClash" oninput="triggerRender()">
+    <p style="font-size: 11px; color: #fde047; margin: 6px 0 0 0; line-height: 1.4;">
+      * Mẹo: Bạn cũng có thể dùng dấu sao <code style="background: rgba(0,0,0,0.2); padding: 1px 4px; border-radius: 3px;">*từ_khóa*</code> hoặc ngoặc vuông <code style="background: rgba(0,0,0,0.2); padding: 1px 4px; border-radius: 3px;">[từ_khóa]</code> trong Đoạn trích để tự bôi sáng từ mong muốn!
+    </p>
   </div>
   
   <label>1. Link Logo website:</label>
-  <input type="text" id="logoUrl" value="https://datnvps37587.github.io/testchoi/reClash-400x40.png">
+  <input type="text" id="logoUrl" value="https://datnvps37587.github.io/testchoi/renews.png" onchange="triggerRender()">
 
   <label>2. Ảnh bài viết:</label>
   <input type="file" id="fileInput" accept="image/*">
-  <input type="text" id="bgUrl" style="margin-top: 6px;" placeholder="https://example.com/image.jpg">
+  <input type="text" id="bgUrl" style="margin-top: 6px;" placeholder="https://example.com/image.jpg" onchange="triggerRender()">
 
   <label>3. Nhãn phân loại:</label>
-  <input type="text" id="badgeText" value="TIN NÓNG">
+  <input type="text" id="badgeText" value="TIN NÓNG" oninput="triggerRender()">
 
-  <label>4. Tác giả & Nguồn:</label>
-  <input type="text" id="authorText" value="Ẩn danh" placeholder="Tác giả...">
-  <input type="text" id="sourceText" style="margin-top: 6px;" placeholder="Nguồn...">
+  <label>4. Tác giả, Nguồn & Ngày đăng:</label>
+  <div class="flex-row" style="margin-top: 0;">
+    <div class="flex-col">
+      <input type="text" id="authorText" value="Ẩn danh" placeholder="Tác giả..." oninput="triggerRender()">
+    </div>
+    <div class="flex-col">
+      <input type="text" id="sourceText" placeholder="Nguồn (vd: VnExpress)..." oninput="triggerRender()">
+    </div>
+    <div class="flex-col">
+      <input type="text" id="dateText" placeholder="Ngày đăng..." oninput="triggerRender()">
+    </div>
+  </div>
 
   <label>5. Tiêu đề bài viết:</label>
-  <textarea id="titleText" rows="2" placeholder="Tiêu đề chính..."></textarea>
+  <textarea id="titleText" rows="2" placeholder="Tiêu đề chính..." oninput="triggerRender()"></textarea>
 
   <label>6. Đoạn trích nổi bật:</label>
-  <textarea id="descText" rows="5" placeholder="Nội dung tóm tắt chi tiết..."></textarea>
+  <textarea id="descText" rows="6" placeholder="Nội dung tóm tắt chi tiết..." oninput="handleDescInput()"></textarea>
 
   <button class="btn" onclick="generateBanner()">Tạo Ảnh Chuẩn Nét TikTok (1080x1920)</button>
+
+  <!-- Nút điều hướng Carousel khi Preview -->
+  <div class="carousel-controls" id="previewNav" style="display: none;">
+    <button class="btn-nav-page" id="btnPrevPage" onclick="navigatePage(-1)">← Trang trước</button>
+    <span id="pageIndicator">Trang 1 / 1</span>
+    <button class="btn-nav-page" id="btnNextPage" onclick="navigatePage(1)">Trang sau →</button>
+  </div>
 
   <div style="text-align: center;">
     <canvas id="preview-canvas" width="1080" height="1920"></canvas>
   </div>
   
-  <button class="btn" id="btnDownload" style="display:none; background: #e2e8f0; color:#0f172a;" onclick="downloadImage()">📥 Tải Ảnh HD Về Máy</button>
+  <div class="flex-row">
+    <button class="btn flex-col" id="btnDownload" style="display:none; background: #e2e8f0; color:#0f172a; margin-top: 20px;" onclick="downloadImage()">📥 Tải Ảnh Hiện Tại</button>
+    <button class="btn flex-col" id="btnDownloadAll" style="display:none; background: linear-gradient(135deg, #0284c7, #06b6d4); color:#ffffff; margin-top: 20px;" onclick="downloadAllCarouselPages()">🎠 Tải Trọn Bộ Carousel</button>
+  </div>
 </div>
 
 <script>
-  // HÀM BẬT TẮT LIQUID GLASS
-  function toggleLiquidGlass() {
-    const isLiquid = document.documentElement.hasAttribute('data-theme');
-    const btn = document.getElementById('themeToggleBtn');
-    
-    if (isLiquid) {
-      document.documentElement.removeAttribute('data-theme');
-      btn.innerHTML = '✨ Bật Giao Diện Liquid Glass';
-    } else {
-      document.documentElement.setAttribute('data-theme', 'liquid-glass');
-      btn.innerHTML = '🌌 Trở về Modern Deep Slate';
-    }
-  }
+  // Quản lý trạng thái Carousel
+  let isCarouselMode = false;
+  let carouselPages = [];
+  let currentCarouselPage = 0;
 
-  // MÃ BOOKMARKLET CÀO BÀI
-  const bookmarkletCode = `javascript:(function(){try{var t=document.querySelector('h1.detail-title,h1.title-detail,h1.title-news,h1.article-title,h1.detail__title,meta[property="og:title"]')?.innerText||document.querySelector('meta[property="og:title"]')?.content||document.title||"";t=t.replace(/\\s*-\\s*Tuổi Trẻ.*$/i,'').replace(/\\s*-\\s*VnExpress.*$/i,'').replace(/\\s*-\\s*Tin Game.*$/i,'').replace(/\\s*-\\s*[^-]+$/,'').trim();var descParts=[];var sapoEl=document.querySelector('.detail-sapo,.detail__sapo,p.description,.sapo,.lead,.summary,.entry-summary');if(sapoEl&&sapoEl.innerText.trim()){descParts.push(sapoEl.innerText.trim());}var contentContainer=document.querySelector('#main-detail-body,.detail-content,.detail__content,.fck_detail,.entry-content,article');if(contentContainer){var bodyPs=contentContainer.querySelectorAll('p:not(.Image):not(.caption):not([style*="text-align:right"]):not([style*="text-align: right"])');for(var i=0;i<bodyPs.length&&descParts.length<2;i++){var pText=bodyPs[i].innerText.trim();if(pText&&pText.length>35&&!descParts.includes(pText)&&!pText.startsWith('Ảnh:')&&!pText.startsWith('Theo ')&&!pText.startsWith('TTO')&&!pText.startsWith('>>')&&!pText.startsWith('*')){descParts.push(pText);}}}var desc=descParts.join(' ');if(!desc){desc=document.querySelector('meta[property="og:description"]')?.content||document.querySelector('meta[name="description"]')?.content||"";}var img="";if(contentContainer){var firstBodyImg=contentContainer.querySelector('[type="Photo"] img,.VCSortableInPage img,figure img,img[itemprop="contentUrl"],img[data-src]');if(firstBodyImg){img=firstBodyImg.getAttribute('data-src')||firstBodyImg.getAttribute('data-original')||firstBodyImg.getAttribute('src')||"";}}if(!img||img.startsWith('data:image')){img=document.querySelector('meta[property="og:image"]')?.content||"";}var badge="";var cateEl=document.querySelector('.detail-cate a,.detail__cate a,.breadcrumb li a:last-child,.parent-cate,meta[property="article:section"],[class*="the-loai"]');if(cateEl){badge=cateEl.innerText||cateEl.content||"";}if(!badge){var metaCat=document.querySelector('meta[name="tt_category_id"],meta[name="keywords"]')?.content?.split(',')[0];if(metaCat&&isNaN(metaCat))badge=metaCat;}badge=(badge||"TIN MỚI").trim();if(badge.length>25)badge="TIN MỚI";var author="";var authorEl=document.querySelector('.author-info,.author,.detail-author,p[style*="text-align:right"] strong,p[style*="text-align: right"] strong,p.author strong,[rel="author"],.author-name,.byline,meta[name="author"]');if(authorEl){author=authorEl.innerText||authorEl.content||"";}author=author.replace(/^Theo\\s+/i,'').replace(/^Ảnh:.*$/i,'').trim();if(!author||author.length>30){author="Tổng hợp";}var src=window.location.hostname.replace('www.','');var data=JSON.stringify({title:t.trim(),desc:desc.trim(),image:img.trim(),badge:badge.trim(),author:author.trim(),source:src});var tempInput=document.createElement("textarea");tempInput.value=data;tempInput.style.position="fixed";tempInput.style.left="-9999px";tempInput.style.top="0";document.body.appendChild(tempInput);tempInput.focus();tempInput.select();var copied=false;try{copied=document.execCommand("copy");}catch(e){}document.body.removeChild(tempInput);if(copied){alert("✅ Đã cào và copy thành công!");}else if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(data).then(function(){alert("✅ Đã cào và copy thành công!");}).catch(function(){prompt("Copy dữ liệu JSON bên dưới:",data);});}else{prompt("Copy dữ liệu JSON bên dưới:",data);}}catch(err){alert("❌ Lỗi cào dữ liệu: "+err.message);}})();`;
+  // Khởi tạo ngày hiện tại
+  function getTodayString() {
+    const today = new Date();
+    const d = String(today.getDate()).padStart(2, '0');
+    const m = String(today.getMonth() + 1).padStart(2, '0');
+    const y = today.getFullYear();
+    return `${d}/${m}/${y}`;
+  }
+  document.getElementById('dateText').value = getTodayString();
+
+  // Mã Bookmarklet chuẩn để cào nội dung mọi trang báo và copy an toàn
+  const bookmarkletCode = `javascript:(function(){try{var t=document.querySelector('h1.detail-title,h1.title-detail,h1.title-news,h1.article-title,h1.detail__title,meta[property=\"og:title\"]')?.innerText||document.querySelector('meta[property=\"og:title\"]')?.content||document.title||\"\";t=t.replace(/\\\\s*-\\\\s*Tuổi Trẻ.*$/i,'').replace(/\\\\s*-\\\\s*VnExpress.*$/i,'').replace(/\\\\s*-\\\\s*Tin Game.*$/i,'').replace(/\\\\s*-\\\\s*[^-]+$/,'').trim();var descParts=[];var sapoEl=document.querySelector('.detail-sapo,.detail__sapo,p.description,.sapo,.lead,.summary,.entry-summary');if(sapoEl&&sapoEl.innerText.trim()){descParts.push(sapoEl.innerText.trim());}var contentContainer=document.querySelector('#main-detail-body,.detail-content,.detail__content,.fck_detail,.entry-content,article');if(contentContainer){var bodyPs=contentContainer.querySelectorAll('p:not(.Image):not(.caption):not([style*=\"text-align:right\"]):not([style*=\"text-align: right\"])');for(var i=0;i<bodyPs.length&&descParts.length<3;i++){var pText=bodyPs[i].innerText.trim();if(pText&&pText.length>35&&!descParts.includes(pText)&&!pText.startsWith('Ảnh:')&&!pText.startsWith('Theo ')&&!pText.startsWith('TTO')&&!pText.startsWith('>>')&&!pText.startsWith('*')){descParts.push(pText);}}}var desc=descParts.join(' ');if(!desc){desc=document.querySelector('meta[property=\"og:description\"]')?.content||document.querySelector('meta[name=\"description\"]')?.content||\"\";}var img=\"\";if(contentContainer){var firstBodyImg=contentContainer.querySelector('[type=\"Photo\"] img,.VCSortableInPage img,figure img,img[itemprop=\"contentUrl\"],img[data-src]');if(firstBodyImg){img=firstBodyImg.getAttribute('data-src')||firstBodyImg.getAttribute('data-original')||firstBodyImg.getAttribute('src')||\"\";}}if(!img||img.startsWith('data:image')){img=document.querySelector('meta[property=\"og:image\"]')?.content||\"\";}var badge=\"\";var cateEl=document.querySelector('.detail-cate a,.detail__cate a,.breadcrumb li a:last-child,.parent-cate,meta[property=\"article:section\"],[class*=\"the-loai\"]');if(cateEl){badge=cateEl.innerText||cateEl.content||\"\";}if(!badge){var metaCat=document.querySelector('meta[name=\"tt_category_id\"],meta[name=\"keywords\"]')?.content?.split(',')[0];if(metaCat&&isNaN(metaCat))badge=metaCat;}badge=(badge||\"TIN MỚI\").trim();if(badge.length>25)badge=\"TIN MỚI\";var author=\"\";var authorEl=document.querySelector('.author-info,.author,.detail-author,p[style*=\"text-align:right\"] strong,p[style*=\"text-align: right\"] strong,p.author strong,[rel=\"author\"],.author-name,.byline,meta[name=\"author\"]');if(authorEl){author=authorEl.innerText||authorEl.content||\"\";}author=author.replace(/^Theo\\\\s+/i,'').replace(/^Ảnh:.*$/i,'').trim();if(!author||author.length>30){author=\"Tổng hợp\";}var src=window.location.hostname.replace('www.','');var data=JSON.stringify({title:t.trim(),desc:desc.trim(),image:img.trim(),badge:badge.trim(),author:author.trim(),source:src});var tempInput=document.createElement(\"textarea\");tempInput.value=data;tempInput.style.position=\"fixed\";tempInput.style.left=\"-9999px\";tempInput.style.top=\"0\";document.body.appendChild(tempInput);tempInput.focus();tempInput.select();var copied=false;try{copied=document.execCommand(\"copy\");}catch(e){}document.body.removeChild(tempInput);if(copied){alert(\"✅ Đã cào và copy thành công!\");}else if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(data).then(function(){alert(\"✅ Đã cào và copy thành công!\");}).catch(function(){prompt(\"Copy dữ liệu JSON bên dưới:\",data);});}else{prompt(\"Copy dữ liệu JSON bên dưới:\",data);}}catch(err){alert(\"❌ Lỗi cào dữ liệu: \"+err.message);}})();`;
 
   function copyBookmarkletCode() {
     navigator.clipboard.writeText(bookmarkletCode).then(() => {
@@ -314,7 +505,11 @@
       if (data.badge) document.getElementById('badgeText').value = data.badge;
       if (data.author) document.getElementById('authorText').value = data.author;
       if (data.source) document.getElementById('sourceText').value = data.source;
+      if (data.date) document.getElementById('dateText').value = data.date;
       document.getElementById('autoPasteInput').value = "✅ Đã tự động điền đầy đủ!";
+      
+      // Kích hoạt dọn dẹp và chia trang
+      handleDescInput();
     } catch(e) {}
   }
 
@@ -324,7 +519,7 @@
       const reader = new FileReader();
       reader.onload = function(event) {
         const img = new Image();
-        img.onload = function() { loadedImage = img; };
+        img.onload = function() { loadedImage = img; triggerRender(); };
         img.src = event.target.result;
       };
       reader.readAsDataURL(file);
@@ -348,41 +543,235 @@
     });
   }
 
-  async function generateBanner() {
-    const title = document.getElementById('titleText').value.trim();
+  // Bật/tắt Giao diện Liquid Glass
+  function toggleLiquidGlass() {
+    const isLiquid = document.documentElement.hasAttribute('data-theme');
+    const btn = document.getElementById('themeToggleBtn');
+    
+    if (isLiquid) {
+      document.documentElement.removeAttribute('data-theme');
+      btn.innerHTML = '✨ Bật Giao Diện Liquid Glass';
+    } else {
+      document.documentElement.setAttribute('data-theme', 'liquid-glass');
+      btn.innerHTML = '🌌 Trở về Modern Deep Slate';
+    }
+    triggerRender();
+  }
+
+  // Bật/tắt Chế độ Carousel
+  function toggleCarouselMode() {
+    isCarouselMode = document.getElementById('carouselToggle').checked;
+    const settings = document.getElementById('carouselSettings');
+    const previewNav = document.getElementById('previewNav');
+    const btnDownloadAll = document.getElementById('btnDownloadAll');
+
+    if (isCarouselMode) {
+      settings.style.display = 'block';
+      previewNav.style.display = 'flex';
+      btnDownloadAll.style.display = 'block';
+      updateCarouselPages();
+    } else {
+      settings.style.display = 'none';
+      previewNav.style.display = 'none';
+      btnDownloadAll.style.display = 'none';
+      triggerRender();
+    }
+  }
+
+  // Tách văn bản đoạn trích thành nhiều trang Carousel một cách thông minh
+  function getCarouselPages(fullText, numPages) {
+    // Làm sạch text đầu vào, lọc rác
+    const cleanText = fullText.replace(/\s+/g, ' ').trim();
+    if (!cleanText) return Array(numPages).fill("");
+
+    // Phân tích văn bản thành các câu riêng biệt dựa trên dấu ngắt
+    const sentences = cleanText.match(/[^.!?]+[.!?]+(?:\s|$)|[^.!?]+$/g) || [cleanText];
+    const totalSentences = sentences.length;
+
+    // Khởi tạo các trang
+    const pages = Array(numPages).fill("").map(() => []);
+
+    if (totalSentences <= numPages) {
+      // Nếu số câu ít hơn số trang, phân phối đều từng câu
+      for (let i = 0; i < totalSentences; i++) {
+        pages[i].push(sentences[i].trim());
+      }
+    } else {
+      // Phân phối số câu đều đặn vào các trang
+      const avgSentencesPerPage = totalSentences / numPages;
+      let sentenceIdx = 0;
+      
+      for (let pageIdx = 0; pageIdx < numPages; pageIdx++) {
+        const targetCount = Math.round((pageIdx + 1) * avgSentencesPerPage) - Math.round(pageIdx * avgSentencesPerPage);
+        const limit = Math.min(sentenceIdx + targetCount, totalSentences);
+        
+        while (sentenceIdx < limit) {
+          pages[pageIdx].push(sentences[sentenceIdx].trim());
+          sentenceIdx++;
+        }
+      }
+    }
+
+    return pages.map(p => p.join(" "));
+  }
+
+  function updateCarouselPages() {
     const desc = document.getElementById('descText').value.trim();
+    const pageCount = parseInt(document.getElementById('carouselPageCount').value);
+    
+    carouselPages = getCarouselPages(desc, pageCount);
+    currentCarouselPage = 0;
+    
+    updateCarouselUI();
+    triggerRender();
+  }
+
+  function updateCarouselUI() {
+    const pageCount = carouselPages.length;
+    document.getElementById('pageIndicator').innerText = `Trang ${currentCarouselPage + 1} / ${pageCount}`;
+    document.getElementById('btnPrevPage').disabled = (currentCarouselPage === 0);
+    document.getElementById('btnNextPage').disabled = (currentCarouselPage === pageCount - 1);
+  }
+
+  function navigatePage(direction) {
+    currentCarouselPage += direction;
+    // Giới hạn trang
+    currentCarouselPage = Math.max(0, Math.min(currentCarouselPage, carouselPages.length - 1));
+    updateCarouselUI();
+    triggerRender();
+  }
+
+  function handleDescInput() {
+    if (isCarouselMode) {
+      updateCarouselPages();
+    } else {
+      triggerRender();
+    }
+  }
+
+  function handleFontChange() {
+    triggerRender();
+  }
+
+  // Hỗ trợ vẽ Canvas ko bị trễ
+  let renderTimer = null;
+  function triggerRender() {
+    if (renderTimer) clearTimeout(renderTimer);
+    renderTimer = setTimeout(() => {
+      generateBanner(true); // render im lặng ko hiện cảnh báo lỗi
+    }, 150);
+  }
+
+  async function generateBanner(silent = false) {
+    const title = document.getElementById('titleText').value.trim();
     const badge = document.getElementById('badgeText').value.trim() || 'TIN TỨC';
     const author = document.getElementById('authorText').value.trim() || 'Ẩn danh';
     const source = document.getElementById('sourceText').value.trim();
+    const dateStr = document.getElementById('dateText').value.trim();
     const bgUrl = document.getElementById('bgUrl').value.trim();
     const logoUrl = document.getElementById('logoUrl').value.trim();
     const font = document.getElementById('fontSelect').value;
     const watermark = document.getElementById('watermarkText').value.trim();
 
-    if (!title) {
+    if (!title && !silent) {
       alert('Vui lòng nhập tiêu đề bài viết!');
       return;
     }
 
     let bgImg = loadedImage;
-    if (!bgImg && bgUrl) bgImg = await loadImageAsync(bgUrl);
+    if (!bgImg && bgUrl) {
+      bgImg = await loadImageAsync(bgUrl);
+    }
+
     const logoImg = await loadImageAsync(logoUrl);
 
-    renderDualLayer(bgImg, logoImg, title, desc, badge, author, source, font, watermark);
+    // Xác định nội dung văn bản hiển thị cho trang hiện tại
+    let currentDesc = "";
+    if (isCarouselMode) {
+      currentDesc = carouselPages[currentCarouselPage] || "";
+    } else {
+      currentDesc = document.getElementById('descText').value.trim();
+    }
+
+    renderDualLayer(bgImg, logoImg, title, currentDesc, badge, author, source, dateStr, font, watermark);
   }
 
-  function renderDualLayer(img, logo, title, desc, badge, author, source, font, watermark) {
+  // DỌN SẠCH KÝ TỰ ĐÁNH DẤU HIGHLIGHT KHI ĐO CHIỀU RỘNG CHỮ
+  function cleanMarkup(text) {
+    return text.replace(/[\*\[\]]/g, '');
+  }
+
+  // THUẬT TOÁN AUTO-HIGHLIGHT VẼ TỪNG TỪ LÊN CANVAS
+  function drawHighlightLine(ctx, line, x, y, defaultColor, highlightColor, autoHighlightEnabled, customKwList) {
+    // Tách dòng thành các tokens gồm cả chữ và khoảng trắng
+    const tokens = line.split(/(\s+)/);
+    let currentX = x;
+
+    tokens.forEach(token => {
+      if (token.trim() === '') {
+        // Vẽ khoảng trắng
+        ctx.fillStyle = defaultColor;
+        ctx.fillText(token, currentX, y);
+        currentX += ctx.measureText(token).width;
+      } else {
+        let isHighlight = false;
+        let cleanWord = token;
+
+        // 1. Kiểm tra bọc markup thủ công *word* hoặc [word]
+        if (token.startsWith('*') && token.endsWith('*') && token.length > 2) {
+          isHighlight = true;
+          cleanWord = token.slice(1, -1);
+        } else if (token.startsWith('[') && token.endsWith(']') && token.length > 2) {
+          isHighlight = true;
+          cleanWord = token.slice(1, -1);
+        }
+        // 2. Kiểm tra từ khóa thủ công tự định nghĩa trong input
+        else if (customKwList.length > 0) {
+          // Loại bỏ dấu câu xung quanh từ để so sánh chính xác
+          const pureWord = token.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()\"']/g,"");
+          if (customKwList.some(kw => kw && pureWord.toLowerCase() === kw.toLowerCase())) {
+            isHighlight = true;
+          }
+        }
+
+        // 3. Tự động nhận diện từ khóa (chữ số, thông số, tên riêng viết hoa giữa câu, từ trong ngoặc)
+        if (!isHighlight && autoHighlightEnabled) {
+          // Nhận diện số và thông số (VD: 100%, 13, v3.1, 1080x1920)
+          const isNumeric = /\b\d+[\w%./x-]*\b/.test(token);
+          
+          // Nhận diện từ viết hoa đặc biệt (chữ viết hoa liên tiếp hoặc CamelCase, tên riêng)
+          const isSpecialCapital = /^[A-Z0-9]+[a-zA-Z0-9]*$/.test(token) && token.length > 1;
+          
+          // Từ nằm trong dấu ngoặc kép
+          const isInQuotes = /^["'«“].*["'»”]$/.test(token);
+
+          if (isNumeric || isSpecialCapital || isInQuotes) {
+            isHighlight = true;
+          }
+        }
+
+        ctx.fillStyle = isHighlight ? highlightColor : defaultColor;
+        ctx.fillText(cleanWord, currentX, y);
+        currentX += ctx.measureText(cleanWord).width;
+      }
+    });
+  }
+
+  function renderDualLayer(img, logo, title, desc, badge, author, source, dateStr, font, watermark) {
     const canvas = document.getElementById('preview-canvas');
     const ctx = canvas.getContext('2d');
     const w = 1080, h = 1920;
 
+    // Khử răng cưa chất lượng cao
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
 
+    // 1. Nền đơn sắc tối căn bản
     ctx.fillStyle = '#080b11';
     ctx.fillRect(0, 0, w, h);
 
     if (img) {
+      // 2. Lớp Blur nền toàn màn hình
       ctx.save();
       ctx.filter = 'blur(48px) brightness(0.32) saturate(1.2)';
       const imgRatio = img.width / img.height;
@@ -400,22 +789,27 @@
       ctx.drawImage(img, bgX, bgY, bgW, bgH);
       ctx.restore();
 
-      const grad = ctx.createLinearGradient(0, 850, 0, h);
-      grad.addColorStop(0, 'rgba(8, 11, 17, 0.2)');
-      grad.addColorStop(0.4, 'rgba(8, 11, 17, 0.88)');
-      grad.addColorStop(0.75, 'rgba(8, 11, 17, 0.98)');
+      // 3. Gradient chuyển tiếp siêu mịn
+      const startGradY = 700;
+      const grad = ctx.createLinearGradient(0, startGradY, 0, h);
+      grad.addColorStop(0, 'rgba(8, 11, 17, 0)');
+      grad.addColorStop(0.25, 'rgba(8, 11, 17, 0.45)');
+      grad.addColorStop(0.6, 'rgba(8, 11, 17, 0.92)');
+      grad.addColorStop(0.85, 'rgba(8, 11, 17, 0.99)');
       grad.addColorStop(1, '#080b11');
       ctx.fillStyle = grad;
-      ctx.fillRect(0, 850, w, h - 850);
+      ctx.fillRect(0, startGradY, w, h - startGradY);
 
+      // 4. Khung ảnh chính (Hero Image)
       const cardMargin = 65;
-      const cardW = w - (cardMargin * 2);
+      const cardW = w - (cardMargin * 2); // 950px
       const cardH = (img.height / img.width) * cardW;
       const cardX = cardMargin;
       const cardY = 300;
 
+      // Đổ bóng 3D
       ctx.save();
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.65)';
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
       ctx.shadowBlur = 40;
       ctx.shadowOffsetY = 18;
 
@@ -425,12 +819,15 @@
       ctx.fill();
       ctx.restore();
 
+      // Vẽ ảnh chính
       ctx.save();
       ctx.beginPath();
       ctx.roundRect(cardX, cardY, cardW, cardH, 20);
       ctx.clip();
       ctx.drawImage(img, cardX, cardY, cardW, cardH);
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.14)';
+      
+      // Viền kính
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.16)';
       ctx.lineWidth = 2;
       ctx.stroke();
       ctx.restore();
@@ -440,22 +837,31 @@
       var contentStartY = 500;
     }
 
+    // 5. Khung Logo reNews
     let nextBadgeX = 65;
     if (logo) {
       const srcW = logo.width;
       const srcH = logo.height;
       const isSquare = Math.abs(srcW - srcH) < (srcW * 0.25);
+
+      // Cắt sát viền vùng chữ reNews ở giữa
       let cropX, cropY, cropW, cropH;
       if (isSquare) {
-        cropX = srcW * 0.10; cropY = srcH * 0.41;
-        cropW = srcW * 0.80; cropH = srcH * 0.18;
+        cropX = srcW * 0.10;
+        cropY = srcH * 0.41;
+        cropW = srcW * 0.80;
+        cropH = srcH * 0.18;
       } else {
-        cropX = 0; cropY = 0;
-        cropW = srcW; cropH = srcH;
+        cropX = 0;
+        cropY = 0;
+        cropW = srcW;
+        cropH = srcH;
       }
 
-      const boxH = 68; const boxW = 230;
-      const padX = 8; const padY = 6;
+      const boxH = 68;
+      const boxW = 230;
+      const padX = 8;
+      const padY = 6;
       const drawW = boxW - (padX * 2);
       const drawH = boxH - (padY * 2);
 
@@ -467,15 +873,18 @@
       ctx.clip();
 
       const scale = Math.min(drawW / cropW, drawH / cropH);
-      const finalW = cropW * scale; const finalH = cropH * scale;
+      const finalW = cropW * scale;
+      const finalH = cropH * scale;
       const drawX = 65 + padX + (drawW - finalW) / 2;
       const drawY = 160 + padY + (drawH - finalH) / 2;
 
       ctx.drawImage(logo, cropX, cropY, cropW, cropH, drawX, drawY, finalW, finalH);
       ctx.restore();
+
       nextBadgeX = 65 + boxW + 20;
     }
 
+    // 6. Badge thể loại
     ctx.font = '600 20px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
     const badgeStr = badge.toUpperCase();
     const badgeMetrics = ctx.measureText(badgeStr);
@@ -493,44 +902,99 @@
     ctx.fillStyle = '#e2e8f0';
     ctx.fillText(badgeStr, nextBadgeX + 18, 202);
 
+    // LẤY CẤU HÌNH HIGHLIGHT
+    const highlightSelect = document.getElementById('highlightStyle');
+    const highlightColor = highlightSelect.value;
+    const autoHighlightEnabled = (highlightColor !== 'none');
+    
+    // Tạo danh sách từ khóa bôi sáng tự chọn
+    const customKwInput = document.getElementById('customKeywords').value.trim();
+    const customKwList = customKwInput ? customKwInput.split(',').map(s => s.trim()).filter(Boolean) : [];
+
+    // 7. Tiêu đề chính (Áp dụng phông chữ tùy chọn)
     ctx.save();
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 54px ' + font; 
     ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
     ctx.shadowBlur = 10;
-    const nextY = wrapText(ctx, title, 65, contentStartY, 950, 70, 3);
+    const nextY = wrapTextWithHighlight(ctx, title, 65, contentStartY, 950, 70, 3, highlightColor, autoHighlightEnabled, customKwList);
     ctx.restore();
 
+    // 8. Đoạn trích nổi bật
     let descEndY = nextY;
     if (desc) {
       ctx.save();
       ctx.fillStyle = '#cbd5e1';
-      ctx.font = '400 31px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.font = '400 31px ' + font.replace('bold ', ''); // Giữ chung font chữ mượt mà
       ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
       ctx.shadowBlur = 6;
-      descEndY = wrapText(ctx, desc, 65, nextY + 48, 950, 48, 8);
+      descEndY = wrapTextWithHighlight(ctx, desc, 65, nextY + 48, 950, 48, 8, highlightColor, autoHighlightEnabled, customKwList);
       ctx.restore();
     }
 
+    // 9. CTA Box hoặc Chỉ báo trượt Carousel (Kích thích vuốt tiếp cận)
+    const isLastPage = !isCarouselMode || (currentCarouselPage === carouselPages.length - 1);
     const ctaY = Math.min(Math.max(descEndY + 60, 1500), 1640);
-    ctx.beginPath();
-    ctx.roundRect(65, ctaY, 950, 72, 14);
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
-    ctx.lineWidth = 1;
-    ctx.stroke();
 
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = '500 24px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-    ctx.fillText('💬 Chia sẻ góc nhìn hoặc suy nghĩ của bạn', 100, ctaY + 45);
+    if (isLastPage) {
+      // CTA Box mặc định cho trang cuối
+      ctx.beginPath();
+      ctx.roundRect(65, ctaY, 950, 72, 14);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
 
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '500 24px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText('💬 Chia sẻ góc nhìn hoặc suy nghĩ của bạn', 100, ctaY + 45);
+    } else {
+      // Chỉ báo trượt ngang lôi cuốn cho các trang giữa Carousel
+      ctx.beginPath();
+      ctx.roundRect(65, ctaY, 950, 78, 14);
+      ctx.fillStyle = 'rgba(56, 189, 248, 0.06)'; // Hơi ám xanh biển
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.25)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = 'bold 24px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText('👉 VUỐT SANG PHẢI ĐỂ ĐỌC TIẾP TRANG SAU >>>', 110, ctaY + 47);
+    }
+
+    // 10. Chỉ báo tiến trình Carousel (Dải chấm tròn nhỏ tinh tế kiểu iOS / TikTok)
+    if (isCarouselMode) {
+      const pageCount = carouselPages.length;
+      const dotRadius = 7;
+      const dotGap = 16;
+      const totalDotW = (pageCount * dotRadius * 2) + ((pageCount - 1) * dotGap);
+      const dotStartX = (w - totalDotW) / 2;
+      const dotY = ctaY - 36;
+
+      for (let i = 0; i < pageCount; i++) {
+        ctx.beginPath();
+        ctx.arc(dotStartX + (i * (dotRadius * 2 + dotGap)) + dotRadius, dotY, dotRadius, 0, Math.PI * 2);
+        if (i === currentCarouselPage) {
+          ctx.fillStyle = '#38bdf8'; // Chấm trang hiện tại sáng rực
+        } else {
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.15)'; // Chấm trang khác mờ
+        }
+        ctx.fill();
+      }
+    }
+
+    // 11. Tác giả & Nguồn & Ngày đăng bài
     ctx.fillStyle = '#64748b';
     ctx.font = '400 22px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
     let metaInfo = author;
     if (source) metaInfo += ` • ${source}`;
+    if (dateStr) metaInfo += ` • ${dateStr}`;
+    if (isCarouselMode) metaInfo += ` • Trang ${currentCarouselPage + 1}/${carouselPages.length}`;
     ctx.fillText(metaInfo, 65, 1780);
 
+    // 12. Đóng dấu Bản quyền (Watermark)
     if (watermark) {
       ctx.save();
       ctx.translate(w / 2, h / 2);
@@ -546,40 +1010,87 @@
     document.getElementById('btnDownload').style.display = 'block';
   }
 
-  function wrapText(ctx, text, x, y, maxWidth, lineHeight, maxLines = 8) {
+  // HÀM NGẮT DÒNG VÀ VẼ CHỮ HIGHLIGHT THÔNG MINH
+  function wrapTextWithHighlight(ctx, text, x, y, maxWidth, lineHeight, maxLines = 8, highlightColor, autoHighlightEnabled, customKwList) {
     const words = text.split(' ');
-    let line = '';
-    let lineCount = 0;
-    let currentY = y;
+    let lines = [];
+    let currentLine = '';
+
     for (let n = 0; n < words.length; n++) {
-      const testLine = line + words[n] + ' ';
-      const metrics = ctx.measureText(testLine);
+      // Làm sạch các markup để đo chính xác
+      const testLine = currentLine + words[n] + ' ';
+      const cleanTestLine = cleanMarkup(testLine);
+      const metrics = ctx.measureText(cleanTestLine);
+      
       if (metrics.width > maxWidth && n > 0) {
-        ctx.fillText(line, x, currentY);
-        line = words[n] + ' ';
-        currentY += lineHeight;
-        lineCount++;
-        if (lineCount >= maxLines - 1 && n < words.length - 1) {
-          line += '...';
-          break;
-        }
+        lines.push(currentLine.trim());
+        currentLine = words[n] + ' ';
       } else {
-        line = testLine;
+        currentLine = testLine;
       }
     }
-    ctx.fillText(line, x, currentY);
-    return currentY;
+    lines.push(currentLine.trim());
+
+    // Giới hạn số dòng tối đa và thêm dấu ba chấm nếu tràn
+    let finalLines = lines.slice(0, maxLines);
+    if (lines.length > maxLines) {
+      const lastIdx = maxLines - 1;
+      finalLines[lastIdx] = finalLines[lastIdx] + '...';
+    }
+
+    // Vẽ từng dòng chữ bôi màu từ khóa
+    let currentY = y;
+    finalLines.forEach(line => {
+      drawHighlightLine(ctx, line, x, currentY, ctx.fillStyle, highlightColor, autoHighlightEnabled, customKwList);
+      currentY += lineHeight;
+    });
+
+    return currentY - lineHeight; // trả về tọa độ Y của dòng cuối cùng để xếp các thành phần tiếp theo
   }
 
+  // TẢI ẢNH TRANG HIỆN TẠI
   function downloadImage() {
     const canvas = document.getElementById('preview-canvas');
     const link = document.createElement('a');
-    link.download = 'renews-tiktok-hd-v3-liquid.png';
+    const pageSuffix = isCarouselMode ? `_trang_${currentCarouselPage + 1}` : '';
+    link.download = `renews_tiktok_v3_1${pageSuffix}.png`;
     link.href = canvas.toDataURL('image/png');
     link.click();
+  }
+
+  // TẢI TRỌN BỘ TOÀN BỘ CAROUSEL 3-5 TRANG
+  async function downloadAllCarouselPages() {
+    if (!isCarouselMode || carouselPages.length === 0) return;
+    
+    const pageCount = carouselPages.length;
+    const confirmDownload = confirm(`Hệ thống sẽ tải xuống trọn bộ ${pageCount} ảnh Carousel liên tiếp. Bạn sẵn sàng chưa?`);
+    if (!confirmDownload) return;
+
+    // Lưu lại trạng thái trang đang xem
+    const originalPage = currentCarouselPage;
+
+    // Tải lần lượt từng trang
+    for (let i = 0; i < pageCount; i++) {
+      currentCarouselPage = i;
+      updateCarouselUI();
+      await generateBanner(true); // Vẽ đồng bộ lên Canvas
+      
+      const canvas = document.getElementById('preview-canvas');
+      const link = document.createElement('a');
+      link.download = `renews_tiktok_v3_1_page_${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      
+      // Chờ một chút trước khi tải trang tiếp theo để trình duyệt xử lý mượt mà
+      await new Promise(resolve => setTimeout(resolve, 300));
+    }
+
+    // Trở về trang gốc
+    currentCarouselPage = originalPage;
+    updateCarouselUI();
+    generateBanner(true);
   }
 </script>
 
 </body>
 </html>
-
