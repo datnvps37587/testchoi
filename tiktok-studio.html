@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>reNews - TikTok Studio Ultra HD v3.1 (Liquid Glass & Carousel - FIXED)</title>
+  <title>reNews - TikTok Studio Ultra HD v4.0 (Multi-Format & Comparison)</title>
   <!-- Kết nối các phông chữ Google Fonts phổ biến cho Typography và eSports -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Lexend:wght@400;700;900&family=Chakra+Petch:wght@400;700&family=Montserrat:wght@400;700;900&family=Playfair+Display:ital,wght@0,700;1,400&family=Patrick+Hand&display=swap" rel="stylesheet">
   <style>
@@ -133,10 +133,34 @@
       margin-bottom: 18px;
     }
 
-    /* Khung Carousel */
     .carousel-box {
       background: rgba(16, 185, 129, 0.05);
       border: 1px solid rgba(16, 185, 129, 0.2);
+      padding: 14px;
+      border-radius: 12px;
+      margin-bottom: 18px;
+    }
+
+    /* Các hộp tính năng mới v4 */
+    .sensitive-box {
+      background: rgba(239, 68, 68, 0.05);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      padding: 14px;
+      border-radius: 12px;
+      margin-bottom: 18px;
+    }
+
+    .format-box {
+      background: rgba(56, 189, 248, 0.05);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      padding: 14px;
+      border-radius: 12px;
+      margin-bottom: 18px;
+    }
+
+    .compare-box {
+      background: rgba(245, 158, 11, 0.05);
+      border: 1px solid rgba(245, 158, 11, 0.2);
       padding: 14px;
       border-radius: 12px;
       margin-bottom: 18px;
@@ -185,7 +209,6 @@
       transform: scale(0.985);
     }
 
-    /* Các nút điều khiển trang Carousel khi preview */
     .carousel-controls {
       display: flex;
       align-items: center;
@@ -236,7 +259,6 @@
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
     }
 
-    /* Nút Bật/Tắt Liquid Glass nổi bật */
     .btn-toggle-theme {
       background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
       border: 1px solid rgba(255,255,255,0.2);
@@ -255,7 +277,6 @@
       text-shadow: 0 0 8px rgba(255,255,255,0.5);
     }
 
-    /* CSS Switch Toggle */
     .switch-container {
       display: flex;
       align-items: center;
@@ -305,6 +326,10 @@
       background-color: #10b981;
     }
 
+    .sensitive-box input:checked + .slider {
+      background-color: #ef4444;
+    }
+
     input:checked + .slider:before {
       transform: translateX(20px);
     }
@@ -323,7 +348,7 @@
 <body>
 
 <div class="container">
-  <h2>reNews TikTok Studio (v3.2 - Layout Templates)</h2>
+  <h2>reNews TikTok Studio (v4.0 - Multi-Format Ultra HD)</h2>
 
   <!-- Nút Bật/Tắt Liquid Glass -->
   <button class="btn btn-toggle-theme" id="themeToggleBtn" onclick="toggleLiquidGlass()">
@@ -342,7 +367,56 @@
     <input type="text" id="autoPasteInput" placeholder="Dán mã JSON bài viết vào đây..." oninput="handleAutoFill(this.value)" onchange="handleAutoFill(this.value)">
   </div>
 
-  <!-- TÍNH NĂNG MỚI: CHẾ ĐỘ CAROUSEL -->
+  <!-- TÍNH NĂNG MỚI V4: ĐA NỀN TẢNG (CHỌN ĐỊNH DẠNG TỶ LỆ) -->
+  <div class="format-box">
+    <label style="color: #38bdf8; font-weight: bold; margin-top:0; display: flex; align-items: center; gap: 6px;">📱 Đa Nền Tảng (Tỷ lệ khung hình):</label>
+    <select id="formatSelect" onchange="changeFormat()">
+      <option value="9_16" selected>TikTok / Shorts / Reels (Đứng 9:16 - 1080x1920)</option>
+      <option value="1_1">Instagram / Facebook (Vuông 1:1 - 1080x1080)</option>
+      <option value="16_9">YouTube Cover / Landscape (Ngang 16:9 - 1920x1080)</option>
+    </select>
+  </div>
+
+  <!-- TÍNH NĂNG MỚI V4: BẢO VỆ KÊNH (BẬT CẢNH BÁO NHẠY CẢM) -->
+  <div class="sensitive-box">
+    <div class="switch-container">
+      <span style="color: #f87171; font-weight: bold; font-size: 13px;">🛡️ Chế độ "Bảo vệ Kênh" (Cảnh báo nhạy cảm):</span>
+      <label class="switch">
+        <input type="checkbox" id="sensitiveToggle" onchange="triggerRender()">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <p style="font-size: 11px; color: #fca5a5; margin: 8px 0 0 0; line-height: 1.4;">
+      * Khi bật, ảnh bìa sẽ được phủ lớp lưới kính mờ đen tối cao cấp kèm biểu tượng cảnh báo đỏ rực rỡ để vượt qua bộ lọc quét AI của TikTok, đồng thời khơi gợi sự tò mò của người xem.
+    </p>
+  </div>
+
+  <!-- TÍNH NĂNG MỚI V4: GHÉP ẢNH SO SÁNH (BEFORE & AFTER) -->
+  <div class="compare-box">
+    <div class="switch-container">
+      <span style="color: #fbbf24; font-weight: bold; font-size: 13px;">📸 Chế độ Ghép Ảnh So Sánh (Before & After):</span>
+      <label class="switch">
+        <input type="checkbox" id="compareToggle" onchange="toggleCompareMode()">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div id="compareSettings" style="display: none; margin-top: 10px;">
+      <label>Ảnh phụ (Ảnh Sau / After):</label>
+      <input type="file" id="fileInput2" accept="image/*">
+      <input type="text" id="bgUrl2" style="margin-top: 6px;" placeholder="https://example.com/after_image.jpg" onchange="triggerRender()">
+      <div class="flex-row" style="margin-top: 10px;">
+        <div class="flex-col">
+          <label>Kiểu chia đôi ảnh:</label>
+          <select id="compareSplit" onchange="triggerRender()">
+            <option value="horizontal">Chia đôi Trên / Dưới (Tối ưu cho 9:16)</option>
+            <option value="vertical">Chia đôi Trái / Phải (Tối ưu cho 16:9 và 1:1)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHẾ ĐỘ CAROUSEL -->
   <div class="carousel-box">
     <div class="switch-container">
       <span style="color: #34d399; font-weight: bold; font-size: 13px;">🎠 Chế độ Carousel (Ảnh trượt ngang TikTok):</span>
@@ -370,7 +444,7 @@
 
   <!-- TÌNH NĂNG V3 & v3.1: WATERMARK, PHÔNG CHỮ & AUTO-HIGHLIGHT -->
   <div class="highlight-box">
-    <label style="color: #fbbf24; font-weight: bold; margin-top:0;">🌟 Tùy chỉnh Nâng cao (v3.2 - Hệ thống Bố cục):</label>
+    <label style="color: #fbbf24; font-weight: bold; margin-top:0;">🌟 Tùy chỉnh Nâng cao (Hệ thống Bố cục & Typography):</label>
     
     <div class="flex-row">
       <div class="flex-col">
@@ -446,7 +520,7 @@
   <label>6. Đoạn trích nổi bật:</label>
   <textarea id="descText" rows="6" placeholder="Nội dung tóm tắt chi tiết..." oninput="handleDescInput()"></textarea>
 
-  <button class="btn" onclick="generateBanner()">Tạo Ảnh Chuẩn Nét TikTok (1080x1920)</button>
+  <button class="btn" onclick="generateBanner()">Tạo Ảnh Chuẩn Nét (Kích Thước Động)</button>
 
   <!-- Nút điều hướng Carousel khi Preview -->
   <div class="carousel-controls" id="previewNav" style="display: none;">
@@ -466,7 +540,7 @@
 </div>
 
 <script>
-  // Quản lý trạng thái Carousel
+  // Quản lý trạng thái Carousel, Định dạng & So sánh
   let isCarouselMode = false;
   let carouselPages = [];
   let currentCarouselPage = 0;
@@ -481,8 +555,8 @@
   }
   document.getElementById('dateText').value = getTodayString();
 
-  // Mã Bookmarklet chuẩn để cào nội dung mọi trang báo và copy an toàn
-  const bookmarkletCode = `javascript:(function(){try{var t=document.querySelector('h1.detail-title,h1.title-detail,h1.title-news,h1.article-title,h1.detail__title,meta[property=\\\"og:title\\\"]')?.innerText||document.querySelector('meta[property=\\\"og:title\\\"]')?.content||document.title||\\\"\\\";t=t.replace(/\\\\\\\\s*-\\\\\\\\s*Tuổi Trẻ.*$/i,'').replace(/\\\\\\\\s*-\\\\\\\\s*VnExpress.*$/i,'').replace(/\\\\\\\\s*-\\\\\\\\s*Tin Game.*$/i,'').replace(/\\\\\\\\s*-\\\\\\\\s*[^-]+$/,'').trim();var descParts=[];var sapoEl=document.querySelector('.detail-sapo,.detail__sapo,p.description,.sapo,.lead,.summary,.entry-summary');if(sapoEl&&sapoEl.innerText.trim()){descParts.push(sapoEl.innerText.trim());}var contentContainer=document.querySelector('#main-detail-body,.detail-content,.detail__content,.fck_detail,.entry-content,article');if(contentContainer){var bodyPs=contentContainer.querySelectorAll('p:not(.Image):not(.caption):not([style*=\\\"text-align:right\\\"]):not([style*=\\\"text-align: right\\\"])');for(var i=0;i<bodyPs.length&&descParts.length<3;i++){var pText=bodyPs[i].innerText.trim();if(pText&&pText.length>35&&!descParts.includes(pText)&&!pText.startsWith('Ảnh:')&&!pText.startsWith('Theo ')&&!pText.startsWith('TTO')&&!pText.startsWith('>>')&&!pText.startsWith('*')){descParts.push(pText);}}}var desc=descParts.join(' ');if(!desc){desc=document.querySelector('meta[property=\\\"og:description\\\"]')?.content||document.querySelector('meta[name=\\\"description\\\"]')?.content||\\\"\\\";}var img=\\\"\\\";if(contentContainer){var firstBodyImg=contentContainer.querySelector('[type=\\\"Photo\\\"] img,.VCSortableInPage img,figure img,img[itemprop=\\\"contentUrl\\\"],img[data-src]');if(firstBodyImg){img=firstBodyImg.getAttribute('data-src')||firstBodyImg.getAttribute('data-original')||firstBodyImg.getAttribute('src')||\\\"\\\";}}if(!img||img.startsWith('data:image')){img=document.querySelector('meta[property=\\\"og:image\\\"]')?.content||\\\"\\\";}var badge=\\\"\\\";var cateEl=document.querySelector('.detail-cate a,.detail__cate a,.breadcrumb li a:last-child,.parent-cate,meta[property=\\\"article:section\\\"],[class*=\\\"the-loai\\\"]');if(cateEl){badge=cateEl.innerText||cateEl.content||\\\"\\\";}if(!badge){var metaCat=document.querySelector('meta[name=\\\"tt_category_id\\\"],meta[name=\\\"keywords\\\"]')?.content?.split(',')[0];if(metaCat&&isNaN(metaCat))badge=metaCat;}badge=(badge||\\\"TIN MỚI\\\").trim();if(badge.length>25)badge=\\\"TIN MỚI\\\";var author=\\\"\\\";var authorEl=document.querySelector('.author-info,.author,.detail-author,p[style*=\\\"text-align:right\\\"] strong,p[style*=\\\"text-align: right\\\"] strong,p.author strong,[rel=\\\"author\\\"],.author-name,.byline,meta[name=\\\"author\\\"]');if(authorEl){author=authorEl.innerText||authorEl.content||\\\"\\\";}author=author.replace(/^Theo\\\\\\\\s+/i,'').replace(/^Ảnh:.*$/i,'').trim();if(!author||author.length>30){author=\\\"Tổng hợp\\\";}var src=window.location.hostname.replace('www.','');var data=JSON.stringify({title:t.trim(),desc:desc.trim(),image:img.trim(),badge:badge.trim(),author:author.trim(),source:src});var tempInput=document.createElement(\\\"textarea\\\");tempInput.value=data;tempInput.style.position=\\\"fixed\\\";tempInput.style.left=\\\"-9999px\\\";tempInput.style.top=\\\"0\\\";document.body.appendChild(tempInput);tempInput.focus();tempInput.select();var copied=false;try{copied=document.execCommand(\\\"copy\\\");}catch(e){}document.body.removeChild(tempInput);if(copied){alert(\\\"✅ Đã cào và copy thành công!\\\");}else if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(data).then(function(){alert(\\\"✅ Đã cào và copy thành công!\\\");}).catch(function(){prompt(\\\"Copy dữ liệu JSON bên dưới:\\\",data);});}else{prompt(\\\"Copy dữ liệu JSON bên dưới:\\\",data);}}catch(err){alert(\\\"❌ Lỗi cào dữ liệu: \\\"+err.message);}})();`;
+  // Mã Bookmarklet chuẩn để cào nội dung mọi trang báo và copy an toàn (v3.2 fixed)
+  const bookmarkletCode = `javascript:(function(){try{var t=document.querySelector('h1.detail-title,h1.title-detail,h1.title-news,h1.article-title,h1.detail__title,meta[property=\"og:title\"]')?.innerText||document.querySelector('meta[property=\"og:title\"]')?.content||document.title||\"\";t=t.replace(/\\s*-\\s*Tuổi Trẻ.*$/i,'').replace(/\\s*-\\s*VnExpress.*$/i,'').replace(/\\s*-\\s*Tin Game.*$/i,'').replace(/\\s*-\\s*[^-]+$/,'').trim();var descParts=[];var sapoEl=document.querySelector('.detail-sapo,.detail__sapo,p.description,.sapo,.lead,.summary,.entry-summary');if(sapoEl&&sapoEl.innerText.trim()){descParts.push(sapoEl.innerText.trim());}var contentContainer=document.querySelector('#main-detail-body,.detail-content,.detail__content,.fck_detail,.entry-content,article');if(contentContainer){var bodyPs=contentContainer.querySelectorAll('p:not(.Image):not(.caption):not([style*=\"text-align:right\"]):not([style*=\"text-align: right\"])');for(var i=0;i<bodyPs.length&&descParts.length<3;i++){var pText=bodyPs[i].innerText.trim();if(pText&&pText.length>35&&!descParts.includes(pText)&&!pText.startsWith('Ảnh:')&&!pText.startsWith('Theo ')&&!pText.startsWith('TTO')&&!pText.startsWith('>>')&&!pText.startsWith('*')){descParts.push(pText);}}}var desc=descParts.join(' ');if(!desc){desc=document.querySelector('meta[property=\"og:description\"]')?.content||document.querySelector('meta[name=\"description\"]')?.content||\"\";}var img=\"\";if(contentContainer){var firstBodyImg=contentContainer.querySelector('[type=\"Photo\"] img,.VCSortableInPage img,figure img,img[itemprop=\"contentUrl\"],img[data-src]');if(firstBodyImg){img=firstBodyImg.getAttribute('data-src')||firstBodyImg.getAttribute('data-original')||firstBodyImg.getAttribute('src')||\"\";}}if(!img||img.startsWith('data:image')){img=document.querySelector('meta[property=\"og:image\"]')?.content||\"\";}var badge=\"\";var cateEl=document.querySelector('.detail-cate a,.detail__cate a,.breadcrumb li a:last-child,.parent-cate,meta[property=\"article:section\"],[class*=\"the-loai\"]');if(cateEl){badge=cateEl.innerText||cateEl.content||\"\";}if(!badge){var metaCat=document.querySelector('meta[name=\"tt_category_id\"],meta[name=\"keywords\"]')?.content?.split(',')[0];if(metaCat&&isNaN(metaCat))badge=metaCat;}badge=(badge||\"TIN MỚI\").trim();if(badge.length>25)badge=\"TIN MỚI\";var author=\"\";var authorEl=document.querySelector('.author-info,.author,.detail-author,p[style*=\"text-align:right\"] strong,p[style*=\"text-align: right\"] strong,p.author strong,[rel=\"author\"],.author-name,.byline,meta[name=\"author\"]');if(authorEl){author=authorEl.innerText||authorEl.content||\"\";}author=author.replace(/^Theo\\s+/i,'').replace(/^Ảnh:.*$/i,'').trim();if(!author||author.length>30){author=\"Tổng hợp\";}var src=window.location.hostname.replace('www.','');var data=JSON.stringify({title:t.trim(),desc:desc.trim(),image:img.trim(),badge:badge.trim(),author:author.trim(),source:src});var tempInput=document.createElement("textarea");tempInput.value=data;tempInput.style.position="fixed";tempInput.style.left=\"-9999px\";tempInput.style.top=\"0\";document.body.appendChild(tempInput);tempInput.focus();tempInput.select();var copied=false;try{copied=document.execCommand("copy");}catch(e){}document.body.removeChild(tempInput);if(copied){alert("✅ Đã cào và copy thành công!");}else if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(data).then(function(){alert("✅ Đã cào và copy thành công!");}).catch(function(){prompt("Copy dữ liệu JSON bên dưới:",data);});}else{prompt("Copy dữ liệu JSON bên dưới:",data);}}catch(err){alert("❌ Lỗi cào dữ liệu: "+err.message);}})();`;
 
   function copyBookmarkletCode() {
     navigator.clipboard.writeText(bookmarkletCode).then(() => {
@@ -501,6 +575,7 @@
   }
 
   let loadedImage = null;
+  let loadedImage2 = null;
 
   function handleAutoFill(val) {
     try {
@@ -514,7 +589,6 @@
       if (data.date) document.getElementById('dateText').value = data.date;
       document.getElementById('autoPasteInput').value = "✅ Đã tự động điền đầy đủ!";
       
-      // Kích hoạt dọn dẹp và chia trang
       handleDescInput();
     } catch(e) {}
   }
@@ -526,6 +600,19 @@
       reader.onload = function(event) {
         const img = new Image();
         img.onload = function() { loadedImage = img; triggerRender(); };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  document.getElementById('fileInput2').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const img = new Image();
+        img.onload = function() { loadedImage2 = img; triggerRender(); };
         img.src = event.target.result;
       };
       reader.readAsDataURL(file);
@@ -584,26 +671,33 @@
     }
   }
 
+  // Bật/tắt Chế độ So Sánh
+  function toggleCompareMode() {
+    const isCompare = document.getElementById('compareToggle').checked;
+    document.getElementById('compareSettings').style.display = isCompare ? 'block' : 'none';
+    triggerRender();
+  }
+
+  // Thay đổi định dạng tỷ lệ
+  function changeFormat() {
+    triggerRender();
+  }
+
   // Tách văn bản đoạn trích thành nhiều trang Carousel một cách thông minh
   function getCarouselPages(fullText, numPages) {
-    // Làm sạch text đầu vào, lọc rác
     const cleanText = fullText.replace(/\s+/g, ' ').trim();
     if (!cleanText) return Array(numPages).fill("");
 
-    // Phân tích văn bản thành các câu riêng biệt dựa trên dấu ngắt
     const sentences = cleanText.match(/[^.!?]+[.!?]+(?:\s|$)|[^.!?]+$/g) || [cleanText];
     const totalSentences = sentences.length;
 
-    // Khởi tạo các trang
     const pages = Array(numPages).fill("").map(() => []);
 
     if (totalSentences <= numPages) {
-      // Nếu số câu ít hơn số trang, phân phối đều từng câu
       for (let i = 0; i < totalSentences; i++) {
         pages[i].push(sentences[i].trim());
       }
     } else {
-      // Phân phối số câu đều đặn vào các trang
       const avgSentencesPerPage = totalSentences / numPages;
       let sentenceIdx = 0;
       
@@ -641,7 +735,6 @@
 
   function navigatePage(direction) {
     currentCarouselPage += direction;
-    // Giới hạn trang
     currentCarouselPage = Math.max(0, Math.min(currentCarouselPage, carouselPages.length - 1));
     updateCarouselUI();
     triggerRender();
@@ -659,12 +752,11 @@
     triggerRender();
   }
 
-  // Hỗ trợ vẽ Canvas ko bị trễ
   let renderTimer = null;
   function triggerRender() {
     if (renderTimer) clearTimeout(renderTimer);
     renderTimer = setTimeout(() => {
-      generateBanner(true); // render im lặng ko hiện cảnh báo lỗi
+      generateBanner(true);
     }, 150);
   }
 
@@ -690,9 +782,14 @@
       bgImg = await loadImageAsync(bgUrl);
     }
 
+    let bgImg2 = loadedImage2;
+    const bgUrl2 = document.getElementById('bgUrl2')?.value.trim();
+    if (!bgImg2 && bgUrl2) {
+      bgImg2 = await loadImageAsync(bgUrl2);
+    }
+
     const logoImg = await loadImageAsync(logoUrl);
 
-    // Xác định nội dung văn bản hiển thị cho trang hiện tại
     let currentDesc = "";
     if (isCarouselMode) {
       currentDesc = carouselPages[currentCarouselPage] || "";
@@ -700,23 +797,19 @@
       currentDesc = document.getElementById('descText').value.trim();
     }
 
-    renderDualLayer(bgImg, logoImg, title, currentDesc, badge, author, source, dateStr, font, watermark, layout);
+    renderDualLayer(bgImg, bgImg2, logoImg, title, currentDesc, badge, author, source, dateStr, font, watermark, layout);
   }
 
-  // DỌN SẠCH KÝ TỰ ĐÁNH DẤU HIGHLIGHT KHI ĐO CHIỀU RỘNG CHỮ
   function cleanMarkup(text) {
     return text.replace(/[\*\[\]]/g, '');
   }
 
-  // THUẬT TOÁN AUTO-HIGHLIGHT VẼ TỪNG TỪ LÊN CANVAS
   function drawHighlightLine(ctx, line, x, y, defaultColor, highlightColor, autoHighlightEnabled, customKwList) {
-    // Tách dòng thành các tokens gồm cả chữ và khoảng trắng
     const tokens = line.split(/(\s+)/);
     let currentX = x;
 
     tokens.forEach(token => {
       if (token.trim() === '') {
-        // Vẽ khoảng trắng
         ctx.fillStyle = defaultColor;
         ctx.fillText(token, currentX, y);
         currentX += ctx.measureText(token).width;
@@ -724,7 +817,6 @@
         let isHighlight = false;
         let cleanWord = token;
 
-        // 1. Kiểm tra bọc markup thủ công *word* hoặc [word]
         if (token.startsWith('*') && token.endsWith('*') && token.length > 2) {
           isHighlight = true;
           cleanWord = token.slice(1, -1);
@@ -732,24 +824,16 @@
           isHighlight = true;
           cleanWord = token.slice(1, -1);
         }
-        // 2. Kiểm tra từ khóa thủ công tự định nghĩa trong input
         else if (customKwList.length > 0) {
-          // Loại bỏ dấu câu xung quanh từ để so sánh chính xác
           const pureWord = token.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()\"']/g,"");
           if (customKwList.some(kw => kw && pureWord.toLowerCase() === kw.toLowerCase())) {
             isHighlight = true;
           }
         }
 
-        // 3. Tự động nhận diện từ khóa (chữ số, thông số, tên riêng viết hoa giữa câu, từ trong ngoặc)
         if (!isHighlight && autoHighlightEnabled) {
-          // Nhận diện số và thông số (VD: 100%, 13, v3.1, 1080x1920)
           const isNumeric = /\b\d+[\w%.\/x-]*\b/.test(token);
-          
-          // Nhận diện từ viết hoa đặc biệt (chữ viết hoa liên tiếp hoặc CamelCase, tên riêng)
           const isSpecialCapital = /^[A-Z0-9]+[a-zA-Z0-9]*$/.test(token) && token.length > 1;
-          
-          // Từ nằm trong dấu ngoặc kép
           const isInQuotes = /^["'«“].*["'»”]$/.test(token);
 
           if (isNumeric || isSpecialCapital || isInQuotes) {
@@ -764,46 +848,188 @@
     });
   }
 
-  function renderDualLayer(img, logo, title, desc, badge, author, source, dateStr, font, watermark, layout = 'default') {
+  // Hàm vẽ Badge nhỏ đè lên ảnh Before/After
+  function drawHalfTag(ctx, text, x, y) {
+    ctx.save();
+    ctx.font = 'bold 20px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+    const metrics = ctx.measureText(text);
+    const padX = 14, padY = 8;
+    const tagW = metrics.width + padX * 2;
+    const tagH = 20 + padY * 2;
+
+    ctx.beginPath();
+    ctx.roundRect(x, y, tagW, tagH, 8);
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.8)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    ctx.fillStyle = '#ffffff';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    ctx.fillText(text, x + padX, y + padY);
+    ctx.restore();
+  }
+
+  function renderDualLayer(img, img2, logo, title, desc, badge, author, source, dateStr, font, watermark, layout = 'default') {
     const canvas = document.getElementById('preview-canvas');
     const ctx = canvas.getContext('2d');
-    const w = 1080, h = 1920;
+    
+    // Đọc cấu hình Đa Nền Tảng (Format)
+    const format = document.getElementById('formatSelect')?.value || '9_16';
+    let w = 1080, h = 1920;
+    if (format === '1_1') {
+      w = 1080; h = 1080;
+    } else if (format === '16_9') {
+      w = 1920; h = 1080;
+    }
 
-    // Khử răng cưa chất lượng cao
+    canvas.width = w;
+    canvas.height = h;
+
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
 
-    // 1. Khởi tạo cấu hình bố cục
     let isQuote = (layout === 'quote');
     let isEmergency = (layout === 'emergency');
-    let contentStartY = 500;
 
     // Nền đơn sắc tối căn bản
-    ctx.fillStyle = isEmergency ? '#0f0505' : '#080b11'; // Đỏ sậm cho khẩn cấp
+    ctx.fillStyle = isEmergency ? '#0f0505' : '#080b11';
     ctx.fillRect(0, 0, w, h);
 
+    // Tính toán biến cấu trúc linh hoạt theo Tỷ Lệ Khung Hình
+    let cardMargin = 65;
+    let cardW = w - (cardMargin * 2);
+    let cardY = 300;
+    let maxCardH = 600;
+    
+    let textX = 65;
+    let textW = w - 130;
+    let titleFontSize = '54px';
+    let titleLineH = 70;
+    let descFontSize = '31px';
+    let descLineH = 48;
+    
+    let footerY = 1780;
+    let ctaX = 65;
+    let ctaW = w - 130;
+    let ctaYDefault = 1500;
+    let ctaYMax = 1640;
+    
+    let logoX = 65;
+    let logoY = isEmergency ? 180 : 160;
+
+    if (format === '1_1') {
+      cardMargin = 60;
+      cardW = w - (cardMargin * 2);
+      cardY = 135;
+      maxCardH = 340; // Giới hạn chiều cao card ảnh vuông để nhường khoảng chữ
+      
+      textX = 60;
+      textW = w - 120;
+      titleFontSize = '42px';
+      titleLineH = 56;
+      descFontSize = '26px';
+      descLineH = 38;
+      
+      footerY = 1010;
+      ctaX = 60;
+      ctaW = w - 120;
+      ctaYDefault = 840;
+      ctaYMax = 910;
+      
+      logoX = 60;
+      logoY = 60;
+    } else if (format === '16_9') {
+      // Phân chia Side-by-Side: Trái ảnh (X: 80, rộng 800), Phải chữ (X: 940, rộng 900)
+      cardMargin = 80;
+      cardY = 160;
+      cardW = img ? 800 : 0;
+      maxCardH = 740;
+      
+      textX = img ? 940 : 80;
+      textW = img ? 900 : 1760;
+      titleFontSize = '52px';
+      titleLineH = 68;
+      descFontSize = '28px';
+      descLineH = 42;
+      
+      footerY = 1010;
+      ctaX = textX;
+      ctaW = textW;
+      ctaYDefault = 840;
+      ctaYMax = 915;
+      
+      logoX = textX;
+      logoY = 60;
+    }
+
+    let cardH = img ? (img.height / img.width) * cardW : 0;
+    if (cardH > maxCardH) cardH = maxCardH;
+    
+    let contentStartY = img ? (cardY + cardH + 75) : 500;
+    if (format === '16_9' && img) {
+      contentStartY = logoY + 120; // Side-by-side bắt đầu chữ cao hơn
+    }
+
+    // A. VẼ NỀN BLUR & GRADIENT
     if (img) {
+      ctx.save();
+      ctx.filter = 'blur(48px) brightness(0.25) saturate(1.2)';
+      // Vẽ ảnh nền mờ toàn trang
+      ctx.drawImage(img, 0, 0, w, h);
+      ctx.restore();
+
+      // Phủ Gradient mịn
+      const startGradY = format === '9_16' ? 700 : 400;
+      const grad = ctx.createLinearGradient(0, startGradY, 0, h);
+      grad.addColorStop(0, 'rgba(8, 11, 17, 0)');
+      grad.addColorStop(0.25, 'rgba(8, 11, 17, 0.45)');
+      grad.addColorStop(0.6, 'rgba(8, 11, 17, 0.92)');
+      grad.addColorStop(0.85, 'rgba(8, 11, 17, 0.99)');
+      grad.addColorStop(1, isEmergency ? '#0f0505' : '#080b11');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, startGradY, w, h - startGradY);
+    }
+
+    // B. VẼ KHUNG VIỀN ĐẶC BIỆT CỦA BỐ CỤC KHẨN CẤP
+    if (isEmergency) {
+      ctx.save();
+      ctx.lineWidth = 24;
+      ctx.strokeStyle = '#7f1d1d';
+      ctx.strokeRect(12, 12, w - 24, h - 24);
+
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = '#ef4444';
+      ctx.strokeRect(26, 26, w - 52, h - 52);
+
+      // Warning Banner top
+      ctx.fillStyle = '#ef4444';
+      ctx.beginPath();
+      ctx.roundRect(logoX, logoY - 100, textW, 70, 12);
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 32px ' + font;
+      ctx.textAlign = 'center';
+      ctx.fillText('🚨 CẢNH BÁO • EMERGENCY ALERT 🚨', w / 2, logoY - 52);
+      ctx.textAlign = 'left';
+      ctx.restore();
+    }
+
+    // C. VẼ KHUNG ẢNH CHÍNH HOẶC CHẾ ĐỘ GHÉP ẢNH (BEFORE & AFTER)
+    if (img) {
+      const isCompareMode = document.getElementById('compareToggle')?.checked;
+      const compareSplit = document.getElementById('compareSplit')?.value || 'horizontal';
+      const cardX = cardMargin;
+
       if (isQuote) {
-        // --- BỐ CỤC TRÍCH DẪN: Vẽ ảnh chân dung hình tròn (Avatar) trung tâm ---
-        ctx.save();
-        ctx.filter = 'blur(48px) brightness(0.25) saturate(1.2)';
-        ctx.drawImage(img, 0, 0, w, h);
-        ctx.restore();
+        // --- BỐ CỤC TRÍCH DẪN: Vẽ ảnh chân dung hình tròn (Avatar) -----
+        const avX = format === '16_9' ? (cardX + cardW / 2) : (w / 2);
+        const avY = format === '16_9' ? (h / 2) : 380;
+        const avR = format === '16_9' ? 200 : 120;
 
-        // Vẽ gradient nền mờ mịn màng
-        const grad = ctx.createLinearGradient(0, 0, 0, h);
-        grad.addColorStop(0, 'rgba(8, 11, 17, 0.5)');
-        grad.addColorStop(0.5, 'rgba(8, 11, 17, 0.85)');
-        grad.addColorStop(1, '#080b11');
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, w, h);
-
-        // Vẽ ảnh chân dung Avatar tròn tuyệt đẹp
-        const avX = w / 2;
-        const avY = 380;
-        const avR = 120; // Đường kính 240px
-
-        // Đổ bóng Avatar
         ctx.save();
         ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
         ctx.shadowBlur = 40;
@@ -814,7 +1040,6 @@
         ctx.fill();
         ctx.restore();
 
-        // Clip ảnh tròn
         ctx.save();
         ctx.beginPath();
         ctx.arc(avX, avY, avR, 0, Math.PI * 2);
@@ -822,104 +1047,23 @@
         ctx.drawImage(img, avX - avR, avY - avR, avR * 2, avR * 2);
         ctx.restore();
 
-        // Viền bóng loáng ngoài
         ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
         ctx.lineWidth = 3;
         ctx.beginPath();
         ctx.arc(avX, avY, avR + 6, 0, Math.PI * 2);
         ctx.stroke();
 
-        contentStartY = avY + avR + 120; // Đẩy nội dung chữ xuống dưới avatar
-      } else if (isEmergency) {
-        // --- BỐ CỤC KHẨN CẤP: Nền đỏ sậm rực cháy và ảnh chính viền đỏ ---
-        ctx.save();
-        ctx.filter = 'blur(48px) brightness(0.25) saturate(1.6)';
-        ctx.drawImage(img, 0, 0, w, h);
-        ctx.restore();
-
-        const grad = ctx.createLinearGradient(0, 500, 0, h);
-        grad.addColorStop(0, 'rgba(15, 5, 5, 0)');
-        grad.addColorStop(0.4, 'rgba(127, 29, 29, 0.45)');
-        grad.addColorStop(0.8, 'rgba(15, 5, 5, 0.95)');
-        grad.addColorStop(1, '#0f0505');
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 500, w, h - 500);
-
-        const cardMargin = 65;
-        const cardW = w - (cardMargin * 2);
-        const cardH = (img.height / img.width) * cardW;
-        const cardX = cardMargin;
-        const cardY = 320;
-
-        // Đổ bóng 3D tông đỏ
-        ctx.save();
-        ctx.shadowColor = 'rgba(239, 68, 68, 0.35)';
-        ctx.shadowBlur = 45;
-        ctx.shadowOffsetY = 15;
-
-        ctx.beginPath();
-        ctx.roundRect(cardX, cardY, cardW, cardH, 16);
-        ctx.fillStyle = '#1e0505';
-        ctx.fill();
-        ctx.restore();
-
-        // Vẽ ảnh chính
-        ctx.save();
-        ctx.beginPath();
-        ctx.roundRect(cardX, cardY, cardW, cardH, 16);
-        ctx.clip();
-        ctx.drawImage(img, cardX, cardY, cardW, cardH);
-        ctx.restore();
-
-        // Viền đỏ dày cảnh báo
-        ctx.strokeStyle = '#ef4444';
-        ctx.lineWidth = 5;
-        ctx.strokeRect(cardX, cardY, cardW, cardH);
-
-        contentStartY = cardY + cardH + 75;
+        contentStartY = format === '16_9' ? (logoY + 120) : (avY + avR + 100);
       } else {
-        // --- BỐ CỤC MẶC ĐỊNH: Blur sâu tinh tế và viền kính Liquid Glass ---
+        // --- BỐ CỤC CHUẨN HOẶC KHẨN CẤP: VẼ CARD ẢNH ---
         ctx.save();
-        ctx.filter = 'blur(48px) brightness(0.32) saturate(1.2)';
-        const imgRatio = img.width / img.height;
-        const canvasRatio = w / h;
-        let bgW, bgH, bgX, bgY;
-        if (imgRatio > canvasRatio) {
-          bgH = h + 100;
-          bgW = bgH * imgRatio;
-        } else {
-          bgW = w + 100;
-          bgH = bgW / imgRatio;
-        }
-        bgX = (w - bgW) / 2;
-        bgY = (h - bgH) / 2;
-        ctx.drawImage(img, bgX, bgY, bgW, bgH);
-        ctx.restore();
-
-        const startGradY = 700;
-        const grad = ctx.createLinearGradient(0, startGradY, 0, h);
-        grad.addColorStop(0, 'rgba(8, 11, 17, 0)');
-        grad.addColorStop(0.25, 'rgba(8, 11, 17, 0.45)');
-        grad.addColorStop(0.6, 'rgba(8, 11, 17, 0.92)');
-        grad.addColorStop(0.85, 'rgba(8, 11, 17, 0.99)');
-        grad.addColorStop(1, '#080b11');
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, startGradY, w, h - startGradY);
-
-        const cardMargin = 65;
-        const cardW = w - (cardMargin * 2);
-        const cardH = (img.height / img.width) * cardW;
-        const cardX = cardMargin;
-        const cardY = 300;
-
-        ctx.save();
-        ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
-        ctx.shadowBlur = 40;
-        ctx.shadowOffsetY = 18;
+        ctx.shadowColor = isEmergency ? 'rgba(239, 68, 68, 0.35)' : 'rgba(0, 0, 0, 0.7)';
+        ctx.shadowBlur = isEmergency ? 45 : 40;
+        ctx.shadowOffsetY = isEmergency ? 15 : 18;
 
         ctx.beginPath();
         ctx.roundRect(cardX, cardY, cardW, cardH, 20);
-        ctx.fillStyle = '#0f172a';
+        ctx.fillStyle = isEmergency ? '#1e0505' : '#0f172a';
         ctx.fill();
         ctx.restore();
 
@@ -927,74 +1071,201 @@
         ctx.beginPath();
         ctx.roundRect(cardX, cardY, cardW, cardH, 20);
         ctx.clip();
-        ctx.drawImage(img, cardX, cardY, cardW, cardH);
 
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.16)';
-        ctx.lineWidth = 2;
-        ctx.strokeRect(cardX, cardY, cardW, cardH);
+        if (isCompareMode) {
+          // --- CHẾ ĐỘ GHÉP ẢNH SO SÁNH ---
+          let drawImg2 = img2;
+          let isFallback = false;
+          if (!drawImg2) {
+            drawImg2 = img; // Dùng ảnh 1 làm fallback
+            isFallback = true;
+          }
+
+          if (compareSplit === 'horizontal') {
+            // Chia đôi trên / dưới
+            const halfH = cardH / 2;
+            
+            // Vẽ ảnh TRƯỚC (Trên)
+            ctx.save();
+            ctx.beginPath();
+            ctx.rect(cardX, cardY, cardW, halfH);
+            ctx.clip();
+            ctx.drawImage(img, cardX, cardY, cardW, halfH * 2); // Kéo nhẹ tỉ lệ
+            ctx.restore();
+            drawHalfTag(ctx, 'TRƯỚC / BEFORE', cardX + 20, cardY + 20);
+
+            // Vẽ ảnh SAU (Dưới)
+            ctx.save();
+            ctx.beginPath();
+            ctx.rect(cardX, cardY + halfH, cardW, halfH);
+            ctx.clip();
+            if (isFallback) {
+              ctx.filter = 'grayscale(1) brightness(0.85)'; // Áp bộ lọc xám đặc biệt cho fallback
+            }
+            ctx.drawImage(drawImg2, cardX, cardY - halfH, cardW, halfH * 2);
+            ctx.restore();
+            drawHalfTag(ctx, isFallback ? 'SAU / AFTER (Hiệu ứng)' : 'SAU / AFTER', cardX + 20, cardY + halfH + 20);
+
+            // Vẽ đường ranh giới và slider grip
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(cardX, cardY + halfH);
+            ctx.lineTo(cardX + cardW, cardY + halfH);
+            ctx.stroke();
+
+            // Vẽ nút tròn điều hướng
+            ctx.fillStyle = '#ef4444';
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(cardX + cardW / 2, cardY + halfH, 22, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 18px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('▲▼', cardX + cardW / 2, cardY + halfH);
+          } else {
+            // Chia đôi trái / phải
+            const halfW = cardW / 2;
+
+            // Vẽ ảnh TRƯỚC (Trái)
+            ctx.save();
+            ctx.beginPath();
+            ctx.rect(cardX, cardY, halfW, cardH);
+            ctx.clip();
+            ctx.drawImage(img, cardX, cardY, halfW * 2, cardH);
+            ctx.restore();
+            drawHalfTag(ctx, 'TRƯỚC / BEFORE', cardX + 20, cardY + 20);
+
+            // Vẽ ảnh SAU (Phải)
+            ctx.save();
+            ctx.beginPath();
+            ctx.rect(cardX + halfW, cardY, halfW, cardH);
+            ctx.clip();
+            if (isFallback) {
+              ctx.filter = 'grayscale(1) brightness(0.85)';
+            }
+            ctx.drawImage(drawImg2, cardX - halfW, cardY, halfW * 2, cardH);
+            ctx.restore();
+            drawHalfTag(ctx, isFallback ? 'SAU / AFTER (Hiệu ứng)' : 'SAU / AFTER', cardX + halfW + 20, cardY + 20);
+
+            // Vẽ đường ranh giới và slider grip
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(cardX + halfW, cardY);
+            ctx.lineTo(cardX + halfW, cardY + cardH);
+            ctx.stroke();
+
+            // Vẽ nút tròn điều hướng
+            ctx.fillStyle = '#38bdf8';
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(cardX + halfW, cardY + cardH / 2, 22, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 18px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('◀▶', cardX + halfW, cardY + cardH / 2);
+          }
+        } else {
+          // Vẽ ảnh đơn chuẩn nguyên bản
+          ctx.drawImage(img, cardX, cardY, cardW, cardH);
+        }
         ctx.restore();
 
-        contentStartY = cardY + cardH + 75;
+        // Viền bọc ngoài
+        ctx.strokeStyle = isEmergency ? '#ef4444' : 'rgba(255, 255, 255, 0.16)';
+        ctx.lineWidth = isEmergency ? 4 : 2;
+        ctx.strokeRect(cardX, cardY, cardW, cardH);
+
+        // --- TÍNH NĂNG MỚI: BẢO VỆ KÊNH (SENSITIVE CONTENT FILTER) ---
+        const isSensitive = document.getElementById('sensitiveToggle')?.checked;
+        if (isSensitive) {
+          ctx.save();
+          // Lớp kính mờ tối màu đỏ sẫm phủ lên card
+          ctx.fillStyle = 'rgba(9, 13, 22, 0.88)';
+          ctx.beginPath();
+          ctx.roundRect(cardX, cardY, cardW, cardH, 20);
+          ctx.fill();
+
+          // Viền Hazard sọc đỏ neon rực cháy
+          ctx.strokeStyle = '#ef4444';
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.roundRect(cardX, cardY, cardW, cardH, 20);
+          ctx.stroke();
+
+          // Vẽ các sọc hazard chéo tinh xảo
+          ctx.save();
+          ctx.beginPath();
+          ctx.roundRect(cardX, cardY, cardW, cardH, 20);
+          ctx.clip();
+          ctx.strokeStyle = 'rgba(239, 68, 68, 0.18)';
+          ctx.lineWidth = 3;
+          const stripeGap = 30;
+          for (let offset = -cardH; offset < cardW + cardH; offset += stripeGap) {
+            ctx.beginPath();
+            ctx.moveTo(cardX + offset, cardY);
+            ctx.lineTo(cardX + offset + cardH, cardY + cardH);
+            ctx.stroke();
+          }
+          ctx.restore();
+
+          // Stamp Warning trung tâm ảnh
+          const centerX = cardX + cardW / 2;
+          const centerY = cardY + cardH / 2;
+
+          ctx.fillStyle = '#ef4444';
+          ctx.font = 'bold 72px ' + font;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('⚠️', centerX, centerY - 45);
+
+          ctx.fillStyle = '#ffffff';
+          ctx.font = 'bold 30px ' + font;
+          ctx.fillText('NỘI DUNG NHẠY CẢM', centerX, centerY + 25);
+
+          ctx.fillStyle = '#ef4444';
+          ctx.font = 'bold 20px ' + font;
+          ctx.fillText('SENSITIVE CONTENT WARNING', centerX, centerY + 65);
+          ctx.restore();
+        }
       }
-    } else {
-      contentStartY = isQuote ? 450 : 500;
     }
 
-    // VẼ KHUNG VIỀN ĐẶC BIỆT CỦA BỐ CỤC KHÂN CẤP
-    if (isEmergency) {
-      ctx.lineWidth = 24;
-      ctx.strokeStyle = '#7f1d1d'; // Viền đỏ sậm dày ngoài cùng
-      ctx.strokeRect(12, 12, w - 24, h - 24);
-
-      ctx.lineWidth = 4;
-      ctx.strokeStyle = '#ef4444'; // Đường viền chỉ báo neon sáng rực bên trong
-      ctx.strokeRect(26, 26, w - 52, h - 52);
-
-      // Thanh Warning đầu trang
-      ctx.fillStyle = '#ef4444';
-      ctx.beginPath();
-      ctx.roundRect(65, 80, 950, 70, 12);
-      ctx.fill();
-
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 36px ' + font;
-      ctx.textAlign = 'center';
-      ctx.fillText('🚨 CẢNH BÁO • EMERGENCY ALERT 🚨', w / 2, 128);
-      ctx.textAlign = 'left'; // Reset lại kiểu căn lề
-    }
-
-    // 5. Khung Logo reNews
-    let logoY = isEmergency ? 180 : 160; // Hạ thấp logo nếu là Tin Khẩn Cấp để tránh đè Alert Bar
-    let nextBadgeX = 65;
+    // D. VẼ LOGO VÀ BADGE THỂ LOẠI
+    let nextBadgeX = logoX;
     if (logo) {
       const srcW = logo.width;
       const srcH = logo.height;
       const isSquare = Math.abs(srcW - srcH) < (srcW * 0.25);
 
-      // Cắt sát viền vùng chữ reNews ở giữa
-      let cropX, cropY, cropW, cropH;
+      let cropX = 0, cropY = 0, cropW = srcW, cropH = srcH;
       if (isSquare) {
         cropX = srcW * 0.10;
         cropY = srcH * 0.41;
         cropW = srcW * 0.80;
         cropH = srcH * 0.18;
-      } else {
-        cropX = 0;
-        cropY = 0;
-        cropW = srcW;
-        cropH = srcH;
       }
 
       const boxH = 68;
       const boxW = 230;
-      const padX = 8;
-      const padY = 6;
+      const padX = 8, padY = 6;
       const drawW = boxW - (padX * 2);
       const drawH = boxH - (padY * 2);
 
       ctx.save();
       ctx.beginPath();
-      ctx.roundRect(65, logoY, boxW, boxH, 12);
+      ctx.roundRect(logoX, logoY, boxW, boxH, 12);
       ctx.fillStyle = '#ffffff';
       ctx.fill();
       ctx.clip();
@@ -1002,16 +1273,16 @@
       const scale = Math.min(drawW / cropW, drawH / cropH);
       const finalW = cropW * scale;
       const finalH = cropH * scale;
-      const drawX = 65 + padX + (drawW - finalW) / 2;
+      const drawX = logoX + padX + (drawW - finalW) / 2;
       const drawY = logoY + padY + (drawH - finalH) / 2;
 
       ctx.drawImage(logo, cropX, cropY, cropW, cropH, drawX, drawY, finalW, finalH);
       ctx.restore();
 
-      nextBadgeX = 65 + boxW + 20;
+      nextBadgeX = logoX + boxW + 20;
     }
 
-    // 6. Badge thể loại
+    // Badge thể loại
     ctx.font = '600 20px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
     const badgeStr = badge.toUpperCase();
     const badgeMetrics = ctx.measureText(badgeStr);
@@ -1029,12 +1300,11 @@
     ctx.fillStyle = isEmergency ? '#ef4444' : '#e2e8f0';
     ctx.fillText(badgeStr, nextBadgeX + 18, logoY + 42);
 
-    // LẤY CẤU HÌNH HIGHLIGHT
+    // E. LẤY CẤU HÌNH HIGHLIGHT
     const highlightSelect = document.getElementById('highlightStyle');
     const highlightColor = highlightSelect.value;
     const autoHighlightEnabled = (highlightColor !== 'none');
     
-    // Tạo danh sách từ khóa bôi sáng tự chọn
     const customKwInput = document.getElementById('customKeywords').value.trim();
     const customKwList = customKwInput ? customKwInput.split(',').map(s => s.trim()).filter(Boolean) : [];
 
@@ -1042,92 +1312,82 @@
     let descEndY = contentStartY;
 
     if (isQuote) {
-      // --- BỐ CỤC TRÍCH DẪN: Vẽ khối Blockquote nghệ thuật căn lề treo ---
+      // --- BỐ CỤC TRÍCH DẪN ---
       ctx.save();
-      // Vẽ ngoặc kép mở khổng lồ, hơi ẩn vào nền cực sang trọng
       ctx.fillStyle = highlightColor !== 'none' ? highlightColor : '#38bdf8';
       ctx.globalAlpha = 0.22;
       ctx.font = '900 240px ' + font;
-      ctx.fillText('“', 60, contentStartY - 30);
+      ctx.fillText('“', textX - 5, contentStartY - 30);
       ctx.restore();
 
-      // Vẽ nội dung câu trích dẫn (Tiêu đề bài viết)
       ctx.save();
       ctx.fillStyle = '#ffffff';
-      ctx.font = 'italic bold 50px ' + font; 
+      ctx.font = 'italic bold ' + (format === '1_1' ? '40px ' : '50px ') + font; 
       ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
       ctx.shadowBlur = 12;
-      // Dịch thụt lề vào x=140 để nhường khoảng trống cho ngoặc kép mở
-      nextY = wrapTextWithHighlight(ctx, title, 140, contentStartY + 30, 810, 68, 5, highlightColor, autoHighlightEnabled, customKwList);
+      nextY = wrapTextWithHighlight(ctx, title, textX + 75, contentStartY + 30, textW - 90, titleLineH, 5, highlightColor, autoHighlightEnabled, customKwList);
       ctx.restore();
 
-      // Vẽ đường gạch mờ phân cách tác giả tinh tế
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
       ctx.lineWidth = 1.5;
       ctx.beginPath();
-      ctx.moveTo(140, nextY + 50);
-      ctx.lineTo(940, nextY + 50);
+      ctx.moveTo(textX + 75, nextY + 45);
+      ctx.lineTo(textX + textW, nextY + 45);
       ctx.stroke();
 
-      // Vẽ tên người phát biểu (Tác giả) với ký tự gạch chân trang nhã
       ctx.save();
       ctx.fillStyle = highlightColor !== 'none' ? highlightColor : '#38bdf8';
       ctx.font = 'bold 36px ' + font;
-      ctx.fillText('— ' + author, 140, nextY + 110);
+      ctx.fillText('— ' + author, textX + 75, nextY + 100);
       ctx.restore();
 
-      // Vẽ bối cảnh trích dẫn (Đoạn trích nổi bật)
       if (desc) {
         ctx.save();
         ctx.fillStyle = '#94a3b8';
         ctx.font = '400 28px ' + font.replace('bold ', '');
         ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
         ctx.shadowBlur = 6;
-        descEndY = wrapTextWithHighlight(ctx, desc, 140, nextY + 170, 810, 44, 4, highlightColor, autoHighlightEnabled, customKwList);
+        descEndY = wrapTextWithHighlight(ctx, desc, textX + 75, nextY + 155, textW - 90, 44, 4, highlightColor, autoHighlightEnabled, customKwList);
         ctx.restore();
       } else {
-        descEndY = nextY + 130;
+        descEndY = nextY + 120;
       }
 
-      // Vẽ ngoặc kép đóng khổng lồ ở góc dưới bên phải
       ctx.save();
       ctx.fillStyle = highlightColor !== 'none' ? highlightColor : '#38bdf8';
       ctx.globalAlpha = 0.22;
       ctx.font = '900 240px ' + font;
-      ctx.fillText('”', w - 170, descEndY + 60);
+      ctx.fillText('”', textX + textW - 100, descEndY + 60);
       ctx.restore();
     } else {
       // --- BỐ CỤC CHUẨN / KHẨN CẤP ---
-      // 7. Tiêu đề chính (Áp dụng phông chữ tùy chọn)
       ctx.save();
-      ctx.fillStyle = isEmergency ? '#fef08a' : '#ffffff'; // Chữ vàng cảnh báo cho emergency
-      ctx.font = 'bold 54px ' + font; 
+      ctx.fillStyle = isEmergency ? '#fef08a' : '#ffffff';
+      ctx.font = 'bold ' + titleFontSize + ' ' + font; 
       ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
       ctx.shadowBlur = 10;
-      nextY = wrapTextWithHighlight(ctx, title, 65, contentStartY, 950, 70, 3, highlightColor, autoHighlightEnabled, customKwList);
+      nextY = wrapTextWithHighlight(ctx, title, textX, contentStartY, textW, titleLineH, 3, highlightColor, autoHighlightEnabled, customKwList);
       ctx.restore();
 
-      // 8. Đoạn trích nổi bật
       descEndY = nextY;
       if (desc) {
         ctx.save();
         ctx.fillStyle = '#cbd5e1';
-        ctx.font = '400 31px ' + font.replace('bold ', ''); // Giữ chung font chữ mượt mà
+        ctx.font = '400 ' + descFontSize + ' ' + font.replace('bold ', '');
         ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
         ctx.shadowBlur = 6;
-        descEndY = wrapTextWithHighlight(ctx, desc, 65, nextY + 48, 950, 48, 8, highlightColor, autoHighlightEnabled, customKwList);
+        descEndY = wrapTextWithHighlight(ctx, desc, textX, nextY + 45, textW, descLineH, 8, highlightColor, autoHighlightEnabled, customKwList);
         ctx.restore();
       }
     }
 
-    // 9. CTA Box hoặc Chỉ báo trượt Carousel (Kích thích vuốt tiếp cận)
+    // F. CTA BOX & TIẾN TRÌNH CAROUSEL
     const isLastPage = !isCarouselMode || (currentCarouselPage === carouselPages.length - 1);
-    const ctaY = Math.min(Math.max(descEndY + 60, 1500), 1640);
+    const ctaY = Math.min(Math.max(descEndY + 60, ctaYDefault), ctaYMax);
 
     if (isLastPage) {
-      // CTA Box mặc định cho trang cuối
       ctx.beginPath();
-      ctx.roundRect(65, ctaY, 950, 72, 14);
+      ctx.roundRect(ctaX, ctaY, ctaW, 72, 14);
       ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
       ctx.fill();
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
@@ -1136,12 +1396,11 @@
 
       ctx.fillStyle = '#94a3b8';
       ctx.font = '500 24px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillText('💬 Chia sẻ góc nhìn hoặc suy nghĩ của bạn', 100, ctaY + 45);
+      ctx.fillText('💬 Chia sẻ góc nhìn hoặc suy nghĩ của bạn', ctaX + 35, ctaY + 45);
     } else {
-      // Chỉ báo trượt ngang lôi cuốn cho các trang giữa Carousel
       ctx.beginPath();
-      ctx.roundRect(65, ctaY, 950, 78, 14);
-      ctx.fillStyle = 'rgba(56, 189, 248, 0.06)'; // Hơi ám xanh biển
+      ctx.roundRect(ctaX, ctaY, ctaW, 78, 14);
+      ctx.fillStyle = 'rgba(56, 189, 248, 0.06)';
       ctx.fill();
       ctx.strokeStyle = 'rgba(56, 189, 248, 0.25)';
       ctx.lineWidth = 1.5;
@@ -1149,53 +1408,39 @@
 
       ctx.fillStyle = '#38bdf8';
       ctx.font = 'bold 24px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillText('👉 VUỐT SANG PHẢI ĐỂ ĐỌC TIẾP TRANG SAU >>>', 110, ctaY + 47);
+      ctx.fillText('👉 VUỐT SANG PHẢI ĐỂ ĐỌC TIẾP TRANG SAU >>>', ctaX + 45, ctaY + 47);
     }
 
-    // 10. Chỉ báo tiến trình Carousel (Dải chấm tròn nhỏ tinh tế kiểu iOS / TikTok)
+    // Chấm trang Carousel
     if (isCarouselMode) {
       const pageCount = carouselPages.length;
       const dotRadius = 7;
       const dotGap = 16;
       const totalDotW = (pageCount * dotRadius * 2) + ((pageCount - 1) * dotGap);
-      const dotStartX = (w - totalDotW) / 2;
-      const dotY = ctaY - 36;
+      const dotStartX = ctaX + (ctaW - totalDotW) / 2;
+      const dotY = ctaY - 32;
 
       for (let i = 0; i < pageCount; i++) {
         ctx.beginPath();
         ctx.arc(dotStartX + (i * (dotRadius * 2 + dotGap)) + dotRadius, dotY, dotRadius, 0, Math.PI * 2);
         if (i === currentCarouselPage) {
-          ctx.fillStyle = '#38bdf8'; // Chấm trang hiện tại sáng rực
+          ctx.fillStyle = '#38bdf8';
         } else {
-          ctx.fillStyle = 'rgba(255, 255, 255, 0.15)'; // Chấm trang khác mờ
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
         }
         ctx.fill();
       }
     }
 
-    // 11. Tác giả & Nguồn & Ngày đăng bài
+    // G. TÁC GIẢ & CHỮ KÝ CHÌM (WATERMARK)
     ctx.fillStyle = '#64748b';
     ctx.font = '400 22px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-    let metaInfo = "";
-    if (isQuote) {
-      // Bố cục Trích Dẫn đã vẽ tên tác giả rất to phía trên, nên phần chân trang chỉ ghi Nguồn & Ngày để tránh trùng lặp rác chữ
-      metaInfo = source || "";
-      if (dateStr) {
-        if (metaInfo) metaInfo += ` • ${dateStr}`;
-        else metaInfo = dateStr;
-      }
-    } else {
-      metaInfo = author;
-      if (source) metaInfo += ` • ${source}`;
-      if (dateStr) metaInfo += ` • ${dateStr}`;
-    }
-    if (isCarouselMode) {
-      if (metaInfo) metaInfo += ` • Trang ${currentCarouselPage + 1}/${carouselPages.length}`;
-      else metaInfo = `Trang ${currentCarouselPage + 1}/${carouselPages.length}`;
-    }
-    ctx.fillText(metaInfo, 65, 1780);
+    let metaInfo = author;
+    if (source) metaInfo += ` • ${source}`;
+    if (dateStr) metaInfo += ` • ${dateStr}`;
+    if (isCarouselMode) metaInfo += ` • Trang ${currentCarouselPage + 1}/${carouselPages.length}`;
+    ctx.fillText(metaInfo, textX, footerY);
 
-    // 12. Đóng dấu Bản quyền (Watermark)
     if (watermark) {
       ctx.save();
       ctx.translate(w / 2, h / 2);
@@ -1211,14 +1456,12 @@
     document.getElementById('btnDownload').style.display = 'block';
   }
 
-  // HÀM NGẮT DÒNG VÀ VẼ CHỮ HIGHLIGHT THÔNG MINH
   function wrapTextWithHighlight(ctx, text, x, y, maxWidth, lineHeight, maxLines = 8, highlightColor, autoHighlightEnabled, customKwList) {
     const words = text.split(' ');
     let lines = [];
     let currentLine = '';
 
     for (let n = 0; n < words.length; n++) {
-      // Làm sạch các markup để đo chính xác
       const testLine = currentLine + words[n] + ' ';
       const cleanTestLine = cleanMarkup(testLine);
       const metrics = ctx.measureText(cleanTestLine);
@@ -1232,34 +1475,31 @@
     }
     lines.push(currentLine.trim());
 
-    // Giới hạn số dòng tối đa và thêm dấu ba chấm nếu tràn
     let finalLines = lines.slice(0, maxLines);
     if (lines.length > maxLines) {
       const lastIdx = maxLines - 1;
       finalLines[lastIdx] = finalLines[lastIdx] + '...';
     }
 
-    // Vẽ từng dòng chữ bôi màu từ khóa
     let currentY = y;
     finalLines.forEach(line => {
       drawHighlightLine(ctx, line, x, currentY, ctx.fillStyle, highlightColor, autoHighlightEnabled, customKwList);
       currentY += lineHeight;
     });
 
-    return currentY - lineHeight; // trả về tọa độ Y của dòng cuối cùng để xếp các thành phần tiếp theo
+    return currentY - lineHeight;
   }
 
-  // TẢI ẢNH TRANG HIỆN TẠI
   function downloadImage() {
     const canvas = document.getElementById('preview-canvas');
     const link = document.createElement('a');
+    const format = document.getElementById('formatSelect')?.value || '9_16';
     const pageSuffix = isCarouselMode ? `_trang_${currentCarouselPage + 1}` : '';
-    link.download = `renews_tiktok_v3_1${pageSuffix}.png`;
+    link.download = `renews_${format}_v4${pageSuffix}.png`;
     link.href = canvas.toDataURL('image/png');
     link.click();
   }
 
-  // TẢI TRỌN BỘ TOÀN BỘ CAROUSEL 3-5 TRANG
   async function downloadAllCarouselPages() {
     if (!isCarouselMode || carouselPages.length === 0) return;
     
@@ -1267,26 +1507,23 @@
     const confirmDownload = confirm(`Hệ thống sẽ tải xuống trọn bộ ${pageCount} ảnh Carousel liên tiếp. Bạn sẵn sàng chưa?`);
     if (!confirmDownload) return;
 
-    // Lưu lại trạng thái trang đang xem
     const originalPage = currentCarouselPage;
 
-    // Tải lần lượt từng trang
     for (let i = 0; i < pageCount; i++) {
       currentCarouselPage = i;
       updateCarouselUI();
-      await generateBanner(true); // Vẽ đồng bộ lên Canvas
+      await generateBanner(true);
       
       const canvas = document.getElementById('preview-canvas');
       const link = document.createElement('a');
-      link.download = `renews_tiktok_v3_1_page_${i + 1}.png`;
+      const format = document.getElementById('formatSelect')?.value || '9_16';
+      link.download = `renews_${format}_v4_page_${i + 1}.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
       
-      // Chờ một chút trước khi tải trang tiếp theo để trình duyệt xử lý mượt mà
       await new Promise(resolve => setTimeout(resolve, 300));
     }
 
-    // Trở về trang gốc
     currentCarouselPage = originalPage;
     updateCarouselUI();
     generateBanner(true);
