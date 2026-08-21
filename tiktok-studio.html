@@ -323,7 +323,7 @@
 <body>
 
 <div class="container">
-  <h2>reNews TikTok Studio (v3.1)</h2>
+  <h2>reNews TikTok Studio (v3.2 - Layout Templates)</h2>
 
   <!-- Nút Bật/Tắt Liquid Glass -->
   <button class="btn btn-toggle-theme" id="themeToggleBtn" onclick="toggleLiquidGlass()">
@@ -370,7 +370,7 @@
 
   <!-- TÌNH NĂNG V3 & v3.1: WATERMARK, PHÔNG CHỮ & AUTO-HIGHLIGHT -->
   <div class="highlight-box">
-    <label style="color: #fbbf24; font-weight: bold; margin-top:0;">🌟 Tùy chỉnh Nâng cao (v3.1 - Sửa lỗi):</label>
+    <label style="color: #fbbf24; font-weight: bold; margin-top:0;">🌟 Tùy chỉnh Nâng cao (v3.2 - Hệ thống Bố cục):</label>
     
     <div class="flex-row">
       <div class="flex-col">
@@ -390,8 +390,16 @@
       </div>
     </div>
 
-    <!-- Tự động bôi sáng từ khóa -->
+    <!-- Bố cục Layout & Tự động bôi sáng từ khóa -->
     <div class="flex-row" style="margin-top: 10px;">
+      <div class="flex-col">
+        <label>Bố cục ảnh (Layout Template):</label>
+        <select id="layoutSelect" onchange="triggerRender()">
+          <option value="default" selected>Bố cục Chuẩn (Liquid Glass / Slate)</option>
+          <option value="emergency">Tin Khẩn Cấp (Viền đỏ sậm, chữ to cảnh báo) 🚨</option>
+          <option value="quote">Trích Dẫn (Ngoặc kép lớn, tối giản nghệ thuật) 💬</option>
+        </select>
+      </div>
       <div class="flex-col">
         <label>Bôi sáng từ khóa (Auto-Highlight):</label>
         <select id="highlightStyle" onchange="triggerRender()">
@@ -670,6 +678,7 @@
     const logoUrl = document.getElementById('logoUrl').value.trim();
     const font = document.getElementById('fontSelect').value;
     const watermark = document.getElementById('watermarkText').value.trim();
+    const layout = document.getElementById('layoutSelect')?.value || 'default';
 
     if (!title && !silent) {
       alert('Vui lòng nhập tiêu đề bài viết!');
@@ -691,7 +700,7 @@
       currentDesc = document.getElementById('descText').value.trim();
     }
 
-    renderDualLayer(bgImg, logoImg, title, currentDesc, badge, author, source, dateStr, font, watermark);
+    renderDualLayer(bgImg, logoImg, title, currentDesc, badge, author, source, dateStr, font, watermark, layout);
   }
 
   // DỌN SẠCH KÝ TỰ ĐÁNH DẤU HIGHLIGHT KHI ĐO CHIỀU RỘNG CHỮ
@@ -755,7 +764,7 @@
     });
   }
 
-  function renderDualLayer(img, logo, title, desc, badge, author, source, dateStr, font, watermark) {
+  function renderDualLayer(img, logo, title, desc, badge, author, source, dateStr, font, watermark, layout = 'default') {
     const canvas = document.getElementById('preview-canvas');
     const ctx = canvas.getContext('2d');
     const w = 1080, h = 1920;
@@ -764,78 +773,198 @@
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
 
-    // 1. Nền đơn sắc tối căn bản
-    ctx.fillStyle = '#080b11';
+    // 1. Khởi tạo cấu hình bố cục
+    let isQuote = (layout === 'quote');
+    let isEmergency = (layout === 'emergency');
+    let contentStartY = 500;
+
+    // Nền đơn sắc tối căn bản
+    ctx.fillStyle = isEmergency ? '#0f0505' : '#080b11'; // Đỏ sậm cho khẩn cấp
     ctx.fillRect(0, 0, w, h);
 
     if (img) {
-      // 2. Lớp Blur nền toàn màn hình
-      ctx.save();
-      ctx.filter = 'blur(48px) brightness(0.32) saturate(1.2)';
-      const imgRatio = img.width / img.height;
-      const canvasRatio = w / h;
-      let bgW, bgH, bgX, bgY;
-      if (imgRatio > canvasRatio) {
-        bgH = h + 100;
-        bgW = bgH * imgRatio;
+      if (isQuote) {
+        // --- BỐ CỤC TRÍCH DẪN: Vẽ ảnh chân dung hình tròn (Avatar) trung tâm ---
+        ctx.save();
+        ctx.filter = 'blur(48px) brightness(0.25) saturate(1.2)';
+        ctx.drawImage(img, 0, 0, w, h);
+        ctx.restore();
+
+        // Vẽ gradient nền mờ mịn màng
+        const grad = ctx.createLinearGradient(0, 0, 0, h);
+        grad.addColorStop(0, 'rgba(8, 11, 17, 0.5)');
+        grad.addColorStop(0.5, 'rgba(8, 11, 17, 0.85)');
+        grad.addColorStop(1, '#080b11');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, w, h);
+
+        // Vẽ ảnh chân dung Avatar tròn tuyệt đẹp
+        const avX = w / 2;
+        const avY = 380;
+        const avR = 120; // Đường kính 240px
+
+        // Đổ bóng Avatar
+        ctx.save();
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+        ctx.shadowBlur = 40;
+        ctx.shadowOffsetY = 15;
+        ctx.beginPath();
+        ctx.arc(avX, avY, avR + 6, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffffff';
+        ctx.fill();
+        ctx.restore();
+
+        // Clip ảnh tròn
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(avX, avY, avR, 0, Math.PI * 2);
+        ctx.clip();
+        ctx.drawImage(img, avX - avR, avY - avR, avR * 2, avR * 2);
+        ctx.restore();
+
+        // Viền bóng loáng ngoài
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(avX, avY, avR + 6, 0, Math.PI * 2);
+        ctx.stroke();
+
+        contentStartY = avY + avR + 120; // Đẩy nội dung chữ xuống dưới avatar
+      } else if (isEmergency) {
+        // --- BỐ CỤC KHẨN CẤP: Nền đỏ sậm rực cháy và ảnh chính viền đỏ ---
+        ctx.save();
+        ctx.filter = 'blur(48px) brightness(0.25) saturate(1.6)';
+        ctx.drawImage(img, 0, 0, w, h);
+        ctx.restore();
+
+        const grad = ctx.createLinearGradient(0, 500, 0, h);
+        grad.addColorStop(0, 'rgba(15, 5, 5, 0)');
+        grad.addColorStop(0.4, 'rgba(127, 29, 29, 0.45)');
+        grad.addColorStop(0.8, 'rgba(15, 5, 5, 0.95)');
+        grad.addColorStop(1, '#0f0505');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 500, w, h - 500);
+
+        const cardMargin = 65;
+        const cardW = w - (cardMargin * 2);
+        const cardH = (img.height / img.width) * cardW;
+        const cardX = cardMargin;
+        const cardY = 320;
+
+        // Đổ bóng 3D tông đỏ
+        ctx.save();
+        ctx.shadowColor = 'rgba(239, 68, 68, 0.35)';
+        ctx.shadowBlur = 45;
+        ctx.shadowOffsetY = 15;
+
+        ctx.beginPath();
+        ctx.roundRect(cardX, cardY, cardW, cardH, 16);
+        ctx.fillStyle = '#1e0505';
+        ctx.fill();
+        ctx.restore();
+
+        // Vẽ ảnh chính
+        ctx.save();
+        ctx.beginPath();
+        ctx.roundRect(cardX, cardY, cardW, cardH, 16);
+        ctx.clip();
+        ctx.drawImage(img, cardX, cardY, cardW, cardH);
+        ctx.restore();
+
+        // Viền đỏ dày cảnh báo
+        ctx.strokeStyle = '#ef4444';
+        ctx.lineWidth = 5;
+        ctx.strokeRect(cardX, cardY, cardW, cardH);
+
+        contentStartY = cardY + cardH + 75;
       } else {
-        bgW = w + 100;
-        bgH = bgW / imgRatio;
+        // --- BỐ CỤC MẶC ĐỊNH: Blur sâu tinh tế và viền kính Liquid Glass ---
+        ctx.save();
+        ctx.filter = 'blur(48px) brightness(0.32) saturate(1.2)';
+        const imgRatio = img.width / img.height;
+        const canvasRatio = w / h;
+        let bgW, bgH, bgX, bgY;
+        if (imgRatio > canvasRatio) {
+          bgH = h + 100;
+          bgW = bgH * imgRatio;
+        } else {
+          bgW = w + 100;
+          bgH = bgW / imgRatio;
+        }
+        bgX = (w - bgW) / 2;
+        bgY = (h - bgH) / 2;
+        ctx.drawImage(img, bgX, bgY, bgW, bgH);
+        ctx.restore();
+
+        const startGradY = 700;
+        const grad = ctx.createLinearGradient(0, startGradY, 0, h);
+        grad.addColorStop(0, 'rgba(8, 11, 17, 0)');
+        grad.addColorStop(0.25, 'rgba(8, 11, 17, 0.45)');
+        grad.addColorStop(0.6, 'rgba(8, 11, 17, 0.92)');
+        grad.addColorStop(0.85, 'rgba(8, 11, 17, 0.99)');
+        grad.addColorStop(1, '#080b11');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, startGradY, w, h - startGradY);
+
+        const cardMargin = 65;
+        const cardW = w - (cardMargin * 2);
+        const cardH = (img.height / img.width) * cardW;
+        const cardX = cardMargin;
+        const cardY = 300;
+
+        ctx.save();
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+        ctx.shadowBlur = 40;
+        ctx.shadowOffsetY = 18;
+
+        ctx.beginPath();
+        ctx.roundRect(cardX, cardY, cardW, cardH, 20);
+        ctx.fillStyle = '#0f172a';
+        ctx.fill();
+        ctx.restore();
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.roundRect(cardX, cardY, cardW, cardH, 20);
+        ctx.clip();
+        ctx.drawImage(img, cardX, cardY, cardW, cardH);
+
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.16)';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(cardX, cardY, cardW, cardH);
+        ctx.restore();
+
+        contentStartY = cardY + cardH + 75;
       }
-      bgX = (w - bgW) / 2;
-      bgY = (h - bgH) / 2;
-      ctx.drawImage(img, bgX, bgY, bgW, bgH);
-      ctx.restore();
-
-      // 3. Gradient chuyển tiếp siêu mịn
-      const startGradY = 700;
-      const grad = ctx.createLinearGradient(0, startGradY, 0, h);
-      grad.addColorStop(0, 'rgba(8, 11, 17, 0)');
-      grad.addColorStop(0.25, 'rgba(8, 11, 17, 0.45)');
-      grad.addColorStop(0.6, 'rgba(8, 11, 17, 0.92)');
-      grad.addColorStop(0.85, 'rgba(8, 11, 17, 0.99)');
-      grad.addColorStop(1, '#080b11');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, startGradY, w, h - startGradY);
-
-      // 4. Khung ảnh chính (Hero Image)
-      const cardMargin = 65;
-      const cardW = w - (cardMargin * 2); // 950px
-      const cardH = (img.height / img.width) * cardW;
-      const cardX = cardMargin;
-      const cardY = 300;
-
-      // Đổ bóng 3D
-      ctx.save();
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
-      ctx.shadowBlur = 40;
-      ctx.shadowOffsetY = 18;
-
-      ctx.beginPath();
-      ctx.roundRect(cardX, cardY, cardW, cardH, 20);
-      ctx.fillStyle = '#0f172a';
-      ctx.fill();
-      ctx.restore();
-
-      // Vẽ ảnh chính
-      ctx.save();
-      ctx.beginPath();
-      ctx.roundRect(cardX, cardY, cardW, cardH, 20);
-      ctx.clip();
-      ctx.drawImage(img, cardX, cardY, cardW, cardH);
-      
-      // Viền kính
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.16)';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-      ctx.restore();
-
-      var contentStartY = cardY + cardH + 75;
     } else {
-      var contentStartY = 500;
+      contentStartY = isQuote ? 450 : 500;
+    }
+
+    // VẼ KHUNG VIỀN ĐẶC BIỆT CỦA BỐ CỤC KHÂN CẤP
+    if (isEmergency) {
+      ctx.lineWidth = 24;
+      ctx.strokeStyle = '#7f1d1d'; // Viền đỏ sậm dày ngoài cùng
+      ctx.strokeRect(12, 12, w - 24, h - 24);
+
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = '#ef4444'; // Đường viền chỉ báo neon sáng rực bên trong
+      ctx.strokeRect(26, 26, w - 52, h - 52);
+
+      // Thanh Warning đầu trang
+      ctx.fillStyle = '#ef4444';
+      ctx.beginPath();
+      ctx.roundRect(65, 80, 950, 70, 12);
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 36px ' + font;
+      ctx.textAlign = 'center';
+      ctx.fillText('🚨 CẢNH BÁO • EMERGENCY ALERT 🚨', w / 2, 128);
+      ctx.textAlign = 'left'; // Reset lại kiểu căn lề
     }
 
     // 5. Khung Logo reNews
+    let logoY = isEmergency ? 180 : 160; // Hạ thấp logo nếu là Tin Khẩn Cấp để tránh đè Alert Bar
     let nextBadgeX = 65;
     if (logo) {
       const srcW = logo.width;
@@ -865,7 +994,7 @@
 
       ctx.save();
       ctx.beginPath();
-      ctx.roundRect(65, 160, boxW, boxH, 12);
+      ctx.roundRect(65, logoY, boxW, boxH, 12);
       ctx.fillStyle = '#ffffff';
       ctx.fill();
       ctx.clip();
@@ -874,7 +1003,7 @@
       const finalW = cropW * scale;
       const finalH = cropH * scale;
       const drawX = 65 + padX + (drawW - finalW) / 2;
-      const drawY = 160 + padY + (drawH - finalH) / 2;
+      const drawY = logoY + padY + (drawH - finalH) / 2;
 
       ctx.drawImage(logo, cropX, cropY, cropW, cropH, drawX, drawY, finalW, finalH);
       ctx.restore();
@@ -890,15 +1019,15 @@
     const badgeBoxH = 68;
 
     ctx.beginPath();
-    ctx.roundRect(nextBadgeX, 160, badgeBoxW, badgeBoxH, 12);
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+    ctx.roundRect(nextBadgeX, logoY, badgeBoxW, badgeBoxH, 12);
+    ctx.fillStyle = isEmergency ? 'rgba(239, 68, 68, 0.15)' : 'rgba(255, 255, 255, 0.1)';
     ctx.fill();
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+    ctx.strokeStyle = isEmergency ? 'rgba(239, 68, 68, 0.35)' : 'rgba(255, 255, 255, 0.2)';
     ctx.lineWidth = 1;
     ctx.stroke();
 
-    ctx.fillStyle = '#e2e8f0';
-    ctx.fillText(badgeStr, nextBadgeX + 18, 202);
+    ctx.fillStyle = isEmergency ? '#ef4444' : '#e2e8f0';
+    ctx.fillText(badgeStr, nextBadgeX + 18, logoY + 42);
 
     // LẤY CẤU HÌNH HIGHLIGHT
     const highlightSelect = document.getElementById('highlightStyle');
@@ -909,25 +1038,86 @@
     const customKwInput = document.getElementById('customKeywords').value.trim();
     const customKwList = customKwInput ? customKwInput.split(',').map(s => s.trim()).filter(Boolean) : [];
 
-    // 7. Tiêu đề chính (Áp dụng phông chữ tùy chọn)
-    ctx.save();
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 54px ' + font; 
-    ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
-    ctx.shadowBlur = 10;
-    const nextY = wrapTextWithHighlight(ctx, title, 65, contentStartY, 950, 70, 3, highlightColor, autoHighlightEnabled, customKwList);
-    ctx.restore();
+    let nextY = contentStartY;
+    let descEndY = contentStartY;
 
-    // 8. Đoạn trích nổi bật
-    let descEndY = nextY;
-    if (desc) {
+    if (isQuote) {
+      // --- BỐ CỤC TRÍCH DẪN: Vẽ khối Blockquote nghệ thuật căn lề treo ---
       ctx.save();
-      ctx.fillStyle = '#cbd5e1';
-      ctx.font = '400 31px ' + font.replace('bold ', ''); // Giữ chung font chữ mượt mà
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
-      ctx.shadowBlur = 6;
-      descEndY = wrapTextWithHighlight(ctx, desc, 65, nextY + 48, 950, 48, 8, highlightColor, autoHighlightEnabled, customKwList);
+      // Vẽ ngoặc kép mở khổng lồ, hơi ẩn vào nền cực sang trọng
+      ctx.fillStyle = highlightColor !== 'none' ? highlightColor : '#38bdf8';
+      ctx.globalAlpha = 0.22;
+      ctx.font = '900 240px ' + font;
+      ctx.fillText('“', 60, contentStartY - 30);
       ctx.restore();
+
+      // Vẽ nội dung câu trích dẫn (Tiêu đề bài viết)
+      ctx.save();
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'italic bold 50px ' + font; 
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+      ctx.shadowBlur = 12;
+      // Dịch thụt lề vào x=140 để nhường khoảng trống cho ngoặc kép mở
+      nextY = wrapTextWithHighlight(ctx, title, 140, contentStartY + 30, 810, 68, 5, highlightColor, autoHighlightEnabled, customKwList);
+      ctx.restore();
+
+      // Vẽ đường gạch mờ phân cách tác giả tinh tế
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(140, nextY + 50);
+      ctx.lineTo(940, nextY + 50);
+      ctx.stroke();
+
+      // Vẽ tên người phát biểu (Tác giả) với ký tự gạch chân trang nhã
+      ctx.save();
+      ctx.fillStyle = highlightColor !== 'none' ? highlightColor : '#38bdf8';
+      ctx.font = 'bold 36px ' + font;
+      ctx.fillText('— ' + author, 140, nextY + 110);
+      ctx.restore();
+
+      // Vẽ bối cảnh trích dẫn (Đoạn trích nổi bật)
+      if (desc) {
+        ctx.save();
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '400 28px ' + font.replace('bold ', '');
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+        ctx.shadowBlur = 6;
+        descEndY = wrapTextWithHighlight(ctx, desc, 140, nextY + 170, 810, 44, 4, highlightColor, autoHighlightEnabled, customKwList);
+        ctx.restore();
+      } else {
+        descEndY = nextY + 130;
+      }
+
+      // Vẽ ngoặc kép đóng khổng lồ ở góc dưới bên phải
+      ctx.save();
+      ctx.fillStyle = highlightColor !== 'none' ? highlightColor : '#38bdf8';
+      ctx.globalAlpha = 0.22;
+      ctx.font = '900 240px ' + font;
+      ctx.fillText('”', w - 170, descEndY + 60);
+      ctx.restore();
+    } else {
+      // --- BỐ CỤC CHUẨN / KHẨN CẤP ---
+      // 7. Tiêu đề chính (Áp dụng phông chữ tùy chọn)
+      ctx.save();
+      ctx.fillStyle = isEmergency ? '#fef08a' : '#ffffff'; // Chữ vàng cảnh báo cho emergency
+      ctx.font = 'bold 54px ' + font; 
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+      ctx.shadowBlur = 10;
+      nextY = wrapTextWithHighlight(ctx, title, 65, contentStartY, 950, 70, 3, highlightColor, autoHighlightEnabled, customKwList);
+      ctx.restore();
+
+      // 8. Đoạn trích nổi bật
+      descEndY = nextY;
+      if (desc) {
+        ctx.save();
+        ctx.fillStyle = '#cbd5e1';
+        ctx.font = '400 31px ' + font.replace('bold ', ''); // Giữ chung font chữ mượt mà
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+        ctx.shadowBlur = 6;
+        descEndY = wrapTextWithHighlight(ctx, desc, 65, nextY + 48, 950, 48, 8, highlightColor, autoHighlightEnabled, customKwList);
+        ctx.restore();
+      }
     }
 
     // 9. CTA Box hoặc Chỉ báo trượt Carousel (Kích thích vuốt tiếp cận)
@@ -986,10 +1176,23 @@
     // 11. Tác giả & Nguồn & Ngày đăng bài
     ctx.fillStyle = '#64748b';
     ctx.font = '400 22px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-    let metaInfo = author;
-    if (source) metaInfo += ` • ${source}`;
-    if (dateStr) metaInfo += ` • ${dateStr}`;
-    if (isCarouselMode) metaInfo += ` • Trang ${currentCarouselPage + 1}/${carouselPages.length}`;
+    let metaInfo = "";
+    if (isQuote) {
+      // Bố cục Trích Dẫn đã vẽ tên tác giả rất to phía trên, nên phần chân trang chỉ ghi Nguồn & Ngày để tránh trùng lặp rác chữ
+      metaInfo = source || "";
+      if (dateStr) {
+        if (metaInfo) metaInfo += ` • ${dateStr}`;
+        else metaInfo = dateStr;
+      }
+    } else {
+      metaInfo = author;
+      if (source) metaInfo += ` • ${source}`;
+      if (dateStr) metaInfo += ` • ${dateStr}`;
+    }
+    if (isCarouselMode) {
+      if (metaInfo) metaInfo += ` • Trang ${currentCarouselPage + 1}/${carouselPages.length}`;
+      else metaInfo = `Trang ${currentCarouselPage + 1}/${carouselPages.length}`;
+    }
     ctx.fillText(metaInfo, 65, 1780);
 
     // 12. Đóng dấu Bản quyền (Watermark)
