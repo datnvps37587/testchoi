@@ -808,11 +808,25 @@
       rssContainer.innerHTML = ""; // Xóa màn hình Loading
       
       displayItems.forEach(item => {
-        // Trích xuất Thumbnail từ enclosure hoặc description
+                // Trích xuất Thumbnail từ enclosure hoặc description
         let thumbnail = item.thumbnail || (item.enclosure && item.enclosure.link) || "";
         if (!thumbnail && item.description) {
-          const match = item.description.match(/<img[^>]+src="([^">]+)"/);
+          // Hỗ trợ cả nháy đơn lẫn nháy kép và khoảng trắng
+          const match = item.description.match(/<img[^>]+src=["']([^"']+)["']/i);
           if (match) thumbnail = match[1];
+        }
+        
+        // Chuẩn hóa thumbnail URL (Giải mã &amp; và xử lý //)
+        if (thumbnail) {
+          try {
+            const txt = document.createElement("textarea");
+            txt.innerHTML = thumbnail;
+            thumbnail = txt.value;
+          } catch(e) {}
+          
+          if (thumbnail.startsWith("//")) {
+            thumbnail = "https:" + thumbnail;
+          }
         }
         
         // Fallback ảnh nếu thiếu
@@ -967,18 +981,41 @@
     }
   });
 
-  function loadImageAsync(url) {
+    function loadImageAsync(url) {
     return new Promise((resolve) => {
       if (!url) return resolve(null);
+      
+      // Chuẩn hóa giao thức nếu bắt đầu bằng //
+      if (url.startsWith("//")) {
+        url = "https:" + url;
+      }
+      
+      // Giải mã thực thể HTML như &amp; thành &
+      try {
+        const txt = document.createElement("textarea");
+        txt.innerHTML = url;
+        url = txt.value;
+      } catch(e) {}
+
       const img = new Image();
       img.crossOrigin = "anonymous";
       img.onload = () => resolve(img);
       img.onerror = () => {
+        // Fallback 1: Thử dùng wsrv.nl (phiên bản mới hơn, cực nhanh)
         const proxyImg = new Image();
         proxyImg.crossOrigin = "anonymous";
         proxyImg.onload = () => resolve(proxyImg);
-        proxyImg.onerror = () => resolve(null);
-        proxyImg.src = "https://images.weserv.nl/?url=" + encodeURIComponent(url);
+        proxyImg.onerror = () => {
+          // Fallback 2: Thử dùng images.weserv.nl (domain truyền thống)
+          const fallbackImg = new Image();
+          fallbackImg.crossOrigin = "anonymous";
+          fallbackImg.onload = () => resolve(fallbackImg);
+          fallbackImg.onerror = () => {
+            resolve(null);
+          };
+          fallbackImg.src = "https://images.weserv.nl/?url=" + encodeURIComponent(url);
+        };
+        proxyImg.src = "https://wsrv.nl/?url=" + encodeURIComponent(url);
       };
       img.src = url;
     });
