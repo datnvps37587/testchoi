@@ -1577,9 +1577,20 @@
     // A. VẼ NỀN BLUR & GRADIENT
     if (img) {
       ctx.save();
-      ctx.filter = 'blur(48px) brightness(0.25) saturate(1.2)';
-      // Vẽ ảnh nền mờ toàn trang
-      ctx.drawImage(img, 0, 0, w, h);
+      ctx.filter = 'blur(48px) brightness(0.32) saturate(1.2)';
+      const imgRatio = img.width / img.height;
+      const canvasRatio = w / h;
+      let bgW, bgH, bgX, bgY;
+      if (imgRatio > canvasRatio) {
+        bgH = h + 100;
+        bgW = bgH * imgRatio;
+      } else {
+        bgW = w + 100;
+        bgH = bgW / imgRatio;
+      }
+      bgX = (w - bgW) / 2;
+      bgY = (h - bgH) / 2;
+      ctx.drawImage(img, bgX, bgY, bgW, bgH);
       ctx.restore();
 
       // Phủ Gradient mịn
@@ -2145,3 +2156,4 @@
 
 </body>
 </html>
+
