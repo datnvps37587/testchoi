@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>reNews - TikTok Studio Ultra HD (Bản Chuẩn Nền Sáng)</title>
+  <title>reNews - TikTok Studio Ultra HD (v4.4 Final)</title>
   <!-- Kết nối các phông chữ Google Fonts phổ biến cho Typography và eSports -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Lexend:wght@400;700;900&family=Chakra+Petch:wght@400;700&family=Montserrat:wght@400;700;900&family=Playfair+Display:ital,wght@0,700;1,400&family=Patrick+Hand&display=swap" rel="stylesheet">
   <style>
     :root {
-      /* Giao diện mặc định: Modern Deep Slate */
       --bg: #080b11;
       --card: rgba(17, 24, 39, 0.75);
       --card-inner: #0f172a;
@@ -119,7 +118,6 @@
       margin-bottom: 18px;
     }
 
-    /* Các hộp tính năng mới v4 */
     .sensitive-box {
       background: rgba(239, 68, 68, 0.05);
       border: 1px solid rgba(239, 68, 68, 0.2);
@@ -1054,7 +1052,6 @@
     ctx.restore();
   }
 
-  // --- HÀM RENDER CHÍNH ĐÃ PHỤC HỒI THUẬT TOÁN CHUẨN ---
   function renderDualLayer(img, img2, logo, title, desc, badge, author, source, dateStr, font, watermark, layout = 'default') {
     const canvas = document.getElementById('preview-canvas');
     const ctx = canvas.getContext('2d');
@@ -1093,13 +1090,9 @@
     let contentStartY = img ? (cardY + cardH + 75) : 500;
     if (format === '16_9' && img) contentStartY = logoY + 120;
 
-    // A. VẼ NỀN BLUR & GRADIENT (ĐÃ ĐƯỢC PHỤC HỒI CHUẨN)
     if (img) {
       ctx.save();
-      // Phục hồi độ sáng 0.32 thay vì 0.25 để hình nền sáng đẹp hơn
       ctx.filter = 'blur(48px) brightness(0.32) saturate(1.2)';
-      
-      // Phục hồi thuật toán giữ tỷ lệ (không bị kéo giãn Stretch)
       const imgRatio = img.width / img.height;
       const canvasRatio = w / h;
       let bgW, bgH, bgX, bgY;
@@ -1115,12 +1108,12 @@
       ctx.drawImage(img, bgX, bgY, bgW, bgH);
       ctx.restore();
 
-      // Phục hồi mức Gradient thấp (bắt đầu từ Y=850 thay vì 700 cho chuẩn 9:16)
-      const startGradY = format === '9_16' ? 850 : 400;
+      const startGradY = format === '9_16' ? 700 : 400;
       const grad = ctx.createLinearGradient(0, startGradY, 0, h);
-      grad.addColorStop(0, 'rgba(8, 11, 17, 0.2)');
-      grad.addColorStop(0.4, 'rgba(8, 11, 17, 0.88)');
-      grad.addColorStop(0.75, 'rgba(8, 11, 17, 0.98)');
+      grad.addColorStop(0, 'rgba(8, 11, 17, 0)');
+      grad.addColorStop(0.25, 'rgba(8, 11, 17, 0.45)');
+      grad.addColorStop(0.6, 'rgba(8, 11, 17, 0.92)');
+      grad.addColorStop(0.85, 'rgba(8, 11, 17, 0.99)');
       grad.addColorStop(1, isEmergency ? '#0f0505' : '#080b11');
       ctx.fillStyle = grad;
       ctx.fillRect(0, startGradY, w, h - startGradY);
@@ -1191,7 +1184,12 @@
         }
         ctx.restore();
 
-        ctx.strokeStyle = isEmergency ? '#ef4444' : 'rgba(255, 255, 255, 0.16)'; ctx.lineWidth = isEmergency ? 4 : 2; ctx.strokeRect(cardX, cardY, cardW, cardH);
+        // SỬA LỖI Ở ĐÂY: Dùng roundRect thay vì strokeRect để viền bo góc ôm sát ảnh
+        ctx.beginPath();
+        ctx.roundRect(cardX, cardY, cardW, cardH, 20);
+        ctx.strokeStyle = isEmergency ? '#ef4444' : 'rgba(255, 255, 255, 0.16)'; 
+        ctx.lineWidth = isEmergency ? 4 : 2; 
+        ctx.stroke();
 
         const isSensitive = document.getElementById('sensitiveToggle')?.checked;
         if (isSensitive) {
