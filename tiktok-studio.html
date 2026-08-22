@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>reNews - TikTok Studio Ultra HD v4.0 (Multi-Format & Comparison)</title>
+  <title>reNews - TikTok Studio Ultra HD v4.2 (Ultimate Slate)</title>
   <!-- Kết nối các phông chữ Google Fonts phổ biến cho Typography và eSports -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Lexend:wght@400;700;900&family=Chakra+Petch:wght@400;700&family=Montserrat:wght@400;700;900&family=Playfair+Display:ital,wght@0,700;1,400&family=Patrick+Hand&display=swap" rel="stylesheet">
   <style>
@@ -22,20 +22,6 @@
       --blur-val: 16px;
     }
 
-    /* Giao diện Apple Liquid Glass */
-    [data-theme="liquid-glass"] {
-      --bg: #000000;
-      --card: rgba(255, 255, 255, 0.08);
-      --card-inner: rgba(255, 255, 255, 0.04);
-      --border: rgba(255, 255, 255, 0.18);
-      --border-focus: rgba(255, 255, 255, 0.5);
-      --text: #ffffff;
-      --text-dim: rgba(235, 235, 245, 0.6);
-      --btn-bg: rgba(255, 255, 255, 0.15);
-      --btn-text: #ffffff;
-      --blur-val: 24px;
-    }
-
     body {
       font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
       background: radial-gradient(circle at 50% 0%, #151d30 0%, var(--bg) 70%);
@@ -49,10 +35,6 @@
       transition: background 0.5s ease;
     }
 
-    [data-theme="liquid-glass"] body {
-      background: radial-gradient(circle at top left, #2c1b4d 0%, #000000 60%, #0a1128 100%);
-    }
-
     .container {
       width: 100%;
       max-width: 600px;
@@ -64,10 +46,6 @@
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
       border: 1px solid var(--border);
       transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-    }
-
-    [data-theme="liquid-glass"] .container {
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7), inset 0 1.5px 1px rgba(255, 255, 255, 0.25), inset 0 0 30px rgba(255, 255, 255, 0.05);
     }
 
     h2 {
@@ -270,12 +248,6 @@
       gap: 8px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
-    
-    [data-theme="liquid-glass"] .btn-toggle-theme {
-      background: rgba(255, 255, 255, 0.2);
-      border-color: rgba(255, 255, 255, 0.5);
-      text-shadow: 0 0 8px rgba(255,255,255,0.5);
-    }
 
     .switch-container {
       display: flex;
@@ -343,17 +315,127 @@
     .flex-col {
       flex: 1;
     }
+
+    /* --- CSS cho RSS Feed 🔥 --- */
+    .rss-section {
+      margin-bottom: 22px;
+      background: rgba(255, 255, 255, 0.01);
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+    }
+    .rss-container {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding: 4px 2px 10px 2px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border-focus) transparent;
+    }
+    .rss-container::-webkit-scrollbar {
+      height: 6px;
+    }
+    .rss-container::-webkit-scrollbar-thumb {
+      background-color: var(--border-focus);
+      border-radius: 10px;
+    }
+    .rss-card {
+      flex: 0 0 150px;
+      background: var(--card-inner);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 8px;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .rss-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(56, 189, 248, 0.15);
+    }
+    .rss-thumb {
+      width: 100%;
+      height: 84px;
+      object-fit: cover;
+      border-radius: 8px;
+      background: #111827;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+    }
+    .rss-title {
+      font-size: 11px;
+      line-height: 1.4;
+      font-weight: 600;
+      color: var(--text);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      height: 30px;
+    }
+    .rss-loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 24px 0;
+      gap: 12px;
+      color: var(--text-dim);
+      font-size: 13px;
+    }
+    .spinner {
+      width: 28px;
+      height: 28px;
+      border: 3px solid rgba(255, 255, 255, 0.08);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <h2>reNews TikTok Studio (v4.0 - Multi-Format Ultra HD)</h2>
 
-  <!-- Nút Bật/Tắt Liquid Glass -->
-  <button class="btn btn-toggle-theme" id="themeToggleBtn" onclick="toggleLiquidGlass()">
-    ✨ Bật Giao Diện Liquid Glass
-  </button>
+<div class="container">
+  <h2>reNews TikTok Studio (v4.2 - Ultimate Slate)</h2>
+
+  <!-- 🔥 Tin Tức Đề Xuất (RSS Feed) -->
+  <div class="rss-section">
+    <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px;">
+      <label style="color: #38bdf8; font-weight: bold; margin: 0; font-size: 14px; display: flex; align-items: center; gap: 6px;">🔥 Tin Tức Đề Xuất (One-Click RSS Library):</label>
+      <button onclick="toggleRssManage()" style="background:transparent; border:none; color:var(--accent); cursor:pointer; font-size:12px; padding:0; text-decoration:underline;">⚙️ Thêm/Quản lý nguồn</button>
+    </div>
+    
+    <!-- Bộ chọn nguồn RSS -->
+    <div class="flex-row" style="margin-bottom: 10px; align-items: center;">
+      <div class="flex-col" style="flex: 1;">
+        <select id="rssSourceSelect" onchange="onRssSourceChange()" style="padding: 10px 12px;"></select>
+      </div>
+      <button id="btnDeleteRss" onclick="deleteSelectedRss()" style="display: none; flex: 0 0 auto; width: auto; background: #ef4444; color: white; border: none; padding: 10px 14px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600;">🗑️ Xóa</button>
+    </div>
+
+    <!-- Hộp thêm nguồn RSS tùy chỉnh -->
+    <div id="rssManageBox" style="display: none; background: rgba(255, 255, 255, 0.02); border-radius: 12px; border: 1px dashed rgba(255, 255, 255, 0.1); padding: 12px; margin-bottom: 10px;">
+      <label style="margin-top: 0; color: #bae6fd;">➕ Thêm nguồn RSS tùy chỉnh:</label>
+      <input type="text" id="customRssName" placeholder="Tên nguồn (vd: Vietgame, GameK)..." style="margin-bottom: 6px;">
+      <input type="text" id="customRssUrl" placeholder="Link RSS (vd: https://gamek.vn/rss/home.rss)..." style="margin-bottom: 8px;">
+      <button class="btn-copy-bm" onclick="addCustomRssFeed()" style="width: auto; background: #10b981; color: white; font-size: 12px; font-weight: 700; padding: 8px 12px; border-radius: 8px;">Thêm Nguồn RSS</button>
+    </div>
+
+    <div id="rssContainer" class="rss-container">
+      <div class="rss-loading">
+        <div class="spinner"></div>
+        <span>Đang tải danh sách tin mới nhất...</span>
+      </div>
+    </div>
+  </div>
+
 
   <div class="bookmark-box">
     <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -543,6 +625,269 @@
   // Trạng thái đã tạo ảnh thành công lần đầu
   let isGenerated = false;
 
+
+    // --- TÍNH NĂNG MỚI: TRẠM TIN TỰ ĐỘNG RSS FEED (ONE-CLICK RSS LIBRARY) ---
+  const DEFAULT_RSS_FEEDS = [
+    { name: "VnExpress - Mới Nhất", url: "https://vnexpress.net/rss/tin-moi-nhat.rss", source: "VnExpress" },
+    { name: "Tuổi Trẻ - Mới Nhất", url: "https://tuoitre.vn/rss/tin-moi-nhat.rss", source: "Tuổi Trẻ" },
+    { name: "Thanh Niên - Mới Nhất", url: "https://thanhnien.vn/rss/home.rss", source: "Thanh Niên" },
+    { name: "Vietgame.asia", url: "https://vietgame.asia/feed/", source: "Vietgame.asia" }
+  ];
+  let customRssFeeds = [];
+
+  function loadRssLibrary() {
+    const stored = localStorage.getItem('reNews_custom_rss');
+    if (stored) {
+      try {
+        customRssFeeds = JSON.parse(stored);
+      } catch(e) {
+        customRssFeeds = [];
+      }
+    }
+    renderRssDropdown();
+  }
+
+  function renderRssDropdown() {
+    const select = document.getElementById('rssSourceSelect');
+    if (!select) return;
+    select.innerHTML = "";
+    
+    // Thêm các nguồn mặc định
+    DEFAULT_RSS_FEEDS.forEach((feed, idx) => {
+      const opt = document.createElement('option');
+      opt.value = `default_${idx}`;
+      opt.innerText = feed.name;
+      select.appendChild(opt);
+    });
+
+    // Thêm các nguồn tùy chỉnh
+    customRssFeeds.forEach((feed, idx) => {
+      const opt = document.createElement('option');
+      opt.value = `custom_${idx}`;
+      opt.innerText = `⭐ ${feed.name}`;
+      select.appendChild(opt);
+    });
+
+    updateDeleteButtonVisibility();
+  }
+
+  function toggleRssManage() {
+    const box = document.getElementById('rssManageBox');
+    if (box) {
+      box.style.display = box.style.display === 'none' ? 'block' : 'none';
+    }
+  }
+
+  function addCustomRssFeed() {
+    const nameInput = document.getElementById('customRssName');
+    const urlInput = document.getElementById('customRssUrl');
+    if (!nameInput || !urlInput) return;
+    
+    const name = nameInput.value.trim();
+    const url = urlInput.value.trim();
+
+    if (!name || !url) {
+      alert("Vui lòng điền đầy đủ Tên nguồn và Link RSS!");
+      return;
+    }
+
+    if (!url.startsWith("http://") && !url.startsWith("https://")) {
+      alert("Link RSS phải bắt đầu bằng http:// hoặc https://!");
+      return;
+    }
+
+    // Xác định tên nguồn (Source) tinh gọn từ tên hiển thị
+    let sourceVal = name;
+    if (sourceVal.includes(" - ")) {
+      sourceVal = sourceVal.split(" - ")[0];
+    }
+
+    const newFeed = { name, url, source: sourceVal };
+    customRssFeeds.push(newFeed);
+    localStorage.setItem('reNews_custom_rss', JSON.stringify(customRssFeeds));
+
+    // Reset input
+    nameInput.value = "";
+    urlInput.value = "";
+
+    renderRssDropdown();
+    
+    // Chọn luôn nguồn mới thêm
+    const select = document.getElementById('rssSourceSelect');
+    if (select) {
+      select.value = `custom_${customRssFeeds.length - 1}`;
+      onRssSourceChange();
+    }
+  }
+
+  function updateDeleteButtonVisibility() {
+    const select = document.getElementById('rssSourceSelect');
+    const btnDelete = document.getElementById('btnDeleteRss');
+    if (!select || !btnDelete) return;
+    
+    if (select.value && select.value.startsWith('custom_')) {
+      btnDelete.style.display = 'block';
+    } else {
+      btnDelete.style.display = 'none';
+    }
+  }
+
+  function deleteSelectedRss() {
+    const select = document.getElementById('rssSourceSelect');
+    if (!select) return;
+    const val = select.value;
+    if (val && val.startsWith('custom_')) {
+      const idx = parseInt(val.split('_')[1]);
+      if (confirm(`Bạn có chắc muốn xóa nguồn "${customRssFeeds[idx].name}" không?`)) {
+        customRssFeeds.splice(idx, 1);
+        localStorage.setItem('reNews_custom_rss', JSON.stringify(customRssFeeds));
+        renderRssDropdown();
+        select.value = "default_0";
+        onRssSourceChange();
+      }
+    }
+  }
+
+  function getSelectedRss() {
+    const select = document.getElementById('rssSourceSelect');
+    if (!select) return DEFAULT_RSS_FEEDS[0];
+    const val = select.value;
+    if (val) {
+      if (val.startsWith('default_')) {
+        const idx = parseInt(val.split('_')[1]);
+        return DEFAULT_RSS_FEEDS[idx];
+      } else if (val.startsWith('custom_')) {
+        const idx = parseInt(val.split('_')[1]);
+        return customRssFeeds[idx];
+      }
+    }
+    return DEFAULT_RSS_FEEDS[0];
+  }
+
+  function onRssSourceChange() {
+    updateDeleteButtonVisibility();
+    fetchRSSFeed();
+  }
+
+  async function fetchRSSFeed() {
+    const rssContainer = document.getElementById('rssContainer');
+    if (!rssContainer) return;
+    
+    // Hiển thị loading spinner
+    rssContainer.innerHTML = `
+      <div class="rss-loading">
+        <div class="spinner"></div>
+        <span>Đang tải danh sách tin...</span>
+      </div>
+    `;
+
+    const feed = getSelectedRss();
+    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}`;
+    
+    try {
+      const response = await fetch(apiUrl);
+      if (!response.ok) throw new Error("Không thể kết nối đến máy chủ dữ liệu");
+      const data = await response.json();
+      
+      if (data.status !== "ok") throw new Error("Dữ liệu RSS không hợp lệ");
+      
+      // Thuật toán LỌC TIN: Loại bỏ hoàn toàn chuyên mục Đời sống & Gia đình
+      const filteredItems = data.items.filter(item => {
+        const link = (item.link || "").toLowerCase();
+        return !link.includes("/doi-song/") && !link.includes("/gia-dinh/");
+      });
+      
+      // Giới hạn hiển thị 10 - 15 tin hợp lệ
+      const displayItems = filteredItems.slice(0, 15);
+      
+      if (displayItems.length === 0) {
+        rssContainer.innerHTML = `<div style="padding:15px; color:var(--text-dim); text-align:center; font-size:12px; width:100%;">Không có tin tức phù hợp trong RSS mới nhất.</div>`;
+        return;
+      }
+      
+      rssContainer.innerHTML = ""; // Xóa màn hình Loading
+      
+      displayItems.forEach(item => {
+        // Trích xuất Thumbnail từ enclosure hoặc description
+        let thumbnail = item.thumbnail || (item.enclosure && item.enclosure.link) || "";
+        if (!thumbnail && item.description) {
+          const match = item.description.match(/<img[^>]+src="([^">]+)"/);
+          if (match) thumbnail = match[1];
+        }
+        
+        // Fallback ảnh nếu thiếu
+        if (!thumbnail) thumbnail = "https://datnvps37587.github.io/testchoi/renews.png";
+        
+        // Làm sạch Description (Xóa tag HTML <a>, <img>, <br>...)
+        let cleanDesc = item.description || "";
+        cleanDesc = cleanDesc.replace(/<[^>]*>/g, "").trim();
+        
+        // Tạo Card HTML
+        const card = document.createElement('div');
+        card.className = 'rss-card';
+        card.innerHTML = `
+          <img class="rss-thumb" src="${thumbnail}" alt="news">
+          <div class="rss-title" title="${item.title}">${item.title}</div>
+        `;
+        
+        // Tương tác One-Click tự động hóa
+        card.addEventListener('click', () => {
+          // 1. Điền Tiêu đề
+          document.getElementById('titleText').value = item.title;
+          
+          // 2. Điền Link ảnh thumbnail và gán null cho loadedImage để force load ảnh mới
+          document.getElementById('bgUrl').value = thumbnail;
+          loadedImage = null;
+          
+          // 3. Điền Description
+          document.getElementById('descText').value = cleanDesc;
+          
+          // 4. Định dạng ngày gốc thành dd/mm/yyyy
+          let finalDateStr = "";
+          let pubDate = item.pubDate || "";
+          if (pubDate) {
+            try {
+              const dObj = new Date(pubDate);
+              if (!isNaN(dObj.getTime())) {
+                const d = String(dObj.getDate()).padStart(2, '0');
+                const m = String(dObj.getMonth() + 1).padStart(2, '0');
+                const y = dObj.getFullYear();
+                finalDateStr = `${d}/${m}/${y}`;
+              }
+            } catch(e) {}
+          }
+          if (!finalDateStr) finalDateStr = getTodayString();
+          document.getElementById('dateText').value = finalDateStr;
+          
+          // 5. Điền nguồn
+          document.getElementById('sourceText').value = feed.source;
+          
+          // Đặt trạng thái đã tạo ảnh thành true để kích hoạt Canvas vẽ ngay lập tức
+          isGenerated = true;
+          
+          // 6. Tự động vẽ lại Canvas
+          if (isCarouselMode) {
+            updateCarouselPages();
+          } else {
+            triggerRender();
+          }
+        });
+        
+        rssContainer.appendChild(card);
+      });
+      
+    } catch(err) {
+      console.error(err);
+      rssContainer.innerHTML = `<div style="padding:15px; color:#ef4444; text-align:center; font-size:12px; width:100%;">❌ Lỗi tải RSS Feed: ${err.message}</div>`;
+    }
+  }
+
+  // Đăng ký gọi hàm khi trang tải xong
+  window.addEventListener('DOMContentLoaded', () => {
+    loadRssLibrary();
+    fetchRSSFeed();
+  });
+
   // Quản lý trạng thái Carousel, Định dạng & So sánh
   let isCarouselMode = false;
   let carouselPages = [];
@@ -637,21 +982,6 @@
       };
       img.src = url;
     });
-  }
-
-  // Bật/tắt Giao diện Liquid Glass
-  function toggleLiquidGlass() {
-    const isLiquid = document.documentElement.hasAttribute('data-theme');
-    const btn = document.getElementById('themeToggleBtn');
-    
-    if (isLiquid) {
-      document.documentElement.removeAttribute('data-theme');
-      btn.innerHTML = '✨ Bật Giao Diện Liquid Glass';
-    } else {
-      document.documentElement.setAttribute('data-theme', 'liquid-glass');
-      btn.innerHTML = '🌌 Trở về Modern Deep Slate';
-    }
-    triggerRender();
   }
 
   // Bật/tắt Chế độ Carousel
@@ -1642,3 +1972,4 @@
 
 </body>
 </html>
+
