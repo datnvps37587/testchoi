@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>reNews & reTechs Ultimate Studio - Creator Suite v5.5</title>
+  <title>reNews & reTechs Ultimate Studio - Creator Suite v6.1</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Chakra+Petch:wght@400;700&family=Montserrat:wght@400;700;900&family=Playfair+Display:ital,wght@0,700;1,400&family=Patrick+Hand&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -156,62 +156,65 @@
     label {
       display: block;
       font-size: 13.5px;
-      color: #1e293b; /* Màu chữ tiêu đề đậm sẫm siêu rõ nét */
+      color: #1e293b; /* Slate 800 - đậm đà rõ ràng */
       margin: 14px 0 6px;
-      font-weight: 700; /* Nâng cao độ đậm font */
+      font-weight: 700; /* Nâng cao độ đậm font để nhận diện cấu trúc */
+      letter-spacing: -0.2px;
     }
 
     input, textarea, select {
       width: 100%;
-      background: #ffffff; /* Nền trắng đặc tách biệt hoàn toàn */
-      border: 1.5px solid #cbd5e1; /* Viền xám có chiều sâu cực rõ */
-      color: var(--text);
+      background: rgba(255, 255, 255, 0.85); /* Trắng sáng mờ mượt mà của kính */
+      border: 1px solid rgba(15, 23, 42, 0.12); /* Đường viền mảnh rõ nét */
+      color: #0f172a; /* Màu chữ đen Slate đậm đà, dễ đọc 100% */
       padding: 12px 14px;
       border-radius: 12px;
       box-sizing: border-box;
       font-size: 14px;
       font-weight: 500;
       transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.03);
+      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.01), inset 0 1px 0 rgba(255, 255, 255, 0.5);
     }
 
     input:focus, textarea:focus, select:focus {
       outline: none;
       border-color: var(--accent);
       box-shadow: 0 0 0 3px var(--accent-alpha);
-      background: #0f172a;
+      background: #ffffff; /* Trắng tinh khiết khi đang gõ */
     }
 
     .auto-box {
-      background: #f1f5f9; /* Nền xám nhạt làm rõ vùng dán */
+      background: rgba(15, 23, 42, 0.02); /* Kính mờ xám */
       padding: 14px;
       border-radius: 12px;
-      border: 1.5px dashed #cbd5e1; /* Viền đứt sắc sảo */
+      border: 1px dashed rgba(15, 23, 42, 0.12);
       margin-bottom: 18px;
       color: #334155;
     }
 
     .bookmark-box {
-      background: #e0f2fe; /* Nền xanh da trời nhạt rực rỡ */
-      border: 1.5px solid #7dd3fc; /* Viền xanh rõ nét */
-      padding: 12px 14px;
+      background: rgba(14, 165, 233, 0.05); /* Kính mờ xanh da trời tinh tế */
+      border: 1px solid rgba(14, 165, 233, 0.18);
+      padding: 14px;
       border-radius: 12px;
       margin-bottom: 16px;
       display: flex;
       flex-direction: column;
       gap: 8px;
-      color: #0369a1; /* Chữ xanh đậm tương phản cực tốt */
-      font-weight: 600; /* Nâng cao độ dễ nhìn */
+      color: #0369a1; /* Chữ xanh đậm tương phản cao */
+      font-weight: 600;
+      font-size: 13.5px;
     }
 
     .highlight-box {
-      background: #fef3c7; /* Nền vàng cam dịu mát */
-      border: 1.5px solid #fde68a; /* Viền cam ấm */
+      background: rgba(245, 158, 11, 0.05); /* Kính mờ vàng hổ phách */
+      border: 1px solid rgba(245, 158, 11, 0.18);
       padding: 14px;
       border-radius: 12px;
       margin-bottom: 18px;
-      color: #b45309; /* Chữ cam sẫm cực nét để đọc Mẹo */
+      color: #b45309; /* Chữ cam sậm dễ chịu và siêu rõ nét */
       font-weight: 600;
+      font-size: 13.5px;
     }
 
     .carousel-box {
@@ -1012,7 +1015,7 @@
       </div>
 
       <div class="grid-2" style="width: 100%; max-width: 420px; margin-top: 20px;">
-        <button class="btn" onclick="renderAllAndDownload()">📥 Tải Ảnh Chuẩn Nét</button>
+        <button class="btn" onclick="isInfoGenerated=true; renderAllAndDownload()">📥 Tải Ảnh Chuẩn Nét</button>
         <button class="btn btn-secondary" onclick="isInfoGenerated=true; triggerRender();">🔄 Cập nhật / Làm mới Canvas</button>
       </div>
       <p style="font-size: 11px; color: var(--text-dim); text-align: center; margin-top: 10px; max-width: 420px;">
@@ -1070,7 +1073,7 @@
       root.style.setProperty('--accent', '#f43f5e'); // Red-pink
       root.style.setProperty('--accent-alpha', 'rgba(244, 63, 94, 0.15)');
       root.style.setProperty('--accent-grad', 'linear-gradient(135deg, #f43f5e 0%, #ec4899 100%)');
-      if (headerTitle) headerTitle.innerText = "reNews Ultimate Studio (v5.6 - Banner)";
+      if (headerTitle) headerTitle.innerText = "reNews Ultimate Studio (v6.1 - Banner Creator)";
       document.title = "reNews Ultimate Studio - Banner Creator";
       if (watermarkInput) watermarkInput.value = "@reNews_Official";
       if (badgeInput) badgeInput.value = "TIN NÓNG";
@@ -1080,7 +1083,7 @@
       root.style.setProperty('--accent', '#38bdf8'); // Cyber Blue
       root.style.setProperty('--accent-alpha', 'rgba(56, 189, 248, 0.15)');
       root.style.setProperty('--accent-grad', 'linear-gradient(135deg, #38bdf8 0%, #0284c7 100%)');
-      if (headerTitle) headerTitle.innerText = "reTechs Ultimate Studio (v5.6 - Infographic)";
+      if (headerTitle) headerTitle.innerText = "reTechs Ultimate Studio (v6.1 - Infographic Studio)";
       document.title = "reTechs Ultimate Studio - Infographic Engine";
       if (watermarkInput) watermarkInput.value = "@reTechs_Official";
       if (badgeInput) badgeInput.value = "CÔNG NGHỆ";
@@ -1532,7 +1535,7 @@
           document.getElementById('sourceText').value = feed.source;
           
           // Đặt trạng thái đã tạo ảnh thành true để kích hoạt Canvas vẽ ngay lập tức
-          isGenerated = true;
+          isBannerGenerated = true;
           
           // 6. Tự động vẽ lại Canvas
           if (isCarouselMode) {
@@ -1822,8 +1825,8 @@
     if (!silent) {
       isBannerGenerated = true; // Đánh dấu chính thức kích hoạt tạo ảnh
     }
-    if (!isGenerated) {
-      drawBannerPlaceholder();
+    if (!isBannerGenerated) {
+      drawPlaceholder('preview-canvas-news', '📱 Trình Tạo Banner (reNews)', 'Nhập nội dung & nhấn [Tạo Ảnh] ở trên để hiển thị!');
       return;
     }
 
@@ -2397,9 +2400,18 @@
         const drawW = (srcW / srcH) * drawH;
         
         ctx.save();
-        ctx.shadowColor = 'rgba(0, 0, 0, 0.45)';
-        ctx.shadowBlur = 10;
-        ctx.shadowOffsetY = 4;
+        // Vẽ một kén mờ mỏng màu sẫm cực mượt (gần giống Apple glass capsule) để làm bệ đỡ nổi bật chữ trắng trên mọi loại ảnh nền!
+        ctx.beginPath();
+        ctx.roundRect(logoX - 16, logoY - 8, drawW + 32, drawH + 16, 16);
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.55)'; // Kính mờ sẫm màu mượt mà bảo vệ chữ khỏi bị tàng hình
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+        ctx.shadowBlur = 8;
+        ctx.shadowOffsetY = 3;
         ctx.drawImage(logo, logoX, logoY, drawW, drawH);
         ctx.restore();
         
@@ -2817,6 +2829,7 @@
     
     renderTopCardsForm();
     renderComparisonListForm();
+    isInfoGenerated = true; // Tự động hiển thị canvas khi nạp Preset nhanh
     triggerRender();
   }
 
