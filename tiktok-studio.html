@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>reTechs Ultimate Studio - Creator Suite v5.0</title>
+  <title>reNews & reTechs Ultimate Studio - Creator Suite v5.2</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Chakra+Petch:wght@400;700&family=Montserrat:wght@400;700;900&family=Playfair+Display:ital,wght@0,700;1,400&family=Patrick+Hand&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -95,6 +95,58 @@
       color: var(--accent);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* GLOBAL BRAND SELECTOR */
+    .brand-selector-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      background: rgba(15, 23, 42, 0.4);
+      padding: 10px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+    }
+    
+    .brand-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .brand-segmented {
+      display: flex;
+      gap: 8px;
+      background: rgba(15, 23, 42, 0.8);
+      padding: 4px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+    
+    .brand-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      padding: 6px 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .brand-btn:hover {
+      color: #ffffff;
+    }
+    
+    .brand-btn.active {
+      background: var(--accent-grad);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
     label {
@@ -612,12 +664,21 @@
 <body>
 
 <div class="container">
-  <h2>reTechs Ultimate Studio (v5.0 Dual-Engine)</h2>
+  <h2 id="appHeaderTitle">reNews Ultimate Studio (v5.2 - Banner)</h2>
+
+  <!-- GLOBAL BRAND SELECTOR -->
+  <div class="brand-selector-container">
+    <span class="brand-label">🌐 Chọn Kênh Đăng (Brand Channel):</span>
+    <div class="brand-segmented">
+      <button class="brand-btn active" id="brand-reNews" onclick="switchBrand('reNews')">🔥 reNews</button>
+      <button class="brand-btn" id="brand-reTechs" onclick="switchBrand('reTechs')">⚡ reTechs</button>
+    </div>
+  </div>
 
   <!-- DUAL ENGINE NAVIGATION TABS -->
   <div class="suite-tabs">
-    <button class="suite-tab active" id="tab-renews" onclick="switchEngine('reNews')">📱 reNews Banner Studio</button>
-    <button class="suite-tab" id="tab-retechs" onclick="switchEngine('reTechs')">📊 reTechs Infographic</button>
+    <button class="suite-tab active" id="tab-renews" onclick="switchEngine('reNews')">📱 Trình Tạo Banner (Banner Creator)</button>
+    <button class="suite-tab" id="tab-retechs" onclick="switchEngine('reTechs')">📊 Thiết Kế Infographic</button>
   </div>
 
   <!-- ==================== TAB 1: RENEWS BANNER CREATOR ==================== -->
@@ -784,14 +845,14 @@
         </div>
       </div>
       <label>Danh sách từ khóa bôi sáng thêm (Ngăn cách bằng dấu phẩy):</label>
-      <input type="text" id="customKeywords" placeholder="VD: GTA VI, reNews, Vietgame, 4 ngày" value="GTA VI, reNews, reClash" oninput="triggerRender()">
+      <input type="text" id="customKeywords" placeholder="VD: GTA VI, reNews, Vietgame, 4 ngày" value="GTA VI, reTechs, reClash" oninput="triggerRender()">
       <p style="font-size: 11px; color: #fde047; margin: 6px 0 0 0; line-height: 1.4;">
         * Mẹo: Bạn cũng có thể dùng dấu sao <code style="background: rgba(0,0,0,0.2); padding: 1px 4px; border-radius: 3px;">*từ_khóa*</code> hoặc ngoặc vuông <code style="background: rgba(0,0,0,0.2); padding: 1px 4px; border-radius: 3px;">[từ_khóa]</code> trong Đoạn trích để tự bôi sáng từ mong muốn!
       </p>
     </div>
     
     <label>1. Link Logo website (Để trống để lấy Logo reNews SVG mặc định cực nét):</label>
-    <input type="text" id="logoUrl" value="" placeholder="Mặc định sử dụng logo reNews SVG tích hợp..." onchange="triggerRender()">
+    <input type="text" id="logoUrl" value="" placeholder="Mặc định sử dụng logo reTechs SVG tích hợp..." onchange="triggerRender()">
 
     <label>2. Ảnh bài viết:</label>
     <input type="file" id="fileInput" accept="image/*">
@@ -862,7 +923,7 @@
         
         <label>Tên Kênh / Logo Badge</label>
         <div class="grid-2">
-          <input type="text" id="logoText" value="Nghĩa Mê Công Nghệ" oninput="triggerRender()">
+          <input type="text" id="logoText" value="reTechs" oninput="triggerRender()">
           <input type="color" id="logoBgColor" value="#0f172a" oninput="triggerRender()">
         </div>
 
@@ -957,7 +1018,7 @@
       container.style.maxWidth = '620px';
       document.getElementById('form-renews').style.display = 'block';
       document.getElementById('form-retechs').style.display = 'none';
-      document.title = "reTechs Ultimate Studio - reNews Engine";
+      document.title = "reTechs Ultimate Studio - Banner Creator Engine";
     } else {
       container.style.maxWidth = '1100px';
       document.getElementById('form-renews').style.display = 'none';
@@ -969,8 +1030,8 @@
   }
 
   // EMBEDDED DUAL-ENGINE PREMIUM SVG LOGOS (Base64)
-  const RENEWS_LOGO_BASE64 = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MDAgMTUwIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0icmVuZXdzR3JhZCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmNDNmNWUiIC8+CiAgICAgIDxzdG9wIG9mZnNldD0iNTAlIiBzdG9wLWNvbG9yPSIjZjQzZjVlIiAvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmOTczMTYiIC8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJtZXRhbEdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMCUiIHkyPSIxMDAlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjY2JkNWUxIiAvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxmaWx0ZXIgaWQ9InJlbmV3c0dsb3ciIHg9Ii0zMCUiIHk9Ii0zMCUiIHdpZHRoPSIxNjAlIiBoZWlnaHQ9IjE2MCUiPgogICAgICA8ZmVHYXVzc2lhbkJsdXIgc3RkRGV2aWF0aW9uPSI1IiByZXN1bHQ9ImJsdXIiIC8+CiAgICAgIDxmZUNvbXBvc2l0ZSBpbj0iU291cmNlR3JhcGhpYyIgaW4yPSJibHVyIiBvcGVyYXRvcj0ib3ZlciIgLz4KICAgIDwvZmlsdGVyPgogICAgPGZpbHRlciBpZD0ibG9nb1NoYWRvdyIgeD0iLTEwJSIgeT0iLTEwJSIgd2lkdGg9IjEyMCUiIGhlaWdodD0iMTIwJSI+CiAgICAgIDxmZURyb3BTaGFkb3cgZHg9IjAiIGR5PSI2IiBzdGREZXZpYXRpb249IjYiIGZsb29kLWNvbG9yPSIjMDAwMDAwIiBmbG9vZC1vcGFjaXR5PSIwLjYiLz4KICAgIDwvZmlsdGVyPgogIDwvZGVmcz4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiByeD0iMjAiIGZpbGw9IiMwODBiMTEiIHN0cm9rZT0icmdiYSgyNTUsIDI1NSwgMjU1LCAwLjA1KSIgc3Ryb2tlLXdpZHRoPSIxLjUiIC8+CiAgPGcgb3BhY2l0eT0iMC4wOCI+CiAgICA8cGF0aCBkPSJNIDAsMzAgTCA2MDAsMzAgTSAwLDYwIEwgNjAwLDYwIE0gMCw5MCBMIDYwMCw5MCBNIDAsMTIwIEwgNjAwLDEyMCIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjEiIC8+CiAgICA8cGF0aCBkPSJNIDEwMCwwIEwgMTAwLDE1MCBNIDIwMCwwIEwgMjAwLDE1MCBNIDMwMCwwIEwgMzAwLDE1MCBNIDQwMCwwIEwgNDAwLDE1MCBNIDUwMCwwIEwgNTAwLDE1MCIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjEiIC8+CiAgPC9nPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDUwLCAyMikiIGZpbHRlcj0idXJsKCNsb2dvU2hhZG93KSI+CiAgICA8cG9seWdvbiBwb2ludHM9IjUzLDUgOTgsMzEgOTgsODMgNTMsMTA5IDgsODMgOCwzMSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI3JlbmV3c0dyYWQpIiBzdHJva2Utd2lkdGg9IjQuNSIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgLz4KICAgIDxwb2x5Z29uIHBvaW50cz0iNTMsMTkgODIsMzYgODIsNzIgNTMsODkgMjQsNzIgMjQsMzYiIGZpbGw9Im5vbmUiIHN0cm9rZT0idXJsKCNyZW5ld3NHcmFkKSIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1kYXNoYXJyYXk9IjYsNCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgb3BhY2l0eT0iMC43IiAvPgogICAgPGNpcmNsZSBjeD0iNTMiIGN5PSI1NyIgcj0iMTQiIGZpbGw9InVybCgjcmVuZXdzR3JhZCkiIGZpbHRlcj0idXJsKCNyZW5ld3NHbG93KSIgLz4KICAgIDxsaW5lIHgxPSI1MyIgeTE9IjUiIHgyPSI1MyIgeTI9IjQzIiBzdHJva2U9InVybCgjcmVuZXdzR3JhZCkiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiAvPgogICAgPGxpbmUgeDE9IjgiIHkxPSIzMSIgeDI9IjM5IiB5Mj0iNTciIHN0cm9rZT0idXJsKCNyZW5ld3NHcmFkKSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIC8+CiAgICA8bGluZSB4MT0iOTgiIHkxPSIzMSIgeDI9IjY3IiB5Mj0iNTciIHN0cm9rZT0idXJsKCNyZW5ld3NHcmFkKSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIC8+CiAgICA8bGluZSB4MT0iNTMiIHkxPSIxMDkiIHgyPSI1MyIgeTI9IjcxIiBzdHJva2U9InVybCgjcmVuZXdzR3JhZCkiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiAvPgogIDwvZz4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxNzUsIDkyKSIgZmlsdGVyPSJ1cmwoI2xvZ29TaGFkb3cpIj4KICAgIDx0ZXh0IHg9IjAiIHk9IjAiIGZvbnQtZmFtaWx5PSInTGV4ZW5kJywgJ0ludGVyJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI2NCIgZm9udC13ZWlnaHQ9IjMwMCIgZmlsbD0idXJsKCNtZXRhbEdyYWQpIiBsZXR0ZXItc3BhY2luZz0iLTEiPnJlPC90ZXh0PgogICAgPHRleHQgeD0iNjgiIHk9IjAiIGZvbnQtZmFtaWx5PSInTGV4ZW5kJywgJ0ludGVyJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI2NCIgZm9udC13ZWlnaHQ9IjkwMCIgZmlsbD0idXJsKCNyZW5ld3NHcmFkKSIgbGV0dGVyLXNwYWNpbmc9IjAuNSI+TmV3czwvdGV4dD4KICAgIDxjaXJjbGUgY3g9IjI4OCIgY3k9Ii01MiIgcj0iNiIgZmlsbD0idXJsKCNyZW5ld3NHcmFkKSIgZmlsdGVyPSJ1cmwoI3JlbmV3c0dsb3cpIiAvPgogICAgPHRleHQgeD0iMyIgeT0iMjgiIGZvbnQtZmFtaWx5PSInQ2hha3JhIFBldGNoJywgJ0ludGVyJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iI2Y0M2Y1ZSIgbGV0dGVyLXNwYWNpbmc9IjciIG9wYWNpdHk9IjAuOTUiPk5FV1MgQVVUT01BVElPTjwvdGV4dD4KICAgIDxsaW5lIHgxPSIzIiB5MT0iMzgiIHgyPSIzMTAiIHkyPSIzOCIgc3Ryb2tlPSJ1cmwoI3JlbmV3c0dyYWQpIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBvcGFjaXR5PSIwLjYiIC8+CiAgICA8cGF0aCBkPSJNIDMxNSwgMzAgTCAzMjUsIDMwIEwgMzI1LCAxNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZjQzZjVlIiBzdHJva2Utd2lkdGg9IjIuNSIgLz4KICA8L2c+Cjwvc3ZnPg==";
-  const RETECHS_LOGO_BASE64 = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MDAgMTUwIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0icmV0ZWNoc0dyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMzhiZGY4IiAvPgogICAgICA8c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0iIzBlYTVlOSIgLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMjU2M2ViIiAvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0ibWV0YWxHcmFkSW5mbyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZmZmZmZmIiAvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNjYmQ1ZTEiIC8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGZpbHRlciBpZD0icmV0ZWNoc0dsb3ciIHg9Ii0zMCUiIHk9Ii0zMCUiIHdpZHRoPSIxNjAlIiBoZWlnaHQ9IjE2MCUiPgogICAgICA8ZmVHYXVzc2lhbkJsdXIgc3RkRGV2aWF0aW9uPSI1IiByZXN1bHQ9ImJsdXIiIC8+CiAgICAgIDxmZUNvbXBvc2l0ZSBpbj0iU291cmNlR3JhcGhpYyIgaW4yPSJibHVyIiBvcGVyYXRvcj0ib3ZlciIgLz4KICAgIDwvZmlsdGVyPgogICAgPGZpbHRlciBpZD0ibG9nb1NoYWRvd0luZm8iIHg9Ii0xMCUiIHk9Ii0xMCUiIHdpZHRoPSIxMjAlIiBoZWlnaHQ9IjEyMCUiPgogICAgICA8ZmVEcm9wU2hhZG93IGR4PSIwIiBkeT0iNiIgc3RkRGV2aWF0aW9uPSI2IiBmbG9vZC1jb2xvcj0iIzAwMDAwMCIgZmxvb2Qtb3BhY2l0eT0iMC42Ii8+CiAgICA8L2ZpbHRlcj4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgcng9IjIwIiBmaWxsPSIjMDgwYjExIiBzdHJva2U9InJnYmEoMjU1LCAyNTUsIDI1NSwgMC4wNSkiIHN0cm9rZS13aWR0aD0iMS41IiAvPgogIDxnIG9wYWNpdHk9IjAuMDgiPgogICAgPHBhdGggZD0iTSAwLDMwIEwgNjAwLDMwIE0gMCw2MCBMIDYwMCw2MCBNIDAsOTAgTCA2MDAsOTAgTSAwLDEyMCBMIDYwMCwxMjAiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSIxIiAvPgogICAgPHBhdGggZD0iTSAxMDAsMCBMIDEwMCwxNTAgTSAyMDAsMCBMIDIwMCwxNTAgTSAzMDAsMCBMIDMwMCwxNTAgTSA0MDAsMCBMIDQwMCwxNTAgTSA1MDAsMCBMIDUwMCwxNTAiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSIxIiAvPgogIDwvZz4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1MCwgMjIpIiBmaWx0ZXI9InVybCgjbG9nb1NoYWRvd0luZm8pIj4KICAgIDxwb2x5Z29uIHBvaW50cz0iNTMsNSA5OCwzMSA5OCw4MyA1MywxMDkgOCw4MyA4LDMxIiBmaWxsPSJub25lIiBzdHJva2U9InVybCgjcmV0ZWNoc0dyYWQpIiBzdHJva2Utd2lkdGg9IjQuNSIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgLz4KICAgIDxwb2x5Z29uIHBvaW50cz0iNTMsMTkgODIsMzYgODIsNzIgNTMsODkgMjQsNzIgMjQsMzYiIGZpbGw9Im5vbmUiIHN0cm9rZT0idXJsKCNyZXRlY2hzR3JhZCkiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtZGFzaGFycmF5PSI2LDQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIG9wYWNpdHk9IjAuNyIgLz4KICAgIDxjaXJjbGUgY3g9IjUzIiBjeT0iNTciIHI9IjE0IiBmaWxsPSJ1cmwoI3JldGVjaHNHcmFkKSIgZmlsdGVyPSJ1cmwoI3JldGVjaHNHbG93KSIgLz4KICAgIDxsaW5lIHgxPSI1MyIgeTE9IjUiIHgyPSI1MyIgeTI9IjQzIiBzdHJva2U9InVybCgjcmV0ZWNoc0dyYWQpIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgLz4KICAgIDxsaW5lIHgxPSI4IiB5MT0iMzEiIHgyPSIzOSIgeTI9IjU3IiBzdHJva2U9InVybCgjcmV0ZWNoc0dyYWQpIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgLz4KICAgIDxsaW5lIHgxPSI5OCIgeTE9IjMxIiB4Mj0iNjciIHkyPSI1NyIgc3Ryb2tlPSJ1cmwoI3JldGVjaHNHcmFkKSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIC8+CiAgICA8bGluZSB4MT0iNTMiIHkxPSIxMDkiIHgyPSI1MyIgeTI9IjcxIiBzdHJva2U9InVybCgjcmV0ZWNoc0dyYWQpIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgLz4KICA8L2c+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTc1LCA5MikiIGZpbHRlcj0idXJsKCNsb2dvU2hhZG93SW5mbykiPgogICAgPHRleHQgeD0iMCIgeT0iMCIgZm9udC1mYW1pbHk9IidMZXhlbmQnLCAnSW50ZXInLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmb250LXdlaWdodD0iMzAwIiBmaWxsPSJ1cmwoI21ldGFsR3JhZEluZm8pIiBsZXR0ZXItc3BhY2luZz0iLTEiPnJlPC90ZXh0PgogICAgPHRleHQgeD0iNjgiIHk9IjAiIGZvbnQtZmFtaWx5PSInTGV4ZW5kJywgJ0ludGVyJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI2NCIgZm9udC13ZWlnaHQ9IjkwMCIgZmlsbD0idXJsKCNyZXRlY2hzR3JhZCkiIGxldHRlci1zcGFjaW5nPSIwLjUiPlRlY2hzPC90ZXh0PgogICAgPGNpcmNsZSBjeD0iMjg4IiBjeT0iLTUyIiByPSI2IiBmaWxsPSJ1cmwoI3JldGVjaHNHcmFkKSIgZmlsdGVyPSJ1cmwoI3JldGVjaHNHbG93KSIgLz4KICAgIDx0ZXh0IHg9IjMiIHk9IjI4IiBmb250LWZhbWlseT0iJ0NoYWtyYSBQZXRjaCcsICdJbnRlcicsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTUiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMzOGJkZjgiIGxldHRlci1zcGFjaW5nPSI3IiBvcGFjaXR5PSIwLjk1Ij5TVFVESU8gQVVUT01BVElPTjwvdGV4dD4KICAgIDxsaW5lIHgxPSIzIiB5MT0iMzgiIHgyPSIzMTAiIHkyPSIzOCIgc3Ryb2tlPSJ1cmwoI3JldGVjaHNHcmFkKSIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgb3BhY2l0eT0iMC42IiAvPgogICAgPHBhdGggZD0iTSAzMTUsIDMwIEwgMzI1LCAzMCBMIDMyNSwgMTUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzM4YmRmOCIgc3Ryb2tlLXdpZHRoPSIyLjUiIC8+CiAgPC9nPgo8L3N2Zz4=";
+  const RENEWS_LOGO_BASE64 = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNTAgMTEwIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0icHJpbWFyeUdyYWROZXdzIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y0M2Y1ZSIgLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI1MCUiIHN0b3AtY29sb3I9IiNlYzQ4OTkiIC8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2Y5NzMxNiIgLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJhY2NlbnRHcmFkTmV3cyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNlZjQ0NDQiIC8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2Y5NzMxNiIgLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJtZXRhbEdyYWROZXdzIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmZmZmZmYiIC8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2NiZDVlMSIgLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CgogICAgPGZpbHRlciBpZD0iZ2xvd05ld3MiIHg9Ii0zMCUiIHk9Ii0zMCUiIHdpZHRoPSIxNjAlIiBoZWlnaHQ9IjE2MCUiPgogICAgICA8ZmVHYXVzc2lhbkJsdXIgc3RkRGV2aWF0aW9uPSI0IiByZXN1bHQ9ImJsdXIiIC8+CiAgICAgIDxmZUNvbXBvc2l0ZSBpbj0iU291cmNlR3JhcGhpYyIgaW4yPSJibHVyIiBvcGVyYXRvcj0ib3ZlciIgLz4KICAgIDwvZmlsdGVyPgoKICAgIDxmaWx0ZXIgaWQ9InNoYWRvd05ld3MiIHg9Ii0xMCUiIHk9Ii0xMCUiIHdpZHRoPSIxMjAlIiBoZWlnaHQ9IjEyMCUiPgogICAgICA8ZmVEcm9wU2hhZG93IGR4PSIwIiBkeT0iNCIgc3RkRGV2aWF0aW9uPSI0IiBmbG9vZC1jb2xvcj0iIzAwMDAwMCIgZmxvb2Qtb3BhY2l0eT0iMC41Ii8+CiAgICA8L2ZpbHRlcj4KICA8L2RlZnM+CgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEwLCA2OCkiIGZpbHRlcj0idXJsKCNzaGFkb3dOZXdzKSI+CiAgICA8dGV4dCB4PSIwIiB5PSIwIiBmb250LWZhbWlseT0iJ0xleGVuZCcsICdJbnRlcicsIC1hcHBsZS1zeXN0ZW0sIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNjQiIGZvbnQtd2VpZ2h0PSIzMDAiIGZpbGw9InVybCgjbWV0YWxHcmFkTmV3cykiIGxldHRlci1zcGFjaW5nPSItMSI+cmU8L3RleHQ+CiAgICA8dGV4dCB4PSI2OCIgeT0iMCIgZm9udC1mYW1pbHk9IidMZXhlbmQnLCAnSW50ZXInLCAtYXBwbGUtc3lzdGVtLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmb250LXdlaWdodD0iOTAwIiBmaWxsPSJ1cmwoI3ByaW1hcnlHcmFkTmV3cykiIGxldHRlci1zcGFjaW5nPSIwLjUiPk5ld3M8L3RleHQ+CiAgICA8Y2lyY2xlIGN4PSIyNTUiIGN5PSItNTIiIHI9IjYiIGZpbGw9InVybCgjYWNjZW50R3JhZE5ld3MpIiBmaWx0ZXI9InVybCgjZ2xvd05ld3MpIiAvPgogICAgPHRleHQgeD0iMyIgeT0iMjgiIGZvbnQtZmFtaWx5PSInQ2hha3JhIFBldGNoJywgJ0ludGVyJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iI2Y0M2Y1ZSIgbGV0dGVyLXNwYWNpbmc9IjguMiIgb3BhY2l0eT0iMC45NSI+TkVXUyBBVVRPTUFUSU9OPC90ZXh0PgogICAgPGxpbmUgeDE9IjMiIHkxPSIzOCIgeDI9IjI4MCIgeTI9IjM4IiBzdHJva2U9InVybCgjcHJpbWFyeUdyYWROZXdzKSIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgb3BhY2l0eT0iMC42IiAvPgogICAgPHBhdGggZD0iTSAyODUsIDMwIEwgMjk1LCAzMCBMIDI5NSwgMTUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Y0M2Y1ZSIgc3Ryb2tlLXdpZHRoPSIyLjUiIC8+CiAgPC9nPgo8L3N2Zz4=";
+  const RETECHS_LOGO_BASE64 = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNTAgMTEwIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0icHJpbWFyeUdyYWRUZWNoIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzM4YmRmOCIgLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI1MCUiIHN0b3AtY29sb3I9IiMwZWE1ZTkiIC8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzI1NjNlYiIgLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJhY2NlbnRHcmFkVGVjaCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMwNmI2ZDQiIC8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzNiODJmNiIgLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJtZXRhbEdyYWRUZWNoIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmZmZmZmYiIC8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2NiZDVlMSIgLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CgogICAgPGZpbHRlciBpZD0iZ2xvd1RlY2giIHg9Ii0zMCUiIHk9Ii0zMCUiIHdpZHRoPSIxNjAlIiBoZWlnaHQ9IjE2MCUiPgogICAgICA8ZmVHYXVzc2lhbkJsdXIgc3RkRGV2aWF0aW9uPSI0IiByZXN1bHQ9ImJsdXIiIC8+CiAgICAgIDxmZUNvbXBvc2l0ZSBpbj0iU291cmNlR3JhcGhpYyIgaW4yPSJibHVyIiBvcGVyYXRvcj0ib3ZlciIgLz4KICAgIDwvZmlsdGVyPgoKICAgIDxmaWx0ZXIgaWQ9InNoYWRvd1RlY2giIHg9Ii0xMCUiIHk9Ii0xMCUiIHdpZHRoPSIxMjAlIiBoZWlnaHQ9IjEyMCUiPgogICAgICA8ZmVEcm9wU2hhZG93IGR4PSIwIiBkeT0iNCIgc3RkRGV2aWF0aW9uPSI0IiBmbG9vZC1jb2xvcj0iIzAwMDAwMCIgZmxvb2Qtb3BhY2l0eT0iMC41Ii8+CiAgICA8L2ZpbHRlcj4KICA8L2RlZnM+CgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEwLCA2OCkiIGZpbHRlcj0idXJsKCNzaGFkb3dUZWNoKSI+CiAgICA8dGV4dCB4PSIwIiB5PSIwIiBmb250LWZhbWlseT0iJ0xleGVuZCcsICdJbnRlcicsIC1hcHBsZS1zeXN0ZW0sIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNjQiIGZvbnQtd2VpZ2h0PSIzMDAiIGZpbGw9InVybCgjbWV0YWxHcmFkVGVjaCkiIGxldHRlci1zcGFjaW5nPSItMSI+cmU8L3RleHQ+CiAgICA8dGV4dCB4PSI2OCIgeT0iMCIgZm9udC1mYW1pbHk9IidMZXhlbmQnLCAnSW50ZXInLCAtYXBwbGUtc3lzdGVtLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmb250LXdlaWdodD0iOTAwIiBmaWxsPSJ1cmwoI3ByaW1hcnlHcmFkVGVjaCkiIGxldHRlci1zcGFjaW5nPSIwLjUiPlRlY2hzPC90ZXh0PgogICAgPGNpcmNsZSBjeD0iMjg4IiBjeT0iLTUyIiByPSI2IiBmaWxsPSJ1cmwoI2FjY2VudEdyYWRUZWNoKSIgZmlsdGVyPSJ1cmwoI2dsb3dUZWNoKSIgLz4KICAgIDx0ZXh0IHg9IjMiIHk9IjI4IiBmb250LWZhbWlseT0iJ0NoYWtyYSBQZXRjaCcsICdJbnRlcicsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTUiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMzOGJkZjgiIGxldHRlci1zcGFjaW5nPSI3IiBvcGFjaXR5PSIwLjk1Ij5TVFVESU8gQVVUT01BVElPTjwvdGV4dD4KICAgIDxsaW5lIHgxPSIzIiB5MT0iMzgiIHgyPSIzMTAiIHkyPSIzOCIgc3Ryb2tlPSJ1cmwoI3ByaW1hcnlHcmFkVGVjaCkiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIG9wYWNpdHk9IjAuNiIgLz4KICAgIDxwYXRoIGQ9Ik0gMzE1LCAzMCBMIDMyNSwgMzAgTCAzMjUsIDE1IiBmaWxsPSJub25lIiBzdHJva2U9IiMzOGJkZjgiIHN0cm9rZS13aWR0aD0iMi41IiAvPgogIDwvZz4KPC9zdmc+";
 
   let preloadedReNewsLogo = null;
   let preloadedReTechsLogo = null;
@@ -979,13 +1040,13 @@
     preloadedReNewsLogo = new Image();
     preloadedReNewsLogo.src = RENEWS_LOGO_BASE64;
     preloadedReNewsLogo.onload = () => {
-      if (activeEngine === 'reNews') triggerRender();
+      triggerRender();
     };
 
     preloadedReTechsLogo = new Image();
     preloadedReTechsLogo.src = RETECHS_LOGO_BASE64;
     preloadedReTechsLogo.onload = () => {
-      if (activeEngine === 'reTechs') triggerRender();
+      triggerRender();
     };
   }
 
@@ -1359,6 +1420,7 @@
     loadRssLibrary();
     fetchRSSFeed();
     preloadSuiteLogos();
+    switchBrand('reNews'); // Khởi tạo thương hiệu mặc định ban đầu là reNews
     loadPreset(0); // Khởi tạo preset cho Infographic
   });
 
@@ -1607,7 +1669,7 @@
 
     let logoImg = null;
     if (!logoUrl) {
-      logoImg = preloadedReNewsLogo;
+      logoImg = (currentBrand === 'reNews') ? preloadedReNewsLogo : preloadedReTechsLogo;
     } else {
       logoImg = await loadImageAsync(logoUrl);
     }
@@ -2733,13 +2795,14 @@
     }
     ctx.restore();
 
-    // 3. LOGO BRAND RETECHS (BẮT BUỘC RENDER LOGO RETECHS ĐỘC QUYỀN)
-    if (preloadedReTechsLogo && preloadedReTechsLogo.complete) {
+    // 3. LOGO BRAND (ĐỘC QUYỀN THEO THƯƠNG HIỆU ĐƯỢC CHỌN)
+    const activeLogo = (currentBrand === 'reNews') ? preloadedReNewsLogo : preloadedReTechsLogo;
+    if (activeLogo && activeLogo.complete) {
       ctx.save();
       ctx.shadowColor = 'rgba(0,0,0,0.4)';
       ctx.shadowBlur = 10;
       ctx.shadowOffsetY = 4;
-      ctx.drawImage(preloadedReTechsLogo, 50, 52, 184, 46);
+      ctx.drawImage(activeLogo, 50, 52, 184, 46);
       ctx.restore();
     } else {
       // Fallback logo badge
