@@ -506,6 +506,10 @@
       .workspace {
         grid-template-columns: 1.2fr 1fr;
       }
+      .preview-panel {
+        position: sticky;
+        top: 20px;
+      }
     }
 
     .control-panel {
@@ -552,8 +556,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      position: sticky;
-      top: 20px;
+      position: relative;
     }
 
     .preset-selector {
@@ -1003,69 +1006,54 @@
 </div>
 
 <script>
-  // Global Brand Channel State
+  // Global Brand & Engine States
+  let activeEngine = 'reNews';
   let currentBrand = 'reNews';
 
   function switchBrand(brand) {
     currentBrand = brand;
     
-    // Toggle active classes on brand selector buttons
-    const btnNews = document.getElementById('brand-reNews');
-    const btnTechs = document.getElementById('brand-reTechs');
-    if (btnNews && btnTechs) {
-      btnNews.classList.toggle('active', brand === 'reNews');
-      btnTechs.classList.toggle('active', brand === 'reTechs');
-    }
+    // Toggle active class on brand buttons
+    document.querySelectorAll('.brand-btn').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    const activeBtn = document.getElementById(`brand-${brand}`);
+    if (activeBtn) activeBtn.classList.add('active');
     
-    // Dynamic Accent Colors based on selected Brand
+    // Update theme, accent colors, and watermarks based on brand
     const root = document.documentElement;
+    const headerTitle = document.getElementById('appHeaderTitle');
+    const watermarkInput = document.getElementById('watermarkText');
+    const badgeInput = document.getElementById('badgeText');
+    const hashtagInput = document.getElementById('hashtagText');
+    const logoTextInput = document.getElementById('logoText');
+    
     if (brand === 'reNews') {
-      root.style.setProperty('--accent', '#f43f5e'); // Rose/Red for reNews
-      root.style.setProperty('--accent-grad', 'linear-gradient(135deg, #f43f5e 0%, #ec4899 50%, #f97316 100%)');
-      
-      const appHeaderTitle = document.getElementById('appHeaderTitle');
-      if (appHeaderTitle) appHeaderTitle.innerHTML = 'reNews Ultimate Studio (v5.2 - Banner)';
-      document.title = "reNews Ultimate Studio";
-      
-      const watermarkText = document.getElementById('watermarkText');
-      if (watermarkText && (watermarkText.value === '' || watermarkText.value === '@reTechs_Official')) {
-        watermarkText.value = '@reNews_Official';
+      root.style.setProperty('--accent', '#f43f5e'); // Red-pink
+      root.style.setProperty('--accent-grad', 'linear-gradient(135deg, #f43f5e 0%, #ec4899 100%)');
+      if (headerTitle) {
+        headerTitle.innerText = activeEngine === 'reNews' ? "reNews Ultimate Studio (v5.3 - Banner)" : "reNews Ultimate Studio (v5.3 - Infographic)";
       }
-      const badgeText = document.getElementById('badgeText');
-      if (badgeText && (badgeText.value === '' || badgeText.value === 'CÔNG NGHỆ')) {
-        badgeText.value = 'TIN NÓNG';
-      }
-      const logoText = document.getElementById('logoText');
-      if (logoText && (logoText.value === '' || logoText.value === 'reTechs' || logoText.value === 'reNews')) {
-        logoText.value = 'reNews';
-      }
+      document.title = activeEngine === 'reNews' ? "reNews Ultimate Studio - Banner Creator" : "reNews Ultimate Studio - Infographic";
+      if (watermarkInput) watermarkInput.value = "@reNews_Official";
+      if (badgeInput) badgeInput.value = "TIN NÓNG";
+      if (hashtagInput) hashtagInput.value = "#RENEWS";
+      if (logoTextInput) logoTextInput.value = "reNews";
     } else {
-      root.style.setProperty('--accent', '#38bdf8'); // Cyan/Blue for reTechs
-      root.style.setProperty('--accent-grad', 'linear-gradient(135deg, #38bdf8 0%, #0ea5e9 50%, #2563eb 100%)');
-      
-      const appHeaderTitle = document.getElementById('appHeaderTitle');
-      if (appHeaderTitle) appHeaderTitle.innerHTML = 'reTechs Ultimate Studio (v5.2 - Banner)';
-      document.title = "reTechs Ultimate Studio";
-      
-      const watermarkText = document.getElementById('watermarkText');
-      if (watermarkText && (watermarkText.value === '' || watermarkText.value === '@reNews_Official')) {
-        watermarkText.value = '@reTechs_Official';
+      root.style.setProperty('--accent', '#38bdf8'); // Cyber Blue
+      root.style.setProperty('--accent-grad', 'linear-gradient(135deg, #38bdf8 0%, #0284c7 100%)');
+      if (headerTitle) {
+        headerTitle.innerText = activeEngine === 'reNews' ? "reTechs Ultimate Studio (v5.3 - Banner)" : "reTechs Ultimate Studio (v5.3 - Infographic)";
       }
-      const badgeText = document.getElementById('badgeText');
-      if (badgeText && (badgeText.value === '' || badgeText.value === 'TIN NÓNG')) {
-        badgeText.value = 'CÔNG NGHỆ';
-      }
-      const logoText = document.getElementById('logoText');
-      if (logoText && (logoText.value === '' || logoText.value === 'reNews' || logoText.value === 'reTechs')) {
-        logoText.value = 'reTechs';
-      }
+      document.title = activeEngine === 'reNews' ? "reTechs Ultimate Studio - Banner Creator" : "reTechs Ultimate Studio - Infographic";
+      if (watermarkInput) watermarkInput.value = "@reTechs_Official";
+      if (badgeInput) badgeInput.value = "CÔNG NGHỆ";
+      if (hashtagInput) hashtagInput.value = "#RETECHS";
+      if (logoTextInput) logoTextInput.value = "reTechs";
     }
     
     triggerRender();
   }
-
-  // Dynamic Suite Tab Engine
-  let activeEngine = 'reNews';
 
   function switchEngine(engine) {
     activeEngine = engine;
@@ -1079,12 +1067,22 @@
       container.style.maxWidth = '620px';
       document.getElementById('form-renews').style.display = 'block';
       document.getElementById('form-retechs').style.display = 'none';
-      document.title = "reTechs Ultimate Studio - Banner Creator Engine";
     } else {
       container.style.maxWidth = '1100px';
       document.getElementById('form-renews').style.display = 'none';
       document.getElementById('form-retechs').style.display = 'grid';
-      document.title = "reTechs Ultimate Studio - Infographic Engine";
+    }
+    
+    // Update header title based on both engine and brand
+    const headerTitle = document.getElementById('appHeaderTitle');
+    if (headerTitle) {
+      if (currentBrand === 'reNews') {
+        headerTitle.innerText = engine === 'reNews' ? "reNews Ultimate Studio (v5.3 - Banner)" : "reNews Ultimate Studio (v5.3 - Infographic)";
+        document.title = engine === 'reNews' ? "reNews Ultimate Studio - Banner Creator" : "reNews Ultimate Studio - Infographic";
+      } else {
+        headerTitle.innerText = engine === 'reNews' ? "reTechs Ultimate Studio (v5.3 - Banner)" : "reTechs Ultimate Studio (v5.3 - Infographic)";
+        document.title = engine === 'reNews' ? "reTechs Ultimate Studio - Banner Creator" : "reTechs Ultimate Studio - Infographic";
+      }
     }
     
     triggerRender();
@@ -2248,7 +2246,8 @@
       const isSquare = Math.abs(srcW - srcH) < (srcW * 0.25);
 
       let cropX = 0, cropY = 0, cropW = srcW, cropH = srcH;
-      if (isSquare) {
+      const isDefaultLogo = logo.src && (logo.src.includes('renews.png') || logo.src.includes('testchoi'));
+      if (isSquare && isDefaultLogo) {
         cropX = srcW * 0.10;
         cropY = srcH * 0.41;
         cropW = srcW * 0.80;
@@ -2961,15 +2960,18 @@
 
       ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
       ctx.font = '700 14px -apple-system, BlinkMacSystemFont, sans-serif';
-      ctx.fillText(card.brand.toUpperCase(), cX + 18, cardsY + 34);
+      ctx.textBaseline = 'top';
+      ctx.fillText(card.brand.toUpperCase(), cX + 18, cardsY + 30);
 
       ctx.fillStyle = card.color || (isDark ? '#ffffff' : '#0f172a');
       ctx.font = '800 32px ' + titleFont + ', sans-serif';
-      ctx.fillText(card.value, cX + 18, cardsY + 76);
+      ctx.textBaseline = 'top';
+      ctx.fillText(card.value, cX + 18, cardsY + 58);
 
       ctx.fillStyle = isDark ? '#64748b' : '#64748b';
       ctx.font = '500 13px -apple-system, BlinkMacSystemFont, sans-serif';
-      ctx.fillText(card.sub, cX + 18, cardsY + 110);
+      ctx.textBaseline = 'top';
+      ctx.fillText(card.sub, cX + 18, cardsY + 102);
 
       ctx.restore();
     });
@@ -2988,7 +2990,8 @@
       ctx.fill();
 
       ctx.fillStyle = isDark ? '#f8fafc' : '#0f172a';
-      ctx.fillText(listTitle, 85, listY + 22);
+      ctx.textBaseline = 'middle';
+      ctx.fillText(listTitle, 85, listY + 14);
 
       ctx.font = '700 13px -apple-system, BlinkMacSystemFont, sans-serif';
       const countText = `${comparisonItems.length} DỊCH VỤ TIÊU BIỂU`;
@@ -3004,7 +3007,9 @@
       ctx.stroke();
 
       ctx.fillStyle = isDark ? '#38bdf8' : '#475569';
-      ctx.fillText(countText, bX + 12, listY + 22);
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(countText, bX + badgeW/2, listY + 18);
       ctx.restore();
     }
 
@@ -3063,10 +3068,12 @@
 
         ctx.fillStyle = '#ffffff';
         ctx.textAlign = 'center';
-        ctx.fillText(item.badge, bX + bW/2, bY + 16);
+        ctx.textBaseline = 'middle';
+        ctx.fillText(item.badge, bX + bW/2, bY + 13);
       }
 
       ctx.textAlign = 'left';
+      ctx.textBaseline = 'top';
       ctx.fillStyle = isDark ? '#94a3b8' : '#475569';
       ctx.font = '500 15px -apple-system, BlinkMacSystemFont, sans-serif';
       ctx.fillText(item.desc, 170, rY + 58);
@@ -3089,13 +3096,16 @@
 
       ctx.fillStyle = item.badgeBg || '#38bdf8';
       ctx.font = '700 14px -apple-system, BlinkMacSystemFont, sans-serif';
-      ctx.fillText("⚡ " + item.barText, barX + 16, barY + 24);
+      ctx.textBaseline = 'middle';
+      ctx.fillText("⚡ " + item.barText, barX + 16, barY + 20);
 
       ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
       ctx.fillStyle = item.badgeBg || (isDark ? '#ffffff' : '#0f172a');
       ctx.font = '800 34px ' + titleFont + ', sans-serif';
-      ctx.fillText(item.stat, 1110, rY + 44);
+      ctx.fillText(item.stat, 1110, rY + 50);
 
+      ctx.textBaseline = 'top';
       ctx.fillStyle = isDark ? '#64748b' : '#64748b';
       ctx.font = '600 13px -apple-system, BlinkMacSystemFont, sans-serif';
       ctx.fillText(item.statSub.toUpperCase(), 1110, rY + 82);
