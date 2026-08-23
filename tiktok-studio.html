@@ -1024,6 +1024,7 @@
   // Global Brand & Engine States
   let activeEngine = 'reNews'; // 'reNews' (Banner) or 'reTechs' (Infographic)
   let currentBrand = 'reNews'; // 'reNews' or 'reTechs'
+  // Trạng thái vẽ được khai báo ở đầu script
 
   function switchBrand(brand) {
     currentBrand = brand;
@@ -1196,8 +1197,7 @@
 
   // ==================== ENGINE 1: RENEWS BANNER CODE ====================
   // Trạng thái vẽ Canvas chủ động theo lệnh người dùng
-  let isBannerGenerated = false;
-  let isInfoGenerated = false;
+  // Trạng thái vẽ được khai báo ở đầu script
 
   // --- TÍNH NĂNG MỚI: TRẠM TIN TỰ ĐỘNG RSS FEED (ONE-CLICK RSS LIBRARY) ---
   const DEFAULT_RSS_FEEDS = [
@@ -2919,6 +2919,32 @@
     return result;
   }
 
+  // Helper to calculate wrapping lines on Canvas
+  function getWrappedLines(ctx, text, maxWidth, font) {
+    if (!text) return [];
+    ctx.save();
+    ctx.font = font;
+    const words = text.split(' ');
+    let lines = [];
+    let currentLine = '';
+
+    for (let n = 0; n < words.length; n++) {
+      const testLine = currentLine + words[n] + ' ';
+      const metrics = ctx.measureText(testLine.trim());
+      if (metrics.width > maxWidth && n > 0) {
+        lines.push(currentLine.trim());
+        currentLine = words[n] + ' ';
+      } else {
+        currentLine = testLine;
+      }
+    }
+    if (currentLine.trim()) {
+      lines.push(currentLine.trim());
+    }
+    ctx.restore();
+    return lines;
+  }
+
   // --- HTML5 CANVAS GRAPHIC GENERATION SYSTEM FOR RETECHS ---
   function renderCanvasInfo() {
     const canvas = document.getElementById('preview-canvas-info');
@@ -3117,27 +3143,48 @@
       ctx.textBaseline = 'middle';
       ctx.fillText(countText, bX + badgeW/2, listY + 18);
       ctx.restore();
-    }
-
-    // 8. RENDER CÁC DÒNG SO SÁNH CHI TIẾT
-    const listStartY = 500;
-    const rowH = 140;
+    }    // 8. RENDER CÁC DÒNG SO SÁNH CHI TIẾT VỚI KÍCH THƯỚC BOX DÀI NGẮN TỰ ĐỘNG THEO CHỮ (DYNAMIC HIGH-TECH CARDS)
+    let currentY = 500;
     const rowGap = 16;
+    const descFont = '500 15px -apple-system, BlinkMacSystemFont, sans-serif';
 
     comparisonItems.forEach((item, idx) => {
-      const rY = listStartY + idx * (rowH + rowGap);
+      // Tính toán số dòng text xuống hàng của mô tả để co giãn box tự động
+      const descLines = getWrappedLines(ctx, item.desc, 760, descFont);
+      const actualDescLines = item.desc ? descLines.length : 0;
+      
+      // Độ cao thành phần cố định
+      const titleH = 30;
+      const barH = 40;
+      const topPad = 24;
+      const botPad = 20;
+      let bodyH = 0;
+      
+      // Tính độ cao vùng thân chữ mô tả tự động co giãn
+      if (actualDescLines > 0) {
+        bodyH = 8 + (actualDescLines * 22) + 12; // Gap + Lines * LineHeight + Gap
+      } else {
+        bodyH = 12; // Khoảng cách tối giản nếu không có mô tả
+      }
+      
+      // Độ cao tổng của Card được kéo dãn tự động theo chữ
+      const itemHeight = topPad + titleH + bodyH + barH + botPad;
+      const rY = currentY;
       
       ctx.save();
       ctx.beginPath();
-      ctx.roundRect(50, rY, 1100, rowH, 20);
+      ctx.roundRect(50, rY, 1100, itemHeight, 20);
       ctx.fillStyle = isDark ? 'rgba(15, 23, 42, 0.45)' : '#ffffff';
       ctx.fill();
-      ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(15, 23, 42, 0.04)';
-      ctx.lineWidth = 1.5;
+      
+      // Vẽ viền sắc nét độ tương phản cao của v5.6
+      ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.05)' : '#cbd5e1';
+      ctx.lineWidth = isDark ? 1.5 : 2;
       ctx.stroke();
 
+      // Vẽ Avatar hình tròn (Căn giữa dọc tự động theo độ cao box mới)
       const iconX = 75;
-      const iconY = rY + (rowH - 74) / 2;
+      const iconY = rY + (itemHeight - 74) / 2;
       ctx.beginPath();
       ctx.arc(iconX + 37, iconY + 37, 37, 0, Math.PI * 2);
       
@@ -3155,16 +3202,18 @@
       ctx.fillText(item.name.charAt(0).toUpperCase(), iconX + 37, iconY + 37);
       ctx.restore();
 
+      // Vẽ Tên dịch vụ
       ctx.save();
       ctx.textAlign = 'left';
       ctx.textBaseline = 'top';
       ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
       ctx.font = '800 24px ' + titleFont + ', sans-serif';
       const truncatedName = truncateText(ctx, item.name, 450);
-      ctx.fillText(truncatedName, 170, rY + 24);
+      ctx.fillText(truncatedName, 170, rY + topPad);
       const nameWidth = ctx.measureText(truncatedName).width;
       ctx.restore();
 
+      // Vẽ Nhãn Badge bên cạnh tên dịch vụ (Căn dọc mượt mà)
       if (item.badge) {
         ctx.save();
         ctx.font = '700 12px -apple-system, BlinkMacSystemFont, sans-serif';
@@ -3172,7 +3221,7 @@
         const bW = badgeMetrics.width + 16;
         const bH = 26;
         const bX = 170 + nameWidth + 12;
-        const bY = rY + 24;
+        const bY = rY + topPad + (28 - bH) / 2;
 
         ctx.beginPath();
         ctx.roundRect(bX, bY, bW, bH, 6);
@@ -3186,17 +3235,27 @@
         ctx.restore();
       }
 
-      ctx.save();
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'top';
-      ctx.fillStyle = isDark ? '#94a3b8' : '#475569';
-      ctx.font = '500 15px -apple-system, BlinkMacSystemFont, sans-serif';
-      const truncatedDesc = truncateText(ctx, item.desc, 760);
-      ctx.fillText(truncatedDesc, 170, rY + 58);
-      ctx.restore();
+      // Vẽ chữ Mô tả tự động xuống dòng và co dãn (Không bị cắt cụt vô cớ)
+      let descEndY = rY + topPad + titleH;
+      if (actualDescLines > 0) {
+        ctx.save();
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'top';
+        ctx.fillStyle = isDark ? '#94a3b8' : '#475569';
+        ctx.font = descFont;
+        
+        let dY = rY + topPad + titleH + 8;
+        descLines.forEach(line => {
+          ctx.fillText(line, 170, dY);
+          dY += 22;
+        });
+        descEndY = dY;
+        ctx.restore();
+      }
 
+      // Vẽ Thanh tiến trình
       const barX = 170;
-      const barY = rY + 84;
+      const barY = descEndY + 12;
       const barMaxW = 680;
       const barW = barMaxW * (item.barVal || 0.7);
       const barH = 40;
@@ -3220,23 +3279,26 @@
       ctx.fillText(truncatedBarText, barX + 16, barY + 20);
       ctx.restore();
 
-      ctx.save();
-      ctx.textAlign = 'right';
-      ctx.textBaseline = 'middle';
-      ctx.fillStyle = item.badgeBg || (isDark ? '#ffffff' : '#0f172a');
-      ctx.font = '800 34px ' + titleFont + ', sans-serif';
-      ctx.fillText(item.stat, 1110, rY + 50);
-      ctx.restore();
+      // Vẽ Chỉ số thống kê to bên phải (Căn giữa dọc tự động theo độ cao box)
+      const rightStatsH = 51;
+      const rightStatsY = rY + (itemHeight - rightStatsH) / 2;
 
       ctx.save();
       ctx.textAlign = 'right';
       ctx.textBaseline = 'top';
+      ctx.fillStyle = item.badgeBg || (isDark ? '#ffffff' : '#0f172a');
+      ctx.font = '800 34px ' + titleFont + ', sans-serif';
+      ctx.fillText(item.stat, 1110, rightStatsY);
+
       ctx.fillStyle = isDark ? '#64748b' : '#64748b';
       ctx.font = '600 13px -apple-system, BlinkMacSystemFont, sans-serif';
-      ctx.fillText(item.statSub.toUpperCase(), 1110, rY + 82);
+      ctx.fillText(item.statSub.toUpperCase(), 1110, rightStatsY + 34 + 4);
       ctx.restore();
 
       ctx.restore();
+      
+      // Tích lũy độ cao để đẩy dòng card tiếp theo xuống đúng khoảng cách
+      currentY += itemHeight + rowGap;
     });
 
     // 9. CHÂN TRANG (FOOTER)
@@ -3295,7 +3357,6 @@
   }
 
   function renderAllAndDownload() {
-    isInfoGenerated = true;
     renderCanvasInfo();
     const canvas = document.getElementById('preview-canvas-info');
     const link = document.createElement('a');
