@@ -686,7 +686,7 @@
 <body>
 
 <div class="container">
-  <h2 id="appHeaderTitle">reNews Ultimate Studio (v6.6 - Banner)</h2>
+  <h2 id="appHeaderTitle">reNews Ultimate Studio (v6.7 - Banner)</h2>
 
   <!-- GLOBAL BRAND SELECTOR -->
   <div class="brand-selector-container">
@@ -1069,7 +1069,7 @@
       root.style.setProperty('--accent', '#f43f5e'); // Red-pink
       root.style.setProperty('--accent-alpha', 'rgba(244, 63, 94, 0.12)');
       root.style.setProperty('--accent-grad', 'linear-gradient(135deg, #f43f5e 0%, #ec4899 100%)');
-      if (headerTitle) headerTitle.innerText = "reNews Ultimate Studio (v6.6 - Banner)";
+      if (headerTitle) headerTitle.innerText = "reNews Ultimate Studio (v6.7 - Banner)";
       document.title = "reNews Ultimate Studio - Banner Creator";
       if (watermarkInput) watermarkInput.value = "@reNews_Official";
       if (badgeInput) badgeInput.value = "TIN NÓNG";
@@ -1079,7 +1079,7 @@
       root.style.setProperty('--accent', '#38bdf8'); // Cyber Blue
       root.style.setProperty('--accent-alpha', 'rgba(56, 189, 248, 0.15)');
       root.style.setProperty('--accent-grad', 'linear-gradient(135deg, #38bdf8 0%, #0284c7 100%)');
-      if (headerTitle) headerTitle.innerText = "reTechs Ultimate Studio (v6.6 - Infographic)";
+      if (headerTitle) headerTitle.innerText = "reTechs Ultimate Studio (v6.7 - Infographic)";
       document.title = "reTechs Ultimate Studio - Infographic Engine";
       if (watermarkInput) watermarkInput.value = "@reTechs_Official";
       if (badgeInput) badgeInput.value = "CÔNG NGHỆ";
@@ -1580,7 +1580,8 @@
     const y = today.getFullYear();
     return `${d}/${m}/${y}`;
   }
-  document.getElementById('dateText').value = getTodayString();
+    const dateInput = document.getElementById('dateText');
+  if (dateInput) dateInput.value = getTodayString();
 
   // Mã Bookmarklet chuẩn để cào nội dung mọi trang báo và copy an toàn (v3.2 fixed)
   const bookmarkletCode = `javascript:(function(){try{var t=document.querySelector('h1.detail-title,h1.title-detail,h1.title-news,h1.article-title,h1.detail__title,meta[property=\\"og:title\\"]')?.innerText||document.querySelector('meta[property=\\"og:title\\"]')?.content||document.title||\\"\\";t=t.replace(/\\s*-\\s*Tuổi Trẻ.*$/i,'').replace(/\\s*-\\s*VnExpress.*$/i,'').replace(/\\s*-\\s*Tin Game.*$/i,'').replace(/\\s*-\\s*[^-]+$/,'').trim();var descParts=[];var sapoEl=document.querySelector('.detail-sapo,.detail__sapo,p.description,.sapo,.lead,.summary,.entry-summary');if(sapoEl&&sapoEl.innerText.trim()){descParts.push(sapoEl.innerText.trim());}var contentContainer=document.querySelector('#main-detail-body,.detail-content,.detail__content,.fck_detail,.entry-content,article');if(contentContainer){var bodyPs=contentContainer.querySelectorAll('p:not(.Image):not(.caption):not([style*=\\"text-align:right\\"]):not([style*=\\"text-align: right\\"])');for(var i=0;i<bodyPs.length&&descParts.length<3;i++){var pText=bodyPs[i].innerText.trim();if(pText&&pText.length>35&&!descParts.includes(pText)&&!pText.startsWith('Ảnh:')&&!pText.startsWith('Theo ')&&!pText.startsWith('TTO')&&!pText.startsWith('>>')&&!pText.startsWith('*')){descParts.push(pText);}}}var desc=descParts.join(' ');if(!desc){desc=document.querySelector('meta[property=\\"og:description\\"]')?.content||document.querySelector('meta[name=\\"description\\"]')?.content||\\"\\";}var img=\\"\\";if(contentContainer){var firstBodyImg=contentContainer.querySelector('[type=\\"Photo\\"] img,.VCSortableInPage img,figure img,img[itemprop=\\"contentUrl\\"],img[data-src]');if(firstBodyImg){img=firstBodyImg.getAttribute('data-src')||firstBodyImg.getAttribute('data-original')||firstBodyImg.getAttribute('src')||\\"\\";}}if(!img||img.startsWith('data:image')){img=document.querySelector('meta[property=\\"og:image\\"]')?.content||\\"\\";}var badge=\\"\\";var cateEl=document.querySelector('.detail-cate a,.detail__cate a,.breadcrumb li a:last-child,.parent-cate,meta[property=\\"article:section\\"],[class*=\\"the-loai\\"]');if(cateEl){badge=cateEl.innerText||cateEl.content||\\"\\";}if(!badge){var metaCat=document.querySelector('meta[name=\\"tt_category_id\\"],meta[name=\\"keywords\\"]')?.content?.split(',')[0];if(metaCat&&isNaN(metaCat))badge=metaCat;}badge=(badge||\\"TIN MỚI\\").trim();if(badge.length>25)badge=\\"TIN MỚI\\";var author=\\"\\";var authorEl=document.querySelector('.author-info,.author,.detail-author,p[style*=\\"text-align:right\\"] strong,p[style*=\\"text-align: right\\"] strong,p.author strong,[rel=\\"author\\"],.author-name,.byline,meta[name=\\"author\\"]');if(authorEl){author=authorEl.innerText||authorEl.content||\\"\\";}author=author.replace(/^Theo\\s+/i,'').replace(/^Ảnh:.*$/i,'').trim();if(!author||author.length>30){author=\\"Tổng hợp\\";}var src=window.location.hostname.replace('www.','');var data=JSON.stringify({title:t.trim(),desc:desc.trim(),image:img.trim(),badge:badge.trim(),author:author.trim(),source:src});var tempInput=document.createElement("textarea");tempInput.value=data;tempInput.style.position="fixed";tempInput.style.left="-9999px";tempInput.style.top="0";document.body.appendChild(tempInput);tempInput.focus();tempInput.select();var copied=false;try{copied=document.execCommand("copy");}catch(e){}document.body.removeChild(tempInput);if(copied){alert("✅ Đã cào và copy thành công!");}else if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(data).then(function(){alert("✅ Đã cào và copy thành công!");}).catch(function(){prompt("Copy dữ liệu JSON bên dưới:",data);});}else{prompt("Copy dữ liệu JSON bên dưới:",data);}}catch(err){alert("❌ Lỗi cào dữ liệu: "+err.message);}})();`;
@@ -1620,31 +1621,37 @@
     } catch(e) {}
   }
 
-  document.getElementById('fileInput').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function(event) {
-        const img = new Image();
-        img.onload = function() { loadedImage = img; triggerRender(); };
-        img.src = event.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-  });
+  const fileInputEl = document.getElementById('fileInput');
+  if (fileInputEl) {
+    fileInputEl.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const img = new Image();
+          img.onload = function() { loadedImage = img; triggerRender(); };
+          img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
 
-  document.getElementById('fileInput2').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function(event) {
-        const img = new Image();
-        img.onload = function() { loadedImage2 = img; triggerRender(); };
-        img.src = event.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-  });
+  const fileInput2El = document.getElementById('fileInput2');
+  if (fileInput2El) {
+    fileInput2El.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const img = new Image();
+          img.onload = function() { loadedImage2 = img; triggerRender(); };
+          img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
 
   function loadImageAsync(url) {
     return new Promise((resolve) => {
@@ -1780,16 +1787,27 @@
   }
 
   async function generateBanner(silent = false) {
-    const title = document.getElementById('titleText').value.trim();
-    const badge = document.getElementById('badgeText').value.trim() || 'TIN TỰ CHỌN';
-    const author = document.getElementById('authorText').value.trim() || 'Ẩn danh';
-    const source = document.getElementById('sourceText').value.trim();
-    const dateStr = document.getElementById('dateText').value.trim();
-    const bgUrl = document.getElementById('bgUrl').value.trim();
-    const logoUrl = document.getElementById('logoUrl').value.trim();
-    const font = document.getElementById('fontSelect').value;
-    const watermark = document.getElementById('watermarkText').value.trim();
-    const layout = document.getElementById('layoutSelect')?.value || 'default';
+    const titleEl = document.getElementById('titleText');
+    const badgeEl = document.getElementById('badgeText');
+    const authorEl = document.getElementById('authorText');
+    const sourceEl = document.getElementById('sourceText');
+    const dateEl = document.getElementById('dateText');
+    const bgUrlEl = document.getElementById('bgUrl');
+    const logoUrlEl = document.getElementById('logoUrl');
+    const fontEl = document.getElementById('fontSelect');
+    const watermarkEl = document.getElementById('watermarkText');
+    const layoutEl = document.getElementById('layoutSelect');
+
+    const title = titleEl ? titleEl.value.trim() : "";
+    const badge = (badgeEl && badgeEl.value.trim()) || 'TIN TỰ CHỌN';
+    const author = (authorEl && authorEl.value.trim()) || 'Ẩn danh';
+    const source = sourceEl ? sourceEl.value.trim() : "";
+    const dateStr = dateEl ? dateEl.value.trim() : "";
+    const bgUrl = bgUrlEl ? bgUrlEl.value.trim() : "";
+    const logoUrl = logoUrlEl ? logoUrlEl.value.trim() : "";
+    const font = fontEl ? fontEl.value : "Arial";
+    const watermark = watermarkEl ? watermarkEl.value.trim() : "";
+    const layout = layoutEl ? layoutEl.value : "default";
 
     if (!title && !silent) {
       alert('Vui lòng nhập tiêu đề bài viết!');
@@ -2778,11 +2796,19 @@
 
   function loadPreset(idx) {
     const preset = PRESETS[idx];
-    document.getElementById('mainTitle').value = preset.title;
-    document.getElementById('subTitle').value = preset.subTitle;
-    document.getElementById('listTitle').value = preset.listTitle;
-    document.getElementById('sourceTextInfo').value = preset.source;
-    document.getElementById('hashtagText').value = preset.hashtag;
+    if (!preset) return;
+    
+    const mainTitleEl = document.getElementById('mainTitle');
+    const subTitleEl = document.getElementById('subTitle');
+    const listTitleEl = document.getElementById('listTitle');
+    const sourceTextInfoEl = document.getElementById('sourceTextInfo');
+    const hashtagTextEl = document.getElementById('hashtagText');
+    
+    if (mainTitleEl) mainTitleEl.value = preset.title;
+    if (subTitleEl) subTitleEl.value = preset.subTitle;
+    if (listTitleEl) listTitleEl.value = preset.listTitle;
+    if (sourceTextInfoEl) sourceTextInfoEl.value = preset.source;
+    if (hashtagTextEl) hashtagTextEl.value = preset.hashtag;
     
     topCards = JSON.parse(JSON.stringify(preset.topCards));
     comparisonItems = JSON.parse(JSON.stringify(preset.items));
@@ -3000,7 +3026,8 @@
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
 
-    const theme = document.getElementById('canvasTheme').value;
+    const themeEl = document.getElementById('canvasTheme');
+    const theme = themeEl ? themeEl.value : "light";
     
     // 1. TÔ NỀN BACKDROP
     let bgGradient = ctx.createRadialGradient(w/2, h/2, 10, w/2, h/2, w);
