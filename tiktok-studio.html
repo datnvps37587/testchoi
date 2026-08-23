@@ -7,50 +7,47 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Chakra+Petch:wght@400;700&family=Montserrat:wght@400;700;900&family=Playfair+Display:ital,wght@0,700;1,400&family=Patrick+Hand&display=swap" rel="stylesheet">
   <style>
     :root {
-      /* Giao diện mặc định: Premium Dark High-Tech Slate Glass */
-      --bg: #080b11;
-      --card: rgba(15, 23, 42, 0.72); /* Khối kính mờ sẫm màu sang trọng */
-      --card-inner: #0f172a;
-      --border: rgba(255, 255, 255, 0.1); /* Viền mảnh sắc nét */
-      --border-focus: rgba(255, 255, 255, 0.3);
-      --text: #ffffff; /* Màu chữ chính trắng tinh khiết siêu nổi bật */
-      --text-dim: #cbd5e1; /* Màu chữ phụ xám sáng cực kỳ dễ đọc */
-      --btn-bg: #ffffff;
-      --btn-text: #090d16;
+      /* Giao diện mặc định: Premium Light Glass */
+      --bg: #f1f5f9;
+      --card: rgba(255, 255, 255, 0.85); /* Khối kính mờ sáng rực rỡ */
+      --card-inner: #ffffff;
+      --border: rgba(15, 23, 42, 0.12); /* Đường viền rõ nét tương phản cực cao */
+      --border-focus: rgba(15, 23, 42, 0.35);
+      --text: #0f172a; /* Màu chữ chính đen slate, 100% dễ đọc */
+      --text-dim: #334155; /* Màu chữ phụ xám sậm cực kỳ rõ nét */
+      --btn-bg: #0f172a;
+      --btn-text: #ffffff;
       --accent: #f43f5e;
-      --accent-alpha: rgba(244, 63, 94, 0.15);
+      --accent-alpha: rgba(244, 63, 94, 0.14);
       --accent-grad: linear-gradient(135deg, #f43f5e 0%, #ec4899 100%) !important;
-      --blur-val: 16px;
+      --blur-val: 20px;
     }
 
     body {
       font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-      background-color: var(--bg);
+      background-color: #f1f5f9; /* Nền xám nhạt cực thanh lịch */
       background-image: 
-        radial-gradient(circle at 50% 0%, #151d30 0%, #080b11 75%),
-        radial-gradient(rgba(255, 255, 255, 0.03) 1.5px, transparent 1.5px);
+        radial-gradient(circle at 50% 0%, #ffffff 0%, #cbd5e1 100%),
+        radial-gradient(rgba(15, 23, 42, 0.03) 1.5px, transparent 1.5px);
       background-size: 100% 100%, 35px 35px;
       background-attachment: fixed;
-      color: var(--text);
+      color: #0f172a;
       margin: 0;
       padding: 24px 16px;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       box-sizing: border-box;
-      transition: all 0.5s ease;
     }
 
     .container {
       width: 100%;
       max-width: 620px; /* Sẽ thay đổi động bằng JS */
-      background: var(--card);
-      backdrop-filter: blur(var(--blur-val));
-      -webkit-backdrop-filter: blur(var(--blur-val));
+      background: #e2e8f0; /* Nền xám Slate Light tuyệt đẹp để các card trắng nổi bật hẳn lên! */
       padding: 28px;
       border-radius: 24px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-      border: 1px solid var(--border);
+      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.05);
+      border: 1.5px solid #cbd5e1;
       transition: max-width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
       display: flex;
       flex-direction: column;
@@ -153,7 +150,7 @@
     .brand-btn.active {
       background: var(--accent-grad);
       color: #ffffff;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1);
     }
 
     label {
@@ -1016,7 +1013,7 @@
 
       <div class="grid-2" style="width: 100%; max-width: 420px; margin-top: 20px;">
         <button class="btn" onclick="renderAllAndDownload()">📥 Tải Ảnh Chuẩn Nét</button>
-        <button class="btn btn-secondary" onclick="isGeneratedInfo=true; triggerRender();">🔄 Cập nhật / Làm mới Canvas</button>
+        <button class="btn btn-secondary" onclick="isInfoGenerated=true; triggerRender();">🔄 Cập nhật / Làm mới Canvas</button>
       </div>
       <p style="font-size: 11px; color: var(--text-dim); text-align: center; margin-top: 10px; max-width: 420px;">
         * Canvas được cấu hình độ phân giải siêu nét (1200 x 1600 px) chuyên dụng để sếp đăng bài không lo bể vỡ hình.
@@ -1034,6 +1031,10 @@
   function switchBrand(brand) {
     currentBrand = brand;
     activeEngine = (brand === 'reNews') ? 'reNews' : 'reTechs';
+    
+    // Reset trạng thái vẽ để hiển thị màn hình chờ (placeholder) cao cấp cho từng kênh tương ứng
+    isBannerGenerated = false;
+    isInfoGenerated = false;
     
     // Toggle active class on brand buttons
     document.querySelectorAll('.brand-btn').forEach(btn => {
@@ -1094,21 +1095,86 @@
   const RENEWS_LOGO_BASE64 = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNTAgMTEwIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0icHJpbWFyeUdyYWROZXdzIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y0M2Y1ZSIgLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI1MCUiIHN0b3AtY29sb3I9IiNlYzQ4OTkiIC8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2Y5NzMxNiIgLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJhY2NlbnRHcmFkTmV3cyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNlZjQ0NDQiIC8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2Y5NzMxNiIgLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJtZXRhbEdyYWROZXdzIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmZmZmZmYiIC8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2NiZDVlMSIgLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CgogICAgPGZpbHRlciBpZD0iZ2xvd05ld3MiIHg9Ii0zMCUiIHk9Ii0zMCUiIHdpZHRoPSIxNjAlIiBoZWlnaHQ9IjE2MCUiPgogICAgICA8ZmVHYXVzc2lhbkJsdXIgc3RkRGV2aWF0aW9uPSI0IiByZXN1bHQ9ImJsdXIiIC8+CiAgICAgIDxmZUNvbXBvc2l0ZSBpbj0iU291cmNlR3JhcGhpYyIgaW4yPSJibHVyIiBvcGVyYXRvcj0ib3ZlciIgLz4KICAgIDwvZmlsdGVyPgoKICAgIDxmaWx0ZXIgaWQ9InNoYWRvd05ld3MiIHg9Ii0xMCUiIHk9Ii0xMCUiIHdpZHRoPSIxMjAlIiBoZWlnaHQ9IjEyMCUiPgogICAgICA8ZmVEcm9wU2hhZG93IGR4PSIwIiBkeT0iNCIgc3RkRGV2aWF0aW9uPSI0IiBmbG9vZC1jb2xvcj0iIzAwMDAwMCIgZmxvb2Qtb3BhY2l0eT0iMC41Ii8+CiAgICA8L2ZpbHRlcj4KICA8L2RlZnM+CgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEwLCA2OCkiIGZpbHRlcj0idXJsKCNzaGFkb3dOZXdzKSI+CiAgICA8dGV4dCB4PSIwIiB5PSIwIiBmb250LWZhbWlseT0iJ0xleGVuZCcsICdJbnRlcicsIC1hcHBsZS1zeXN0ZW0sIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNjQiIGZvbnQtd2VpZ2h0PSIzMDAiIGZpbGw9InVybCgjbWV0YWxHcmFkTmV3cykiIGxldHRlci1zcGFjaW5nPSItMSI+cmU8L3RleHQ+CiAgICA8dGV4dCB4PSI2OCIgeT0iMCIgZm9udC1mYW1pbHk9IidMZXhlbmQnLCAnSW50ZXInLCAtYXBwbGUtc3lzdGVtLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmb250LXdlaWdodD0iOTAwIiBmaWxsPSJ1cmwoI3ByaW1hcnlHcmFkTmV3cykiIGxldHRlci1zcGFjaW5nPSIwLjUiPk5ld3M8L3RleHQ+CiAgICA8Y2lyY2xlIGN4PSIyNTUiIGN5PSItNTIiIHI9IjYiIGZpbGw9InVybCgjYWNjZW50R3JhZE5ld3MpIiBmaWx0ZXI9InVybCgjZ2xvd05ld3MpIiAvPgogICAgPHRleHQgeD0iMyIgeT0iMjgiIGZvbnQtZmFtaWx5PSInQ2hha3JhIFBldGNoJywgJ0ludGVyJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iI2Y0M2Y1ZSIgbGV0dGVyLXNwYWNpbmc9IjguMiIgb3BhY2l0eT0iMC45NSI+TkVXUyBBVVRPTUFUSU9OPC90ZXh0PgogICAgPGxpbmUgeDE9IjMiIHkxPSIzOCIgeDI9IjI4MCIgeTI9IjM4IiBzdHJva2U9InVybCgjcHJpbWFyeUdyYWROZXdzKSIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgb3BhY2l0eT0iMC42IiAvPgogICAgPHBhdGggZD0iTSAyODUsIDMwIEwgMjk1LCAzMCBMIDI5NSwgMTUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Y0M2Y1ZSIgc3Ryb2tlLXdpZHRoPSIyLjUiIC8+CiAgPC9nPgo8L3N2Zz4=";
   const RETECHS_LOGO_BASE64 = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNTAgMTEwIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0icHJpbWFyeUdyYWRUZWNoIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzM4YmRmOCIgLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI1MCUiIHN0b3AtY29sb3I9IiMwZWE1ZTkiIC8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzI1NjNlYiIgLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJhY2NlbnRHcmFkVGVjaCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMwNmI2ZDQiIC8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzNiODJmNiIgLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJtZXRhbEdyYWRUZWNoIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmZmZmZmYiIC8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2NiZDVlMSIgLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CgogICAgPGZpbHRlciBpZD0iZ2xvd1RlY2giIHg9Ii0zMCUiIHk9Ii0zMCUiIHdpZHRoPSIxNjAlIiBoZWlnaHQ9IjE2MCUiPgogICAgICA8ZmVHYXVzc2lhbkJsdXIgc3RkRGV2aWF0aW9uPSI0IiByZXN1bHQ9ImJsdXIiIC8+CiAgICAgIDxmZUNvbXBvc2l0ZSBpbj0iU291cmNlR3JhcGhpYyIgaW4yPSJibHVyIiBvcGVyYXRvcj0ib3ZlciIgLz4KICAgIDwvZmlsdGVyPgoKICAgIDxmaWx0ZXIgaWQ9InNoYWRvd1RlY2giIHg9Ii0xMCUiIHk9Ii0xMCUiIHdpZHRoPSIxMjAlIiBoZWlnaHQ9IjEyMCUiPgogICAgICA8ZmVEcm9wU2hhZG93IGR4PSIwIiBkeT0iNCIgc3RkRGV2aWF0aW9uPSI0IiBmbG9vZC1jb2xvcj0iIzAwMDAwMCIgZmxvb2Qtb3BhY2l0eT0iMC41Ii8+CiAgICA8L2ZpbHRlcj4KICA8L2RlZnM+CgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEwLCA2OCkiIGZpbHRlcj0idXJsKCNzaGFkb3dUZWNoKSI+CiAgICA8dGV4dCB4PSIwIiB5PSIwIiBmb250LWZhbWlseT0iJ0xleGVuZCcsICdJbnRlcicsIC1hcHBsZS1zeXN0ZW0sIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNjQiIGZvbnQtd2VpZ2h0PSIzMDAiIGZpbGw9InVybCgjbWV0YWxHcmFkVGVjaCkiIGxldHRlci1zcGFjaW5nPSItMSI+cmU8L3RleHQ+CiAgICA8dGV4dCB4PSI2OCIgeT0iMCIgZm9udC1mYW1pbHk9IidMZXhlbmQnLCAnSW50ZXInLCAtYXBwbGUtc3lzdGVtLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmb250LXdlaWdodD0iOTAwIiBmaWxsPSJ1cmwoI3ByaW1hcnlHcmFkVGVjaCkiIGxldHRlci1zcGFjaW5nPSIwLjUiPlRlY2hzPC90ZXh0PgogICAgPGNpcmNsZSBjeD0iMjg4IiBjeT0iLTUyIiByPSI2IiBmaWxsPSJ1cmwoI2FjY2VudEdyYWRUZWNoKSIgZmlsdGVyPSJ1cmwoI2dsb3dUZWNoKSIgLz4KICAgIDx0ZXh0IHg9IjMiIHk9IjI4IiBmb250LWZhbWlseT0iJ0NoYWtyYSBQZXRjaCcsICdJbnRlcicsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTUiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMzOGJkZjgiIGxldHRlci1zcGFjaW5nPSI3IiBvcGFjaXR5PSIwLjk1Ij5TVFVESU8gQVVUT01BVElPTjwvdGV4dD4KICAgIDxsaW5lIHgxPSIzIiB5MT0iMzgiIHgyPSIzMTAiIHkyPSIzOCIgc3Ryb2tlPSJ1cmwoI3ByaW1hcnlHcmFkVGVjaCkiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIG9wYWNpdHk9IjAuNiIgLz4KICAgIDxwYXRoIGQ9Ik0gMzE1LCAzMCBMIDMyNSwgMzAgTCAzMjUsIDE1IiBmaWxsPSJub25lIiBzdHJva2U9IiMzOGJkZjgiIHN0cm9rZS13aWR0aD0iMi41IiAvPgogIDwvZz4KPC9zdmc+";
 
+  const RENEWS_LOGO_LIGHT_BASE64 = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNTAgMTEwIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0icHJpbWFyeUdyYWROZXdzIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y0M2Y1ZSIgLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI1MCUiIHN0b3AtY29sb3I9IiNlYzQ4OTkiIC8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2Y5NzMxNiIgLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJhY2NlbnRHcmFkTmV3cyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNlZjQ0NDQiIC8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2Y5NzMxNiIgLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJtZXRhbEdyYWROZXdzIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMwZjE3MmEiIC8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzQ3NTU2OSIgLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CgogICAgPGZpbHRlciBpZD0iZ2xvd05ld3MiIHg9Ii0zMCUiIHk9Ii0zMCUiIHdpZHRoPSIxNjAlIiBoZWlnaHQ9IjE2MCUiPgogICAgICA8ZmVHYXVzc2lhbkJsdXIgc3RkRGV2aWF0aW9uPSI0IiByZXN1bHQ9ImJsdXIiIC8+CiAgICAgIDxmZUNvbXBvc2l0ZSBpbj0iU291cmNlR3JhcGhpYyIgaW4yPSJibHVyIiBvcGVyYXRvcj0ib3ZlciIgLz4KICAgIDwvZmlsdGVyPgoKICAgIDxmaWx0ZXIgaWQ9InNoYWRvd05ld3MiIHg9Ii0xMCUiIHk9Ii0xMCUiIHdpZHRoPSIxMjAlIiBoZWlnaHQ9IjEyMCUiPgogICAgICA8ZmVEcm9wU2hhZG93IGR4PSIwIiBkeT0iNCIgc3RkRGV2aWF0aW9uPSI0IiBmbG9vZC1jb2xvcj0iIzAwMDAwMCIgZmxvb2Qtb3BhY2l0eT0iMC41Ii8+CiAgICA8L2ZpbHRlcj4KICA8L2RlZnM+CgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEwLCA2OCkiIGZpbHRlcj0idXJsKCNzaGFkb3dOZXdzKSI+CiAgICA8dGV4dCB4PSIwIiB5PSIwIiBmb250LWZhbWlseT0iJ0xleGVuZCcsICdJbnRlcicsIC1hcHBsZS1zeXN0ZW0sIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNjQiIGZvbnQtd2VpZ2h0PSIzMDAiIGZpbGw9InVybCgjbWV0YWxHcmFkTmV3cykiIGxldHRlci1zcGFjaW5nPSItMSI+cmU8L3RleHQ+CiAgICA8dGV4dCB4PSI2OCIgeT0iMCIgZm9udC1mYW1pbHk9IidMZXhlbmQnLCAnSW50ZXInLCAtYXBwbGUtc3lzdGVtLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmb250LXdlaWdodD0iOTAwIiBmaWxsPSJ1cmwoI3ByaW1hcnlHcmFkTmV3cykiIGxldHRlci1zcGFjaW5nPSIwLjUiPk5ld3M8L3RleHQ+CiAgICA8Y2lyY2xlIGN4PSIyNTUiIGN5PSItNTIiIHI9IjYiIGZpbGw9InVybCgjYWNjZW50R3JhZE5ld3MpIiBmaWx0ZXI9InVybCgjZ2xvd05ld3MpIiAvPgogICAgPHRleHQgeD0iMyIgeT0iMjgiIGZvbnQtZmFtaWx5PSInQ2hha3JhIFBldGNoJywgJ0ludGVyJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iI2Y0M2Y1ZSIgbGV0dGVyLXNwYWNpbmc9IjguMiIgb3BhY2l0eT0iMC45NSI+TkVXUyBBVVRPTUFUSU9OPC90ZXh0PgogICAgPGxpbmUgeDE9IjMiIHkxPSIzOCIgeDI9IjI4MCIgeTI9IjM4IiBzdHJva2U9InVybCgjcHJpbWFyeUdyYWROZXdzKSIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgb3BhY2l0eT0iMC42IiAvPgogICAgPHBhdGggZD0iTSAyODUsIDMwIEwgMjk1LCAzMCBMIDI5NSwgMTUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Y0M2Y1ZSIgc3Ryb2tlLXdpZHRoPSIyLjUiIC8+CiAgPC9nPgo8L3N2Zz4=";
+  const RETECHS_LOGO_LIGHT_BASE64 = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNTAgMTEwIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0icHJpbWFyeUdyYWRUZWNoIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzM4YmRmOCIgLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI1MCUiIHN0b3AtY29sb3I9IiMwZWE1ZTkiIC8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzI1NjNlYiIgLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJhY2NlbnRHcmFkVGVjaCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMwNmI2ZDQiIC8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzNiODJmNiIgLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJtZXRhbEdyYWRUZWNoIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMwZjE3MmEiIC8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzQ3NTU2OSIgLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CgogICAgPGZpbHRlciBpZD0iZ2xvd1RlY2giIHg9Ii0zMCUiIHk9Ii0zMCUiIHdpZHRoPSIxNjAlIiBoZWlnaHQ9IjE2MCUiPgogICAgICA8ZmVHYXVzc2lhbkJsdXIgc3RkRGV2aWF0aW9uPSI0IiByZXN1bHQ9ImJsdXIiIC8+CiAgICAgIDxmZUNvbXBvc2l0ZSBpbj0iU291cmNlR3JhcGhpYyIgaW4yPSJibHVyIiBvcGVyYXRvcj0ib3ZlciIgLz4KICAgIDwvZmlsdGVyPgoKICAgIDxmaWx0ZXIgaWQ9InNoYWRvd1RlY2giIHg9Ii0xMCUiIHk9Ii0xMCUiIHdpZHRoPSIxMjAlIiBoZWlnaHQ9IjEyMCUiPgogICAgICA8ZmVEcm9wU2hhZG93IGR4PSIwIiBkeT0iNCIgc3RkRGV2aWF0aW9uPSI0IiBmbG9vZC1jb2xvcj0iIzAwMDAwMCIgZmxvb2Qtb3BhY2l0eT0iMC41Ii8+CiAgICA8L2ZpbHRlcj4KICA8L2RlZnM+CgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEwLCA2OCkiIGZpbHRlcj0idXJsKCNzaGFkb3dUZWNoKSI+CiAgICA8dGV4dCB4PSIwIiB5PSIwIiBmb250LWZhbWlseT0iJ0xleGVuZCcsICdJbnRlcicsIC1hcHBsZS1zeXN0ZW0sIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNjQiIGZvbnQtd2VpZ2h0PSIzMDAiIGZpbGw9InVybCgjbWV0YWxHcmFkVGVjaCkiIGxldHRlci1zcGFjaW5nPSItMSI+cmU8L3RleHQ+CiAgICA8dGV4dCB4PSI2OCIgeT0iMCIgZm9udC1mYW1pbHk9IidMZXhlbmQnLCAnSW50ZXInLCAtYXBwbGUtc3lzdGVtLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmb250LXdlaWdodD0iOTAwIiBmaWxsPSJ1cmwoI3ByaW1hcnlHcmFkVGVjaCkiIGxldHRlci1zcGFjaW5nPSIwLjUiPlRlY2hzPC90ZXh0PgogICAgPGNpcmNsZSBjeD0iMjg4IiBjeT0iLTUyIiByPSI2IiBmaWxsPSJ1cmwoI2FjY2VudEdyYWRUZWNoKSIgZmlsdGVyPSJ1cmwoI2dsb3dUZWNoKSIgLz4KICAgIDx0ZXh0IHg9IjMiIHk9IjI4IiBmb250LWZhbWlseT0iJ0NoYWtyYSBQZXRjaCcsICdJbnRlcicsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTUiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMzOGJkZjgiIGxldHRlci1zcGFjaW5nPSI3IiBvcGFjaXR5PSIwLjk1Ij5TVFVESU8gQVVUT01BVElPTjwvdGV4dD4KICAgIDxsaW5lIHgxPSIzIiB5MT0iMzgiIHgyPSIzMTAiIHkyPSIzOCIgc3Ryb2tlPSJ1cmwoI3ByaW1hcnlHcmFkVGVjaCkiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIG9wYWNpdHk9IjAuNiIgLz4KICAgIDxwYXRoIGQ9Ik0gMzE1LCAzMCBMIDMyNSwgMzAgTCAzMjUsIDE1IiBmaWxsPSJub25lIiBzdHJva2U9IiMzOGJkZjgiIHN0cm9rZS13aWR0aD0iMi41IiAvPgogIDwvZz4KPC9zdmc+";
+
   let preloadedReNewsLogo = null;
+  let preloadedReNewsLogoLight = null;
   let preloadedReTechsLogo = null;
+  let preloadedReTechsLogoLight = null;
 
   function preloadSuiteLogos() {
     preloadedReNewsLogo = new Image();
     preloadedReNewsLogo.src = RENEWS_LOGO_BASE64;
-    preloadedReNewsLogo.onload = () => {
-      triggerRender();
-    };
+    preloadedReNewsLogo.onload = () => { triggerRender(); };
+
+    preloadedReNewsLogoLight = new Image();
+    preloadedReNewsLogoLight.src = RENEWS_LOGO_LIGHT_BASE64;
+    preloadedReNewsLogoLight.onload = () => { triggerRender(); };
 
     preloadedReTechsLogo = new Image();
     preloadedReTechsLogo.src = RETECHS_LOGO_BASE64;
-    preloadedReTechsLogo.onload = () => {
-      triggerRender();
-    };
+    preloadedReTechsLogo.onload = () => { triggerRender(); };
+
+    preloadedReTechsLogoLight = new Image();
+    preloadedReTechsLogoLight.src = RETECHS_LOGO_LIGHT_BASE64;
+    preloadedReTechsLogoLight.onload = () => { triggerRender(); };
+  }
+
+  // --- CHUYÊN GIA UI/UX: VẼ MÀN HÌNH CHỜ (PLACEHOLDER) CAO CẤP ---
+  function drawPlaceholder(canvasId, titleText, subtitleText) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width, h = canvas.height;
+
+    // Background tối sang trọng đồng điệu
+    ctx.fillStyle = '#080b11';
+    ctx.fillRect(0, 0, w, h);
+
+    // Subtle dotted grid
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
+    const dotGap = 40;
+    for (let x = 0; x < w; x += dotGap) {
+      for (let y = 0; y < h; y += dotGap) {
+        ctx.beginPath();
+        ctx.arc(x, y, 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    // Centered Circular Glow theo thương hiệu
+    let grad = ctx.createRadialGradient(w/2, h/2 - 100, 10, w/2, h/2 - 100, 300);
+    grad.addColorStop(0, currentBrand === 'reNews' ? 'rgba(244, 63, 94, 0.18)' : 'rgba(56, 189, 248, 0.18)');
+    grad.addColorStop(1, 'rgba(8, 11, 17, 0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(w/2, h/2 - 100, 300, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Centered Logo
+    const activeLogo = (currentBrand === 'reNews') ? preloadedReNewsLogo : preloadedReTechsLogo;
+    if (activeLogo && activeLogo.complete && activeLogo.width > 0) {
+      ctx.save();
+      ctx.shadowColor = currentBrand === 'reNews' ? 'rgba(244, 63, 94, 0.45)' : 'rgba(56, 189, 248, 0.45)';
+      ctx.shadowBlur = 20;
+      const drawH = 100;
+      const drawW = (activeLogo.width / activeLogo.height) * drawH;
+      ctx.drawImage(activeLogo, w/2 - drawW/2, h/2 - 100 - drawH/2, drawW, drawH);
+      ctx.restore();
+    }
+
+    // Title text
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 36px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(titleText, w/2, h/2 + 60);
+
+    // Subtitle instruction
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '400 22px sans-serif';
+    ctx.fillText(subtitleText, w/2, h/2 + 120);
   }
 
   // Universal Render Throttler
@@ -1117,17 +1183,25 @@
     if (renderTimer) clearTimeout(renderTimer);
     renderTimer = setTimeout(() => {
       if (activeEngine === 'reNews') {
-        generateBanner(true);
+        if (isBannerGenerated) {
+          generateBanner(true);
+        } else {
+          drawPlaceholder('preview-canvas-news', '📱 Trình Tạo Banner (reNews)', 'Vui lòng nhập tiêu đề & nhấn [Tạo Ảnh] ở trên để hiển thị!');
+        }
       } else {
-        renderCanvasInfo();
+        if (isInfoGenerated) {
+          renderCanvasInfo();
+        } else {
+          drawPlaceholder('preview-canvas-info', '📊 Thiết Kế Infographic (reTechs)', 'Vui lòng nhấn [Cập nhật / Làm mới Canvas] ở dưới để hiển thị!');
+        }
       }
     }, 150);
   }
 
   // ==================== ENGINE 1: RENEWS BANNER CODE ====================
-  // Trạng thái đã tạo ảnh thành công lần đầu
-  let isGenerated = false;
-  let isGeneratedInfo = false;
+  // Trạng thái vẽ Canvas chủ động theo lệnh người dùng
+  let isBannerGenerated = false;
+  let isInfoGenerated = false;
 
   // --- TÍNH NĂNG MỚI: TRẠM TIN TỰ ĐỘNG RSS FEED (ONE-CLICK RSS LIBRARY) ---
   const DEFAULT_RSS_FEEDS = [
@@ -1608,7 +1682,7 @@
 
     if (isCarouselMode) {
       settings.style.display = 'block';
-      if (isGenerated) {
+      if (isBannerGenerated) {
         previewNav.style.display = 'flex';
         btnDownloadAll.style.display = 'block';
       }
@@ -1746,7 +1820,7 @@
       return;
     }
     if (!silent) {
-      isGenerated = true; // Đánh dấu đã bấm tạo ảnh lần đầu
+      isBannerGenerated = true; // Đánh dấu chính thức kích hoạt tạo ảnh
     }
     if (!isGenerated) {
       drawBannerPlaceholder();
@@ -2927,23 +3001,8 @@
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
 
-    if (!isGeneratedInfo) {
-      ctx.fillStyle = '#020617';
-      ctx.fillRect(0, 0, w, h);
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.02)';
-      const dotGap = 35;
-      for (let x = 0; x < w; x += dotGap) {
-        for (let y = 0; y < h; y += dotGap) {
-          ctx.beginPath();
-          ctx.arc(x, y, 2.5, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
-      ctx.fillStyle = '#94a3b8';
-      ctx.font = 'bold 36px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('📊 Nhập dữ liệu & nhấn [Cập nhật / Làm mới] để hiển thị', w / 2, h / 2);
+    if (!isInfoGenerated) {
+      drawPlaceholder('preview-canvas-info', '📊 Thiết Kế Infographic (reTechs)', 'Vui lòng nhấn [Cập nhật / Làm mới Canvas] ở dưới để hiển thị!');
       return;
     }
 
@@ -2977,11 +3036,15 @@
     }
     ctx.restore();
 
-    // 3. LOGO BRAND (ĐỘC QUYỀN THEO THƯƠNG HIỆU ĐƯỢC CHỌN)
-    const activeLogo = (currentBrand === 'reNews') ? preloadedReNewsLogo : preloadedReTechsLogo;
-    if (activeLogo && activeLogo.complete) {
+    // 3. LOGO BRAND (ĐỘC QUYỀN THEO THƯƠNG HIỆU VÀ MÀU NỀN CỦA CANVAS)
+    const isThemeDark = (theme !== 'light');
+    const activeLogo = (currentBrand === 'reNews') 
+      ? (isThemeDark ? preloadedReNewsLogo : preloadedReNewsLogoLight) 
+      : (isThemeDark ? preloadedReTechsLogo : preloadedReTechsLogoLight);
+      
+    if (activeLogo && activeLogo.complete && activeLogo.width > 0) {
       ctx.save();
-      ctx.shadowColor = 'rgba(0,0,0,0.4)';
+      ctx.shadowColor = isThemeDark ? 'rgba(0,0,0,0.4)' : 'rgba(15, 23, 42, 0.08)';
       ctx.shadowBlur = 10;
       ctx.shadowOffsetY = 4;
       ctx.drawImage(activeLogo, 50, 52, 184, 46);
