@@ -119,7 +119,7 @@
     .brand-label {
       font-size: 13px;
       font-weight: 700;
-      color: var(--text-dim);
+      color: var(--text);
       display: flex;
       align-items: center;
       gap: 6px;
@@ -137,7 +137,7 @@
     .brand-btn {
       background: transparent;
       border: none;
-      color: var(--text-dim);
+      color: #475569;
       padding: 6px 16px;
       border-radius: 8px;
       font-weight: 700;
@@ -147,7 +147,7 @@
     }
     
     .brand-btn:hover {
-      color: #ffffff;
+      color: var(--accent);
     }
     
     .brand-btn.active {
@@ -1063,7 +1063,7 @@
       root.style.setProperty('--accent', '#f43f5e'); // Red-pink
       root.style.setProperty('--accent-alpha', 'rgba(244, 63, 94, 0.12)');
       root.style.setProperty('--accent-grad', 'linear-gradient(135deg, #f43f5e 0%, #ec4899 100%)');
-      if (headerTitle) headerTitle.innerText = "reNews Ultimate Studio (v5.5 - Banner)";
+      if (headerTitle) headerTitle.innerText = "reNews Ultimate Studio (v5.6 - Banner)";
       document.title = "reNews Ultimate Studio - Banner Creator";
       if (watermarkInput) watermarkInput.value = "@reNews_Official";
       if (badgeInput) badgeInput.value = "TIN NÓNG";
@@ -1073,7 +1073,7 @@
       root.style.setProperty('--accent', '#38bdf8'); // Cyber Blue
       root.style.setProperty('--accent-alpha', 'rgba(56, 189, 248, 0.15)');
       root.style.setProperty('--accent-grad', 'linear-gradient(135deg, #38bdf8 0%, #0284c7 100%)');
-      if (headerTitle) headerTitle.innerText = "reTechs Ultimate Studio (v5.5 - Infographic)";
+      if (headerTitle) headerTitle.innerText = "reTechs Ultimate Studio (v5.6 - Infographic)";
       document.title = "reTechs Ultimate Studio - Infographic Engine";
       if (watermarkInput) watermarkInput.value = "@reTechs_Official";
       if (badgeInput) badgeInput.value = "CÔNG NGHỆ";
@@ -2236,7 +2236,7 @@
 
     // D. VẼ LOGO VÀ BADGE THỂ LOẠI
     let nextBadgeX = logoX;
-    if (logo) {
+    if (logo && logo.complete && logo.width > 0 && logo.height > 0) {
       const srcW = logo.width;
       const srcH = logo.height;
       const isSquare = Math.abs(srcW - srcH) < (srcW * 0.25);
@@ -2954,20 +2954,22 @@
       ctx.fillStyle = card.color || '#38bdf8';
       ctx.fill();
 
+      ctx.save();
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'top';
+
       ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
       ctx.font = '700 14px -apple-system, BlinkMacSystemFont, sans-serif';
-      ctx.textBaseline = 'top';
       ctx.fillText(card.brand.toUpperCase(), cX + 18, cardsY + 30);
 
       ctx.fillStyle = card.color || (isDark ? '#ffffff' : '#0f172a');
       ctx.font = '800 32px ' + titleFont + ', sans-serif';
-      ctx.textBaseline = 'top';
       ctx.fillText(card.value, cX + 18, cardsY + 58);
 
       ctx.fillStyle = isDark ? '#64748b' : '#64748b';
       ctx.font = '500 13px -apple-system, BlinkMacSystemFont, sans-serif';
-      ctx.textBaseline = 'top';
       ctx.fillText(card.sub, cX + 18, cardsY + 102);
+      ctx.restore();
 
       ctx.restore();
     });
@@ -3037,20 +3039,25 @@
       ctx.fillStyle = iconGrad;
       ctx.fill();
 
+      ctx.save();
       ctx.fillStyle = '#ffffff';
       ctx.font = '800 36px ' + titleFont + ', sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(item.name.charAt(0).toUpperCase(), iconX + 37, iconY + 37);
+      ctx.restore();
 
+      ctx.save();
       ctx.textAlign = 'left';
       ctx.textBaseline = 'top';
       ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
       ctx.font = '800 24px ' + titleFont + ', sans-serif';
       ctx.fillText(item.name, 170, rY + 24);
       const nameWidth = ctx.measureText(item.name).width;
+      ctx.restore();
 
       if (item.badge) {
+        ctx.save();
         ctx.font = '700 12px -apple-system, BlinkMacSystemFont, sans-serif';
         const badgeMetrics = ctx.measureText(item.badge);
         const bW = badgeMetrics.width + 16;
@@ -3067,13 +3074,16 @@
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(item.badge, bX + bW/2, bY + 13);
+        ctx.restore();
       }
 
+      ctx.save();
       ctx.textAlign = 'left';
       ctx.textBaseline = 'top';
       ctx.fillStyle = isDark ? '#94a3b8' : '#475569';
       ctx.font = '500 15px -apple-system, BlinkMacSystemFont, sans-serif';
       ctx.fillText(item.desc, 170, rY + 58);
+      ctx.restore();
 
       const barX = 170;
       const barY = rY + 84;
@@ -3091,21 +3101,29 @@
       ctx.strokeStyle = item.badgeBg ? addAlphaToHex(item.badgeBg, 0.25) : 'rgba(56, 189, 248, 0.25)';
       ctx.stroke();
 
+      ctx.save();
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
       ctx.fillStyle = item.badgeBg || '#38bdf8';
       ctx.font = '700 14px -apple-system, BlinkMacSystemFont, sans-serif';
-      ctx.textBaseline = 'middle';
       ctx.fillText("⚡ " + item.barText, barX + 16, barY + 20);
+      ctx.restore();
 
+      ctx.save();
       ctx.textAlign = 'right';
       ctx.textBaseline = 'middle';
       ctx.fillStyle = item.badgeBg || (isDark ? '#ffffff' : '#0f172a');
       ctx.font = '800 34px ' + titleFont + ', sans-serif';
       ctx.fillText(item.stat, 1110, rY + 50);
+      ctx.restore();
 
+      ctx.save();
+      ctx.textAlign = 'right';
       ctx.textBaseline = 'top';
       ctx.fillStyle = isDark ? '#64748b' : '#64748b';
       ctx.font = '600 13px -apple-system, BlinkMacSystemFont, sans-serif';
       ctx.fillText(item.statSub.toUpperCase(), 1110, rY + 82);
+      ctx.restore();
 
       ctx.restore();
     });
@@ -3143,6 +3161,9 @@
   }
 
   function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+    ctx.save();
+    ctx.textBaseline = 'top';
+    ctx.textAlign = 'left';
     const words = text.split(' ');
     let line = '';
     let currentY = y;
@@ -3159,6 +3180,7 @@
       }
     }
     ctx.fillText(line, x, currentY);
+    ctx.restore();
   }
 
   function renderAllAndDownload() {
