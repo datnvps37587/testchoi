@@ -1003,6 +1003,67 @@
 </div>
 
 <script>
+  // Global Brand Channel State
+  let currentBrand = 'reNews';
+
+  function switchBrand(brand) {
+    currentBrand = brand;
+    
+    // Toggle active classes on brand selector buttons
+    const btnNews = document.getElementById('brand-reNews');
+    const btnTechs = document.getElementById('brand-reTechs');
+    if (btnNews && btnTechs) {
+      btnNews.classList.toggle('active', brand === 'reNews');
+      btnTechs.classList.toggle('active', brand === 'reTechs');
+    }
+    
+    // Dynamic Accent Colors based on selected Brand
+    const root = document.documentElement;
+    if (brand === 'reNews') {
+      root.style.setProperty('--accent', '#f43f5e'); // Rose/Red for reNews
+      root.style.setProperty('--accent-grad', 'linear-gradient(135deg, #f43f5e 0%, #ec4899 50%, #f97316 100%)');
+      
+      const appHeaderTitle = document.getElementById('appHeaderTitle');
+      if (appHeaderTitle) appHeaderTitle.innerHTML = 'reNews Ultimate Studio (v5.2 - Banner)';
+      document.title = "reNews Ultimate Studio";
+      
+      const watermarkText = document.getElementById('watermarkText');
+      if (watermarkText && (watermarkText.value === '' || watermarkText.value === '@reTechs_Official')) {
+        watermarkText.value = '@reNews_Official';
+      }
+      const badgeText = document.getElementById('badgeText');
+      if (badgeText && (badgeText.value === '' || badgeText.value === 'CÔNG NGHỆ')) {
+        badgeText.value = 'TIN NÓNG';
+      }
+      const logoText = document.getElementById('logoText');
+      if (logoText && (logoText.value === '' || logoText.value === 'reTechs' || logoText.value === 'reNews')) {
+        logoText.value = 'reNews';
+      }
+    } else {
+      root.style.setProperty('--accent', '#38bdf8'); // Cyan/Blue for reTechs
+      root.style.setProperty('--accent-grad', 'linear-gradient(135deg, #38bdf8 0%, #0ea5e9 50%, #2563eb 100%)');
+      
+      const appHeaderTitle = document.getElementById('appHeaderTitle');
+      if (appHeaderTitle) appHeaderTitle.innerHTML = 'reTechs Ultimate Studio (v5.2 - Banner)';
+      document.title = "reTechs Ultimate Studio";
+      
+      const watermarkText = document.getElementById('watermarkText');
+      if (watermarkText && (watermarkText.value === '' || watermarkText.value === '@reNews_Official')) {
+        watermarkText.value = '@reTechs_Official';
+      }
+      const badgeText = document.getElementById('badgeText');
+      if (badgeText && (badgeText.value === '' || badgeText.value === 'TIN NÓNG')) {
+        badgeText.value = 'CÔNG NGHỆ';
+      }
+      const logoText = document.getElementById('logoText');
+      if (logoText && (logoText.value === '' || logoText.value === 'reNews' || logoText.value === 'reTechs')) {
+        logoText.value = 'reTechs';
+      }
+    }
+    
+    triggerRender();
+  }
+
   // Dynamic Suite Tab Engine
   let activeEngine = 'reNews';
 
