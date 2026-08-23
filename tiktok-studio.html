@@ -678,11 +678,7 @@
     </div>
   </div>
 
-  <!-- DUAL ENGINE NAVIGATION TABS -->
-  <div class="suite-tabs">
-    <button class="suite-tab active" id="tab-renews" onclick="switchEngine('reNews')">📱 Trình Tạo Banner (Banner Creator)</button>
-    <button class="suite-tab" id="tab-retechs" onclick="switchEngine('reTechs')">📊 Thiết Kế Infographic</button>
-  </div>
+  <!-- DUAL ENGINE TABS INTEGRATED INTO BRAND SELECTOR -->
 
   <!-- ==================== TAB 1: RENEWS BANNER CREATOR ==================== -->
   <div id="form-renews">
@@ -982,7 +978,7 @@
         <input type="text" id="sourceTextInfo" value="Nguồn kiểm chứng: Resend, Brevo, Mailersend, Cloudflare, SendGrid Docs (2026)" oninput="triggerRender()">
 
         <label>Hashtag / Nickname thương hiệu</label>
-        <input type="text" id="hashtagText" value="#NGHIAMECONGNGHE" oninput="triggerRender()">
+        <input type="text" id="hashtagText" value="#RENEWS" oninput="triggerRender()">
       </div>
 
     </div>
@@ -1007,11 +1003,12 @@
 
 <script>
   // Global Brand & Engine States
-  let activeEngine = 'reNews';
-  let currentBrand = 'reNews';
+  let activeEngine = 'reNews'; // 'reNews' (Banner) or 'reTechs' (Infographic)
+  let currentBrand = 'reNews'; // 'reNews' or 'reTechs'
 
   function switchBrand(brand) {
     currentBrand = brand;
+    activeEngine = (brand === 'reNews') ? 'reNews' : 'reTechs';
     
     // Toggle active class on brand buttons
     document.querySelectorAll('.brand-btn').forEach(btn => {
@@ -1019,6 +1016,21 @@
     });
     const activeBtn = document.getElementById(`brand-${brand}`);
     if (activeBtn) activeBtn.classList.add('active');
+    
+    // Switch workspace display and container width automatically
+    const container = document.querySelector('.container');
+    const formRenews = document.getElementById('form-renews');
+    const formRetechs = document.getElementById('form-retechs');
+    
+    if (brand === 'reNews') {
+      if (container) container.style.maxWidth = '620px';
+      if (formRenews) formRenews.style.display = 'block';
+      if (formRetechs) formRetechs.style.display = 'none';
+    } else {
+      if (container) container.style.maxWidth = '1100px';
+      if (formRenews) formRenews.style.display = 'none';
+      if (formRetechs) formRetechs.style.display = 'grid';
+    }
     
     // Update theme, accent colors, and watermarks based on brand
     const root = document.documentElement;
@@ -1031,10 +1043,8 @@
     if (brand === 'reNews') {
       root.style.setProperty('--accent', '#f43f5e'); // Red-pink
       root.style.setProperty('--accent-grad', 'linear-gradient(135deg, #f43f5e 0%, #ec4899 100%)');
-      if (headerTitle) {
-        headerTitle.innerText = activeEngine === 'reNews' ? "reNews Ultimate Studio (v5.3 - Banner)" : "reNews Ultimate Studio (v5.3 - Infographic)";
-      }
-      document.title = activeEngine === 'reNews' ? "reNews Ultimate Studio - Banner Creator" : "reNews Ultimate Studio - Infographic";
+      if (headerTitle) headerTitle.innerText = "reNews Ultimate Studio (v5.4 - Banner)";
+      document.title = "reNews Ultimate Studio - Banner Creator";
       if (watermarkInput) watermarkInput.value = "@reNews_Official";
       if (badgeInput) badgeInput.value = "TIN NÓNG";
       if (hashtagInput) hashtagInput.value = "#RENEWS";
@@ -1042,47 +1052,12 @@
     } else {
       root.style.setProperty('--accent', '#38bdf8'); // Cyber Blue
       root.style.setProperty('--accent-grad', 'linear-gradient(135deg, #38bdf8 0%, #0284c7 100%)');
-      if (headerTitle) {
-        headerTitle.innerText = activeEngine === 'reNews' ? "reTechs Ultimate Studio (v5.3 - Banner)" : "reTechs Ultimate Studio (v5.3 - Infographic)";
-      }
-      document.title = activeEngine === 'reNews' ? "reTechs Ultimate Studio - Banner Creator" : "reTechs Ultimate Studio - Infographic";
+      if (headerTitle) headerTitle.innerText = "reTechs Ultimate Studio (v5.4 - Infographic)";
+      document.title = "reTechs Ultimate Studio - Infographic Engine";
       if (watermarkInput) watermarkInput.value = "@reTechs_Official";
       if (badgeInput) badgeInput.value = "CÔNG NGHỆ";
       if (hashtagInput) hashtagInput.value = "#RETECHS";
       if (logoTextInput) logoTextInput.value = "reTechs";
-    }
-    
-    triggerRender();
-  }
-
-  function switchEngine(engine) {
-    activeEngine = engine;
-    
-    // Toggle active tab classes
-    document.getElementById('tab-renews').classList.toggle('active', engine === 'reNews');
-    document.getElementById('tab-retechs').classList.toggle('active', engine === 'reTechs');
-    
-    const container = document.querySelector('.container');
-    if (engine === 'reNews') {
-      container.style.maxWidth = '620px';
-      document.getElementById('form-renews').style.display = 'block';
-      document.getElementById('form-retechs').style.display = 'none';
-    } else {
-      container.style.maxWidth = '1100px';
-      document.getElementById('form-renews').style.display = 'none';
-      document.getElementById('form-retechs').style.display = 'grid';
-    }
-    
-    // Update header title based on both engine and brand
-    const headerTitle = document.getElementById('appHeaderTitle');
-    if (headerTitle) {
-      if (currentBrand === 'reNews') {
-        headerTitle.innerText = engine === 'reNews' ? "reNews Ultimate Studio (v5.3 - Banner)" : "reNews Ultimate Studio (v5.3 - Infographic)";
-        document.title = engine === 'reNews' ? "reNews Ultimate Studio - Banner Creator" : "reNews Ultimate Studio - Infographic";
-      } else {
-        headerTitle.innerText = engine === 'reNews' ? "reTechs Ultimate Studio (v5.3 - Banner)" : "reTechs Ultimate Studio (v5.3 - Infographic)";
-        document.title = engine === 'reNews' ? "reTechs Ultimate Studio - Banner Creator" : "reTechs Ultimate Studio - Infographic";
-      }
     }
     
     triggerRender();
@@ -2574,7 +2549,7 @@
       subTitle: "Không lo bị chặn spam hay tính phí: 5 nền tảng gửi Email OTP xác thực và tạo hòm thư tên miền riêng hoàn toàn miễn phí.",
       listTitle: "Hạn Mức Dịch Vụ Gửi Email Transactional & OTP",
       source: "Nguồn kiểm chứng: Resend, Brevo, Mailersend, Cloudflare, SendGrid Docs (2026)",
-      hashtag: "#NGHIAMECONGNGHE",
+      hashtag: "#RENEWS",
       topCards: [
         { brand: "BREVO", value: "9.000", sub: "Email/tháng • 300/ngày Free", color: "#10b981" },
         { brand: "RESEND", value: "3.000", sub: "Email/tháng • react template", color: "#6366f1" },
@@ -2594,7 +2569,7 @@
       subTitle: "Xây dựng và deploy dự án của bạn lên mây chỉ trong vài giây hoàn toàn miễn phí. Top 5 nền tảng cloud hosting được dev tin dùng nhất.",
       listTitle: "Danh Sách Hạn Mức Cloud Hosting Free-Tier (2026)",
       source: "Nguồn tham khảo: Vercel, Netlify, Render, Railway, Fly.io pricing logs",
-      hashtag: "#NGHIAMECONGNGHE",
+      hashtag: "#RENEWS",
       topCards: [
         { brand: "VERCEL", value: "FREE", sub: "Tối ưu nhất cho Next.js", color: "#10b981" },
         { brand: "NETLIFY", value: "100GB", sub: "Băng thông cực cao hàng tháng", color: "#06b6d4" },
@@ -3052,13 +3027,14 @@
       ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
       ctx.font = '800 24px ' + titleFont + ', sans-serif';
       ctx.fillText(item.name, 170, rY + 24);
+      const nameWidth = ctx.measureText(item.name).width;
 
       if (item.badge) {
         ctx.font = '700 12px -apple-system, BlinkMacSystemFont, sans-serif';
         const badgeMetrics = ctx.measureText(item.badge);
         const bW = badgeMetrics.width + 16;
         const bH = 26;
-        const bX = 175 + ctx.measureText(item.name).width;
+        const bX = 170 + nameWidth + 12;
         const bY = rY + 24;
 
         ctx.beginPath();
@@ -3199,4 +3175,3 @@
 </script>
 </body>
 </html>
-
