@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>reNews & reTechs Ultimate Studio - Creator Suite v6.4</title>
+  <title>reTechs Studio Ultimate v6.8</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Chakra+Petch:wght@400;700&family=Montserrat:wght@400;700;900&family=Playfair+Display:ital,wght@0,700;1,400&family=Patrick+Hand&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -686,7 +686,7 @@
 <body>
 
 <div class="container">
-  <h2 id="appHeaderTitle">reNews Ultimate Studio (v6.7 - Banner)</h2>
+  <h2 id="appHeaderTitle">reTechs Studio Ultimate (v6.8 - Banner)</h2>
 
   <!-- GLOBAL BRAND SELECTOR -->
   <div class="brand-selector-container">
@@ -1069,8 +1069,8 @@
       root.style.setProperty('--accent', '#f43f5e'); // Red-pink
       root.style.setProperty('--accent-alpha', 'rgba(244, 63, 94, 0.12)');
       root.style.setProperty('--accent-grad', 'linear-gradient(135deg, #f43f5e 0%, #ec4899 100%)');
-      if (headerTitle) headerTitle.innerText = "reNews Ultimate Studio (v6.7 - Banner)";
-      document.title = "reNews Ultimate Studio - Banner Creator";
+      if (headerTitle) headerTitle.innerText = "reTechs Studio Ultimate (v6.8 - Banner)";
+      document.title = "reTechs Studio Ultimate - Banner Creator";
       if (watermarkInput) watermarkInput.value = "@reNews_Official";
       if (badgeInput) badgeInput.value = "TIN NÓNG";
       if (hashtagInput) hashtagInput.value = "#RENEWS";
@@ -1079,8 +1079,8 @@
       root.style.setProperty('--accent', '#38bdf8'); // Cyber Blue
       root.style.setProperty('--accent-alpha', 'rgba(56, 189, 248, 0.15)');
       root.style.setProperty('--accent-grad', 'linear-gradient(135deg, #38bdf8 0%, #0284c7 100%)');
-      if (headerTitle) headerTitle.innerText = "reTechs Ultimate Studio (v6.7 - Infographic)";
-      document.title = "reTechs Ultimate Studio - Infographic Engine";
+      if (headerTitle) headerTitle.innerText = "reTechs Studio Ultimate (v6.8 - Infographic)";
+      document.title = "reTechs Studio Ultimate - Infographic Creator";
       if (watermarkInput) watermarkInput.value = "@reTechs_Official";
       if (badgeInput) badgeInput.value = "CÔNG NGHỆ";
       if (hashtagInput) hashtagInput.value = "#RETECHS";
@@ -3337,7 +3337,6 @@
       // Co giãn động theo độ dài chữ: Ít nhất bằng độ dài chữ + padding, tối đa 820px để tránh đè cột số liệu bên phải
       let barW = Math.max(barMaxW * (item.barVal || 0.7), barTextWidth + 36);
       if (barW > 820) barW = 820;
-      const barH = 40;
 
       ctx.beginPath();
       ctx.roundRect(barX, barY, barW, barH, 12);
