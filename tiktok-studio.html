@@ -1876,6 +1876,40 @@
     });
   }
 
+  function wrapTextWithHighlight(ctx, text, x, y, maxWidth, lineHeight, maxLines = 8, highlightColor, autoHighlightEnabled, customKwList) {
+    const words = text.split(' ');
+    let lines = [];
+    let currentLine = '';
+
+    for (let n = 0; n < words.length; n++) {
+      const testLine = currentLine + words[n] + ' ';
+      const cleanTestLine = cleanMarkup(testLine);
+      const metrics = ctx.measureText(cleanTestLine);
+      
+      if (metrics.width > maxWidth && n > 0) {
+        lines.push(currentLine.trim());
+        currentLine = words[n] + ' ';
+      } else {
+        currentLine = testLine;
+      }
+    }
+    lines.push(currentLine.trim());
+
+    let finalLines = lines.slice(0, maxLines);
+    if (lines.length > maxLines) {
+      const lastIdx = maxLines - 1;
+      finalLines[lastIdx] = finalLines[lastIdx] + '...';
+    }
+
+    let currentY = y;
+    finalLines.forEach(line => {
+      drawHighlightLine(ctx, line, x, currentY, ctx.fillStyle, highlightColor, autoHighlightEnabled, customKwList);
+      currentY += lineHeight;
+    });
+
+    return currentY - lineHeight;
+  }
+
   function renderDualLayer(img, img2, logo, title, desc, badge, author, source, dateStr, font, watermark, layout = 'default') {
     const canvas = document.getElementById('preview-canvas-news');
     const ctx = canvas.getContext('2d');
