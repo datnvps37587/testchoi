@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>reNews & reTechs Ultimate Studio - Creator Suite v5.5</title>
+  <title>reNews & reTechs Ultimate Studio - Creator Suite v6.4</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Chakra+Petch:wght@400;700&family=Montserrat:wght@400;700;900&family=Playfair+Display:ital,wght@0,700;1,400&family=Patrick+Hand&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -1010,7 +1010,7 @@
 
       <div class="grid-2" style="width: 100%; max-width: 420px; margin-top: 20px;">
         <button class="btn" onclick="renderAllAndDownload()">📥 Tải Ảnh Chuẩn Nét</button>
-        <button class="btn btn-secondary" onclick="triggerRender()">🔄 Làm mới Canvas</button>
+        <button class="btn btn-secondary" onclick="isInfoGenerated=true; triggerRender();">🔄 Cập nhật / Làm mới Canvas</button>
       </div>
       <p style="font-size: 11px; color: var(--text-dim); text-align: center; margin-top: 10px; max-width: 420px;">
         * Canvas được cấu hình độ phân giải siêu nét (1200 x 1600 px) chuyên dụng để sếp đăng bài không lo bể vỡ hình.
@@ -1028,6 +1028,10 @@
   function switchBrand(brand) {
     currentBrand = brand;
     activeEngine = (brand === 'reNews') ? 'reNews' : 'reTechs';
+    
+    // Reset trạng thái vẽ để hiển thị màn hình chờ (placeholder) cao cấp cho từng kênh tương ứng
+    isBannerGenerated = false;
+    isInfoGenerated = false;
     
     // Toggle active class on brand buttons
     document.querySelectorAll('.brand-btn').forEach(btn => {
@@ -1063,7 +1067,7 @@
       root.style.setProperty('--accent', '#f43f5e'); // Red-pink
       root.style.setProperty('--accent-alpha', 'rgba(244, 63, 94, 0.12)');
       root.style.setProperty('--accent-grad', 'linear-gradient(135deg, #f43f5e 0%, #ec4899 100%)');
-      if (headerTitle) headerTitle.innerText = "reNews Ultimate Studio (v5.6 - Banner)";
+      if (headerTitle) headerTitle.innerText = "reNews Ultimate Studio (v6.4 - Banner)";
       document.title = "reNews Ultimate Studio - Banner Creator";
       if (watermarkInput) watermarkInput.value = "@reNews_Official";
       if (badgeInput) badgeInput.value = "TIN NÓNG";
@@ -1073,7 +1077,7 @@
       root.style.setProperty('--accent', '#38bdf8'); // Cyber Blue
       root.style.setProperty('--accent-alpha', 'rgba(56, 189, 248, 0.15)');
       root.style.setProperty('--accent-grad', 'linear-gradient(135deg, #38bdf8 0%, #0284c7 100%)');
-      if (headerTitle) headerTitle.innerText = "reTechs Ultimate Studio (v5.6 - Infographic)";
+      if (headerTitle) headerTitle.innerText = "reTechs Ultimate Studio (v6.4 - Infographic)";
       document.title = "reTechs Ultimate Studio - Infographic Engine";
       if (watermarkInput) watermarkInput.value = "@reTechs_Official";
       if (badgeInput) badgeInput.value = "CÔNG NGHỆ";
@@ -1524,7 +1528,7 @@
           document.getElementById('sourceText').value = feed.source;
           
           // Đặt trạng thái đã tạo ảnh thành true để kích hoạt Canvas vẽ ngay lập tức
-          
+          isBannerGenerated = true;
           
           // 6. Tự động vẽ lại Canvas
           if (isCarouselMode) {
@@ -1600,7 +1604,7 @@
       if (data.source) document.getElementById('sourceText').value = data.source;
       if (data.date) document.getElementById('dateText').value = data.date;
       document.getElementById('autoPasteInput').value = "✅ Đã tự động điền đầy đủ!";
-      
+      isBannerGenerated = true; // Kích hoạt vẽ ảnh ngay lập tức khi dùng bookmarklet
       handleDescInput();
     } catch(e) {}
   }
@@ -2740,6 +2744,7 @@
     
     renderTopCardsForm();
     renderComparisonListForm();
+    isInfoGenerated = true; // Kích hoạt vẽ Infographic thật ngay khi sếp chọn mẫu nhanh!
     triggerRender();
   }
 
@@ -3290,6 +3295,7 @@
   }
 
   function renderAllAndDownload() {
+    isInfoGenerated = true;
     renderCanvasInfo();
     const canvas = document.getElementById('preview-canvas-info');
     const link = document.createElement('a');
