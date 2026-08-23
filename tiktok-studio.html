@@ -9,16 +9,16 @@
     :root {
       /* Giao diện mặc định: Premium Light Glass */
       --bg: #f8fafc;
-      --card: rgba(255, 255, 255, 0.75);
+      --card: rgba(255, 255, 255, 0.85); /* Tăng tương phản thẻ */
       --card-inner: #ffffff;
-      --border: rgba(15, 23, 42, 0.06);
-      --border-focus: rgba(15, 23, 42, 0.2);
+      --border: rgba(15, 23, 42, 0.12); /* Đường viền rõ nét hơn */
+      --border-focus: rgba(15, 23, 42, 0.35);
       --text: #0f172a;
-      --text-dim: #64748b;
+      --text-dim: #475569; /* Đậm nét dễ nhìn */
       --btn-bg: #0f172a;
       --btn-text: #ffffff;
       --accent: #f43f5e;
-      --accent-alpha: rgba(244, 63, 94, 0.12);
+      --accent-alpha: rgba(244, 63, 94, 0.14);
       --accent-grad: linear-gradient(135deg, #f43f5e 0%, #ec4899 100%) !important;
       --blur-val: 20px;
     }
@@ -158,23 +158,24 @@
 
     label {
       display: block;
-      font-size: 13px;
-      color: #475569;
+      font-size: 13.5px;
+      color: #1e293b; /* Màu chữ tiêu đề đậm sẫm siêu rõ nét */
       margin: 14px 0 6px;
-      font-weight: 600;
+      font-weight: 700; /* Nâng cao độ đậm font */
     }
 
     input, textarea, select {
       width: 100%;
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid var(--border);
+      background: #ffffff; /* Nền trắng đặc tách biệt hoàn toàn */
+      border: 1.5px solid #cbd5e1; /* Viền xám có chiều sâu cực rõ */
       color: var(--text);
       padding: 12px 14px;
       border-radius: 12px;
       box-sizing: border-box;
       font-size: 14px;
+      font-weight: 500;
       transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.02);
+      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.03);
     }
 
     input:focus, textarea:focus, select:focus {
@@ -185,30 +186,35 @@
     }
 
     .auto-box {
-      background: rgba(15, 23, 42, 0.01);
+      background: #f1f5f9; /* Nền xám nhạt làm rõ vùng dán */
       padding: 14px;
       border-radius: 12px;
-      border: 1px dashed rgba(15, 23, 42, 0.15);
+      border: 1.5px dashed #cbd5e1; /* Viền đứt sắc sảo */
       margin-bottom: 18px;
+      color: #334155;
     }
 
     .bookmark-box {
-      background: rgba(56, 189, 248, 0.04);
-      border: 1px solid rgba(56, 189, 248, 0.15);
+      background: #e0f2fe; /* Nền xanh da trời nhạt rực rỡ */
+      border: 1.5px solid #7dd3fc; /* Viền xanh rõ nét */
       padding: 12px 14px;
       border-radius: 12px;
       margin-bottom: 16px;
       display: flex;
       flex-direction: column;
       gap: 8px;
+      color: #0369a1; /* Chữ xanh đậm tương phản cực tốt */
+      font-weight: 600; /* Nâng cao độ dễ nhìn */
     }
 
     .highlight-box {
-      background: rgba(245, 158, 11, 0.04);
-      border: 1px solid rgba(245, 158, 11, 0.12);
+      background: #fef3c7; /* Nền vàng cam dịu mát */
+      border: 1.5px solid #fde68a; /* Viền cam ấm */
       padding: 14px;
       border-radius: 12px;
       margin-bottom: 18px;
+      color: #b45309; /* Chữ cam sẫm cực nét để đọc Mẹo */
+      font-weight: 600;
     }
 
     .carousel-box {
@@ -548,11 +554,11 @@
     }
 
     .section-box {
-      background: rgba(255, 255, 255, 0.6);
-      border: 1px solid var(--border);
+      background: #f1f5f9; /* Nền xám nhạt mịn giúp nhận diện rõ rệt từng phân vùng */
+      border: 1.5px solid #cbd5e1; /* Viền rõ nét */
       border-radius: 18px;
       padding: 20px;
-      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.02);
+      box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.01);
     }
 
     .section-title {
@@ -606,8 +612,8 @@
     }
 
     .comparison-item {
-      background: #ffffff;
-      border: 1px solid var(--border);
+      background: #ffffff; /* Thẻ so sánh trắng tinh khôi nổi bật hẳn */
+      border: 1.5px solid #cbd5e1;
       border-radius: 12px;
       padding: 14px;
       margin-bottom: 12px;
@@ -615,7 +621,7 @@
       flex-direction: column;
       gap: 10px;
       position: relative;
-      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.02);
+      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.04);
     }
 
     .comparison-item-header {
@@ -2273,40 +2279,47 @@
     if (logo && logo.complete && logo.width > 0 && logo.height > 0) {
       const srcW = logo.width;
       const srcH = logo.height;
-      const isSquare = Math.abs(srcW - srcH) < (srcW * 0.25);
+      const isDefaultLogo = !logoUrl; // Mặc định sử dụng logo SVG Base64 trong suốt sếp chọn
 
-      let cropX = 0, cropY = 0, cropW = srcW, cropH = srcH;
-      const isDefaultLogo = logo.src && (logo.src.includes('renews.png') || logo.src.includes('testchoi'));
-      if (isSquare && isDefaultLogo) {
-        cropX = srcW * 0.10;
-        cropY = srcH * 0.41;
-        cropW = srcW * 0.80;
-        cropH = srcH * 0.18;
+      if (isDefaultLogo) {
+        // KHÔNG vẽ ô vuông trắng làm mất logo chữ! Vẽ trực tiếp logo chữ cực kỳ lịch lãm
+        const drawH = 68;
+        const drawW = (srcW / srcH) * drawH;
+        
+        ctx.save();
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.45)';
+        ctx.shadowBlur = 10;
+        ctx.shadowOffsetY = 4;
+        ctx.drawImage(logo, logoX, logoY, drawW, drawH);
+        ctx.restore();
+        
+        nextBadgeX = logoX + drawW + 20;
+      } else {
+        // Nếu sếp tải logo ngoài thì vẽ trong box trắng để nổi bật trên nền tối
+        const boxH = 68;
+        const boxW = 230;
+        const padX = 8, padY = 6;
+        const drawW = boxW - (padX * 2);
+        const drawH = boxH - (padY * 2);
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.roundRect(logoX, logoY, boxW, boxH, 12);
+        ctx.fillStyle = '#ffffff';
+        ctx.fill();
+        ctx.clip();
+
+        const scale = Math.min(drawW / srcW, drawH / srcH);
+        const finalW = srcW * scale;
+        const finalH = srcH * scale;
+        const drawX = logoX + padX + (drawW - finalW) / 2;
+        const drawY = logoY + padY + (drawH - finalH) / 2;
+
+        ctx.drawImage(logo, 0, 0, srcW, srcH, drawX, drawY, finalW, finalH);
+        ctx.restore();
+
+        nextBadgeX = logoX + boxW + 20;
       }
-
-      const boxH = 68;
-      const boxW = 230;
-      const padX = 8, padY = 6;
-      const drawW = boxW - (padX * 2);
-      const drawH = boxH - (padY * 2);
-
-      ctx.save();
-      ctx.beginPath();
-      ctx.roundRect(logoX, logoY, boxW, boxH, 12);
-      ctx.fillStyle = '#ffffff';
-      ctx.fill();
-      ctx.clip();
-
-      const scale = Math.min(drawW / cropW, drawH / cropH);
-      const finalW = cropW * scale;
-      const finalH = cropH * scale;
-      const drawX = logoX + padX + (drawW - finalW) / 2;
-      const drawY = logoY + padY + (drawH - finalH) / 2;
-
-      ctx.drawImage(logo, cropX, cropY, cropW, cropH, drawX, drawY, finalW, finalH);
-      ctx.restore();
-
-      nextBadgeX = logoX + boxW + 20;
     }
 
     ctx.font = '600 20px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
@@ -2845,6 +2858,29 @@
     triggerRender();
   }
 
+  // --- CHUYÊN GIA CANVAS: THUẬT TOÁN TỰ ĐỘNG CẮT CHỮ TRÁN TRÀN KHUNG (TRUNCATE) ---
+  function truncateText(ctx, text, maxWidth) {
+    if (!text) return '';
+    const metrics = ctx.measureText(text);
+    if (metrics.width <= maxWidth) return text;
+    
+    let low = 0;
+    let high = text.length;
+    let result = '';
+    
+    while (low <= high) {
+      let mid = Math.floor((low + high) / 2);
+      let substr = text.substring(0, mid) + '...';
+      if (ctx.measureText(substr).width <= maxWidth) {
+        result = substr;
+        low = mid + 1;
+      } else {
+        high = mid - 1;
+      }
+    }
+    return result;
+  }
+
   // --- HTML5 CANVAS GRAPHIC GENERATION SYSTEM FOR RETECHS ---
   function renderCanvasInfo() {
     const canvas = document.getElementById('preview-canvas-info');
@@ -3054,12 +3090,29 @@
       const rY = listStartY + idx * (rowH + rowGap);
       
       ctx.save();
+      // Vẽ đổ bóng mờ Liquid Glass dưới từng thẻ để có chiều sâu và nhận diện rõ rệt từng ô
+      if (!isDark) {
+        ctx.shadowColor = 'rgba(15, 23, 42, 0.06)';
+        ctx.shadowBlur = 12;
+        ctx.shadowOffsetY = 4;
+      } else {
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.25)';
+        ctx.shadowBlur = 6;
+        ctx.shadowOffsetY = 2;
+      }
+
       ctx.beginPath();
       ctx.roundRect(50, rY, 1100, rowH, 20);
       ctx.fillStyle = isDark ? 'rgba(15, 23, 42, 0.45)' : '#ffffff';
       ctx.fill();
-      ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(15, 23, 42, 0.04)';
-      ctx.lineWidth = 1.5;
+      
+      // Tắt bóng trước khi vẽ viền sắc nét
+      ctx.shadowColor = 'transparent';
+      ctx.shadowBlur = 0;
+      ctx.shadowOffsetY = 0;
+
+      ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.05)' : '#cbd5e1'; /* Viền xám trung tính có độ tương phản tuyệt vời */
+      ctx.lineWidth = isDark ? 1.5 : 2; /* Nâng độ dày viền lên 2px cho nền sáng nổi bật hẳn */
       ctx.stroke();
 
       const iconX = 75;
@@ -3086,8 +3139,9 @@
       ctx.textBaseline = 'top';
       ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
       ctx.font = '800 24px ' + titleFont + ', sans-serif';
-      ctx.fillText(item.name, 170, rY + 24);
-      const nameWidth = ctx.measureText(item.name).width;
+      const truncatedName = truncateText(ctx, item.name, 450); /* Tránh tên quá dài tràn đè lên Badge */
+      ctx.fillText(truncatedName, 170, rY + 24);
+      const nameWidth = ctx.measureText(truncatedName).width;
       ctx.restore();
 
       if (item.badge) {
@@ -3116,7 +3170,8 @@
       ctx.textBaseline = 'top';
       ctx.fillStyle = isDark ? '#94a3b8' : '#475569';
       ctx.font = '500 15px -apple-system, BlinkMacSystemFont, sans-serif';
-      ctx.fillText(item.desc, 170, rY + 58);
+      const truncatedDesc = truncateText(ctx, item.desc, 760); /* Tuyệt đối không bao giờ tràn ra ngoài rìa card */
+      ctx.fillText(truncatedDesc, 170, rY + 58);
       ctx.restore();
 
       const barX = 170;
@@ -3140,7 +3195,8 @@
       ctx.textBaseline = 'middle';
       ctx.fillStyle = item.badgeBg || '#38bdf8';
       ctx.font = '700 14px -apple-system, BlinkMacSystemFont, sans-serif';
-      ctx.fillText("⚡ " + item.barText, barX + 16, barY + 20);
+      const truncatedBarText = truncateText(ctx, "⚡ " + item.barText, barW - 32); /* Tránh chữ bôi tiến trình bị tràn */
+      ctx.fillText(truncatedBarText, barX + 16, barY + 20);
       ctx.restore();
 
       ctx.save();
