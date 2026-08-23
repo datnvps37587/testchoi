@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>reNews & reTechs Ultimate Studio - Creator Suite v6.1</title>
+  <title>reNews & reTechs Ultimate Studio - Creator Suite v6.2</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Chakra+Petch:wght@400;700&family=Montserrat:wght@400;700;900&family=Playfair+Display:ital,wght@0,700;1,400&family=Patrick+Hand&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -554,11 +554,11 @@
     }
 
     .section-box {
-      background: #f1f5f9; /* Nền xám nhạt mịn giúp nhận diện rõ rệt từng phân vùng */
-      border: 1.5px solid #cbd5e1; /* Viền rõ nét */
+      background: rgba(255, 255, 255, 0.6); /* Kính mờ trong suốt cao cấp v5.6 */
+      border: 1px solid var(--border);
       border-radius: 18px;
       padding: 20px;
-      box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.01);
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.02);
     }
 
     .section-title {
@@ -593,9 +593,9 @@
     }
 
     .preset-btn {
-      background: rgba(15, 23, 42, 0.5);
+      background: rgba(255, 255, 255, 0.8);
       border: 1px solid var(--border);
-      color: #ffffff;
+      color: var(--text);
       padding: 10px;
       border-radius: 10px;
       text-align: left;
@@ -603,7 +603,7 @@
       font-size: 12px;
       font-weight: 600;
       transition: all 0.2s;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.02);
     }
 
     .preset-btn:hover {
@@ -612,8 +612,8 @@
     }
 
     .comparison-item {
-      background: #ffffff; /* Thẻ so sánh trắng tinh khôi nổi bật hẳn */
-      border: 1.5px solid #cbd5e1;
+      background: #ffffff;
+      border: 1px solid var(--border);
       border-radius: 12px;
       padding: 14px;
       margin-bottom: 12px;
@@ -621,7 +621,7 @@
       flex-direction: column;
       gap: 10px;
       position: relative;
-      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.04);
+      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.02);
     }
 
     .comparison-item-header {
@@ -711,7 +711,7 @@
     <!-- Tin Tức Đề Xuất (RSS Feed) -->
     <div class="rss-section">
       <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px;">
-        <label style="color: #38bdf8; font-weight: bold; margin: 0; font-size: 14px; display: flex; align-items: center; gap: 6px;">🔥 Tin Tức Đề Xuất (One-Click RSS Library):</label>
+        <label style="color: #0284c7; font-weight: 700; margin: 0; font-size: 14px; display: flex; align-items: center; gap: 6px;">🔥 Tin Tức Đề Xuất (One-Click RSS Library):</label>
         <button onclick="toggleRssManage()" style="background:transparent; border:none; color:var(--accent); cursor:pointer; font-size:12px; padding:0; text-decoration:underline;">⚙️ Thêm/Quản lý nguồn</button>
       </div>
       
@@ -725,7 +725,7 @@
 
       <!-- Hộp thêm nguồn RSS tùy chỉnh -->
       <div id="rssManageBox" style="display: none; background: rgba(255, 255, 255, 0.02); border-radius: 12px; border: 1px dashed rgba(255, 255, 255, 0.1); padding: 12px; margin-bottom: 10px;">
-        <label style="margin-top: 0; color: #bae6fd;">➕ Thêm nguồn RSS tùy chỉnh:</label>
+        <label style="margin-top: 0; color: #0284c7; font-weight: 700;">➕ Thêm nguồn RSS tùy chỉnh:</label>
         <input type="text" id="customRssName" placeholder="Tên nguồn (vd: Vietgame, GameK)..." style="margin-bottom: 6px;">
         <input type="text" id="customRssUrl" placeholder="Link RSS (vd: https://gamek.vn/rss/home.rss)..." style="margin-bottom: 8px;">
         <button class="btn-copy-bm" onclick="addCustomRssFeed()" style="width: auto; background: #10b981; color: white; font-size: 12px; font-weight: 700; padding: 8px 12px; border-radius: 8px;">Thêm Nguồn RSS</button>
@@ -741,7 +741,7 @@
 
     <div class="bookmark-box">
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <span style="font-size: 13px; font-weight: 600; color: #bae6fd;">📱 Dấu trang cào bài (Điện thoại):</span>
+        <span style="font-size: 13px; font-weight: 600; color: #0284c7; font-weight: 700;">📱 Dấu trang cào bài (Điện thoại):</span>
       </div>
       <button class="btn-copy-bm" id="btnCopyBm" onclick="copyBookmarkletCode()">📋 Sao Chép Mã Bookmarklet</button>
     </div>
@@ -753,7 +753,7 @@
 
     <!-- ĐA NỀN TẢNG (CHỌN ĐỊNH DẠNG TỶ LỆ) -->
     <div class="format-box">
-      <label style="color: #38bdf8; font-weight: bold; margin-top:0; display: flex; align-items: center; gap: 6px;">📱 Đa Nền Tảng (Tỷ lệ khung hình):</label>
+      <label style="color: #0284c7; font-weight: 700; margin-top:0; display: flex; align-items: center; gap: 6px;">📱 Đa Nền Tảng (Tỷ lệ khung hình):</label>
       <select id="formatSelect" onchange="changeFormat()">
         <option value="9_16" selected>TikTok / Shorts / Reels (Đứng 9:16 - 1080x1920)</option>
         <option value="1_1">Instagram / Facebook (Vuông 1:1 - 1080x1080)</option>
@@ -1073,7 +1073,7 @@
       root.style.setProperty('--accent', '#f43f5e'); // Red-pink
       root.style.setProperty('--accent-alpha', 'rgba(244, 63, 94, 0.15)');
       root.style.setProperty('--accent-grad', 'linear-gradient(135deg, #f43f5e 0%, #ec4899 100%)');
-      if (headerTitle) headerTitle.innerText = "reNews Ultimate Studio (v6.1 - Banner Creator)";
+      if (headerTitle) headerTitle.innerText = "reNews Ultimate Studio (v6.2 - Banner Creator)";
       document.title = "reNews Ultimate Studio - Banner Creator";
       if (watermarkInput) watermarkInput.value = "@reNews_Official";
       if (badgeInput) badgeInput.value = "TIN NÓNG";
@@ -1083,7 +1083,7 @@
       root.style.setProperty('--accent', '#38bdf8'); // Cyber Blue
       root.style.setProperty('--accent-alpha', 'rgba(56, 189, 248, 0.15)');
       root.style.setProperty('--accent-grad', 'linear-gradient(135deg, #38bdf8 0%, #0284c7 100%)');
-      if (headerTitle) headerTitle.innerText = "reTechs Ultimate Studio (v6.1 - Infographic Studio)";
+      if (headerTitle) headerTitle.innerText = "reTechs Ultimate Studio (v6.2 - Infographic Studio)";
       document.title = "reTechs Ultimate Studio - Infographic Engine";
       if (watermarkInput) watermarkInput.value = "@reTechs_Official";
       if (badgeInput) badgeInput.value = "CÔNG NGHỆ";
