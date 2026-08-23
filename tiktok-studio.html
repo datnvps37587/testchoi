@@ -7,28 +7,28 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Chakra+Petch:wght@400;700&family=Montserrat:wght@400;700;900&family=Playfair+Display:ital,wght@0,700;1,400&family=Patrick+Hand&display=swap" rel="stylesheet">
   <style>
     :root {
-      /* Giao diện mặc định: Premium Light Glass */
-      --bg: #f8fafc;
-      --card: rgba(255, 255, 255, 0.85); /* Tăng tương phản thẻ */
-      --card-inner: #ffffff;
-      --border: rgba(15, 23, 42, 0.12); /* Đường viền rõ nét hơn */
-      --border-focus: rgba(15, 23, 42, 0.35);
-      --text: #0f172a;
-      --text-dim: #475569; /* Đậm nét dễ nhìn */
-      --btn-bg: #0f172a;
-      --btn-text: #ffffff;
+      /* Giao diện mặc định: Premium Dark High-Tech Slate Glass */
+      --bg: #080b11;
+      --card: rgba(15, 23, 42, 0.72); /* Khối kính mờ sẫm màu sang trọng */
+      --card-inner: #0f172a;
+      --border: rgba(255, 255, 255, 0.1); /* Viền mảnh sắc nét */
+      --border-focus: rgba(255, 255, 255, 0.3);
+      --text: #ffffff; /* Màu chữ chính trắng tinh khiết siêu nổi bật */
+      --text-dim: #cbd5e1; /* Màu chữ phụ xám sáng cực kỳ dễ đọc */
+      --btn-bg: #ffffff;
+      --btn-text: #090d16;
       --accent: #f43f5e;
-      --accent-alpha: rgba(244, 63, 94, 0.14);
+      --accent-alpha: rgba(244, 63, 94, 0.15);
       --accent-grad: linear-gradient(135deg, #f43f5e 0%, #ec4899 100%) !important;
-      --blur-val: 20px;
+      --blur-val: 16px;
     }
 
     body {
       font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
       background-color: var(--bg);
       background-image: 
-        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.8) 0%, rgba(241, 245, 249, 0.6) 100%),
-        radial-gradient(rgba(15, 23, 42, 0.03) 1.5px, transparent 1.5px);
+        radial-gradient(circle at 50% 0%, #151d30 0%, #080b11 75%),
+        radial-gradient(rgba(255, 255, 255, 0.03) 1.5px, transparent 1.5px);
       background-size: 100% 100%, 35px 35px;
       background-attachment: fixed;
       color: var(--text);
@@ -49,7 +49,7 @@
       -webkit-backdrop-filter: blur(var(--blur-val));
       padding: 28px;
       border-radius: 24px;
-      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
       border: 1px solid var(--border);
       transition: max-width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
       display: flex;
@@ -109,11 +109,11 @@
       align-items: center;
       justify-content: space-between;
       margin-bottom: 20px;
-      background: rgba(255, 255, 255, 0.8);
+      background: rgba(15, 23, 42, 0.5);
       padding: 10px 16px;
       border-radius: 14px;
       border: 1px solid var(--border);
-      box-shadow: 0 4px 15px rgba(15, 23, 42, 0.02);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
     }
     
     .brand-label {
@@ -128,7 +128,7 @@
     .brand-segmented {
       display: flex;
       gap: 8px;
-      background: rgba(15, 23, 42, 0.03);
+      background: rgba(3, 7, 18, 0.5);
       padding: 4px;
       border-radius: 10px;
       border: 1px solid var(--border);
@@ -182,7 +182,7 @@
       outline: none;
       border-color: var(--accent);
       box-shadow: 0 0 0 3px var(--accent-alpha);
-      background: #ffffff;
+      background: #0f172a;
     }
 
     .auto-box {
@@ -436,11 +436,11 @@
     /* CSS for reNews RSS Feed */
     .rss-section {
       margin-bottom: 22px;
-      background: rgba(255, 255, 255, 0.6);
+      background: rgba(15, 23, 42, 0.7);
       padding: 16px;
       border-radius: 16px;
       border: 1px solid var(--border);
-      box-shadow: 0 4px 15px rgba(15, 23, 42, 0.02);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
     .rss-container {
       display: flex;
@@ -593,9 +593,9 @@
     }
 
     .preset-btn {
-      background: rgba(255, 255, 255, 0.8);
+      background: rgba(15, 23, 42, 0.5);
       border: 1px solid var(--border);
-      color: var(--text);
+      color: #ffffff;
       padding: 10px;
       border-radius: 10px;
       text-align: left;
@@ -603,7 +603,7 @@
       font-size: 12px;
       font-weight: 600;
       transition: all 0.2s;
-      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.02);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .preset-btn:hover {
@@ -692,7 +692,7 @@
 <body>
 
 <div class="container">
-  <h2 id="appHeaderTitle">reNews Ultimate Studio (v5.5 - Banner)</h2>
+  <h2 id="appHeaderTitle">reNews Ultimate Studio (v5.9 - Banner)</h2>
 
   <!-- GLOBAL BRAND SELECTOR -->
   <div class="brand-selector-container">
@@ -1016,7 +1016,7 @@
 
       <div class="grid-2" style="width: 100%; max-width: 420px; margin-top: 20px;">
         <button class="btn" onclick="renderAllAndDownload()">📥 Tải Ảnh Chuẩn Nét</button>
-        <button class="btn btn-secondary" onclick="triggerRender()">🔄 Làm mới Canvas</button>
+        <button class="btn btn-secondary" onclick="isGeneratedInfo=true; triggerRender();">🔄 Cập nhật / Làm mới Canvas</button>
       </div>
       <p style="font-size: 11px; color: var(--text-dim); text-align: center; margin-top: 10px; max-width: 420px;">
         * Canvas được cấu hình độ phân giải siêu nét (1200 x 1600 px) chuyên dụng để sếp đăng bài không lo bể vỡ hình.
@@ -1067,7 +1067,7 @@
     
     if (brand === 'reNews') {
       root.style.setProperty('--accent', '#f43f5e'); // Red-pink
-      root.style.setProperty('--accent-alpha', 'rgba(244, 63, 94, 0.12)');
+      root.style.setProperty('--accent-alpha', 'rgba(244, 63, 94, 0.15)');
       root.style.setProperty('--accent-grad', 'linear-gradient(135deg, #f43f5e 0%, #ec4899 100%)');
       if (headerTitle) headerTitle.innerText = "reNews Ultimate Studio (v5.6 - Banner)";
       document.title = "reNews Ultimate Studio - Banner Creator";
@@ -1127,6 +1127,7 @@
   // ==================== ENGINE 1: RENEWS BANNER CODE ====================
   // Trạng thái đã tạo ảnh thành công lần đầu
   let isGenerated = false;
+  let isGeneratedInfo = false;
 
   // --- TÍNH NĂNG MỚI: TRẠM TIN TỰ ĐỘNG RSS FEED (ONE-CLICK RSS LIBRARY) ---
   const DEFAULT_RSS_FEEDS = [
@@ -1697,6 +1698,37 @@
     }
   }
 
+  function drawBannerPlaceholder() {
+    const canvas = document.getElementById('preview-canvas-news');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width, h = canvas.height;
+    ctx.fillStyle = '#080b11';
+    ctx.fillRect(0, 0, w, h);
+    
+    // Draw beautiful dotted grid
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.02)';
+    const dotGap = 35;
+    for (let x = 0; x < w; x += dotGap) {
+      for (let y = 0; y < h; y += dotGap) {
+        ctx.beginPath();
+        ctx.arc(x, y, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    
+    ctx.fillStyle = '#cbd5e1';
+    ctx.font = 'bold 36px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('📱 Nhập nội dung & nhấn [Tạo Ảnh] để hiển thị', w / 2, h / 2);
+    
+    document.getElementById('btnDownload').style.display = 'none';
+    document.getElementById('btnDownloadAll').style.display = 'none';
+    const previewNav = document.getElementById('previewNav');
+    if (previewNav) previewNav.style.display = 'none';
+  }
+
   async function generateBanner(silent = false) {
     const title = document.getElementById('titleText').value.trim();
     const badge = document.getElementById('badgeText').value.trim() || 'TIN TỰ CHỌN';
@@ -1715,6 +1747,10 @@
     }
     if (!silent) {
       isGenerated = true; // Đánh dấu đã bấm tạo ảnh lần đầu
+    }
+    if (!isGenerated) {
+      drawBannerPlaceholder();
+      return;
     }
 
     let bgImg = loadedImage;
@@ -2279,7 +2315,7 @@
     if (logo && logo.complete && logo.width > 0 && logo.height > 0) {
       const srcW = logo.width;
       const srcH = logo.height;
-      const isDefaultLogo = !logoUrl; // Mặc định sử dụng logo SVG Base64 trong suốt sếp chọn
+      const isDefaultLogo = !document.getElementById('logoUrl').value.trim(); // Sửa lỗi ReferenceError để đo chính xác ô nhập liệu
 
       if (isDefaultLogo) {
         // KHÔNG vẽ ô vuông trắng làm mất logo chữ! Vẽ trực tiếp logo chữ cực kỳ lịch lãm
@@ -2891,6 +2927,26 @@
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
 
+    if (!isGeneratedInfo) {
+      ctx.fillStyle = '#020617';
+      ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.02)';
+      const dotGap = 35;
+      for (let x = 0; x < w; x += dotGap) {
+        for (let y = 0; y < h; y += dotGap) {
+          ctx.beginPath();
+          ctx.arc(x, y, 2.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = 'bold 36px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('📊 Nhập dữ liệu & nhấn [Cập nhật / Làm mới] để hiển thị', w / 2, h / 2);
+      return;
+    }
+
     const theme = document.getElementById('canvasTheme').value;
     
     // 1. TÔ NỀN BACKDROP
@@ -3274,6 +3330,7 @@
   }
 
   function renderAllAndDownload() {
+    isGeneratedInfo = true;
     renderCanvasInfo();
     const canvas = document.getElementById('preview-canvas-info');
     const link = document.createElement('a');
