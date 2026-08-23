@@ -686,7 +686,7 @@
 <body>
 
 <div class="container">
-  <h2 id="appHeaderTitle">reNews Ultimate Studio (v5.5 - Banner)</h2>
+  <h2 id="appHeaderTitle">reNews Ultimate Studio (v6.6 - Banner)</h2>
 
   <!-- GLOBAL BRAND SELECTOR -->
   <div class="brand-selector-container">
@@ -1010,7 +1010,7 @@
 
       <div class="grid-2" style="width: 100%; max-width: 420px; margin-top: 20px;">
         <button class="btn" onclick="renderAllAndDownload()">📥 Tải Ảnh Chuẩn Nét</button>
-        <button class="btn btn-secondary" onclick="isInfoGenerated=true; triggerRender();">🔄 Cập nhật / Làm mới Canvas</button>
+        <button class="btn btn-secondary" onclick="refreshInfographic()">🔄 Cập nhật / Làm mới Canvas</button>
       </div>
       <p style="font-size: 11px; color: var(--text-dim); text-align: center; margin-top: 10px; max-width: 420px;">
         * Canvas được cấu hình độ phân giải siêu nét (1200 x 1600 px) chuyên dụng để sếp đăng bài không lo bể vỡ hình.
@@ -1024,7 +1024,8 @@
   // Global Brand & Engine States
   let activeEngine = 'reNews'; // 'reNews' (Banner) or 'reTechs' (Infographic)
   let currentBrand = 'reNews'; // 'reNews' or 'reTechs'
-  // Trạng thái vẽ được khai báo ở đầu script
+  let isBannerGenerated = false;
+  let isInfoGenerated = false;
 
   function switchBrand(brand) {
     currentBrand = brand;
@@ -1068,7 +1069,7 @@
       root.style.setProperty('--accent', '#f43f5e'); // Red-pink
       root.style.setProperty('--accent-alpha', 'rgba(244, 63, 94, 0.12)');
       root.style.setProperty('--accent-grad', 'linear-gradient(135deg, #f43f5e 0%, #ec4899 100%)');
-      if (headerTitle) headerTitle.innerText = "reNews Ultimate Studio (v6.4 - Banner)";
+      if (headerTitle) headerTitle.innerText = "reNews Ultimate Studio (v6.6 - Banner)";
       document.title = "reNews Ultimate Studio - Banner Creator";
       if (watermarkInput) watermarkInput.value = "@reNews_Official";
       if (badgeInput) badgeInput.value = "TIN NÓNG";
@@ -1078,7 +1079,7 @@
       root.style.setProperty('--accent', '#38bdf8'); // Cyber Blue
       root.style.setProperty('--accent-alpha', 'rgba(56, 189, 248, 0.15)');
       root.style.setProperty('--accent-grad', 'linear-gradient(135deg, #38bdf8 0%, #0284c7 100%)');
-      if (headerTitle) headerTitle.innerText = "reTechs Ultimate Studio (v6.4 - Infographic)";
+      if (headerTitle) headerTitle.innerText = "reTechs Ultimate Studio (v6.6 - Infographic)";
       document.title = "reTechs Ultimate Studio - Infographic Engine";
       if (watermarkInput) watermarkInput.value = "@reTechs_Official";
       if (badgeInput) badgeInput.value = "CÔNG NGHỆ";
@@ -1195,9 +1196,13 @@
     }, 150);
   }
 
+  function refreshInfographic() {
+    isInfoGenerated = true;
+    triggerRender();
+  }
+
   // ==================== ENGINE 1: RENEWS BANNER CODE ====================
   // Trạng thái vẽ Canvas chủ động theo lệnh người dùng
-  // Trạng thái vẽ được khai báo ở đầu script
 
   // --- TÍNH NĂNG MỚI: TRẠM TIN TỰ ĐỘNG RSS FEED (ONE-CLICK RSS LIBRARY) ---
   const DEFAULT_RSS_FEEDS = [
@@ -1547,14 +1552,20 @@
     }
   }
 
-  // Đăng ký gọi hàm khi trang tải xong
-  window.addEventListener('DOMContentLoaded', () => {
+  // Đăng ký gọi hàm khi trang tải xong (Hệ thống khởi chạy chống treo cực kì ổn định)
+  function initApp() {
     loadRssLibrary();
     fetchRSSFeed();
     preloadSuiteLogos();
     switchBrand('reNews'); // Khởi tạo thương hiệu mặc định ban đầu là reNews
     loadPreset(0); // Khởi tạo preset cho Infographic
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    window.addEventListener('DOMContentLoaded', initApp);
+  } else {
+    setTimeout(initApp, 0); // Tránh hiện tượng mất sự kiện DOMContentLoaded khi tải động
+  }
 
   // Quản lý trạng thái Carousel, Định dạng & So sánh
   let isCarouselMode = false;
@@ -1951,6 +1962,40 @@
       ctx.fillText(seg.text, currentX, y);
       currentX += ctx.measureText(seg.text).width;
     });
+  }
+
+  function wrapTextWithHighlight(ctx, text, x, y, maxWidth, lineHeight, maxLines = 8, highlightColor, autoHighlightEnabled, customKwList) {
+    const words = text.split(' ');
+    let lines = [];
+    let currentLine = '';
+
+    for (let n = 0; n < words.length; n++) {
+      const testLine = currentLine + words[n] + ' ';
+      const cleanTestLine = cleanMarkup(testLine);
+      const metrics = ctx.measureText(cleanTestLine);
+      
+      if (metrics.width > maxWidth && n > 0) {
+        lines.push(currentLine.trim());
+        currentLine = words[n] + ' ';
+      } else {
+        currentLine = testLine;
+      }
+    }
+    lines.push(currentLine.trim());
+
+    let finalLines = lines.slice(0, maxLines);
+    if (lines.length > maxLines) {
+      const lastIdx = maxLines - 1;
+      finalLines[lastIdx] = finalLines[lastIdx] + '...';
+    }
+
+    let currentY = y;
+    finalLines.forEach(line => {
+      drawHighlightLine(ctx, line, x, currentY, ctx.fillStyle, highlightColor, autoHighlightEnabled, customKwList);
+      currentY += lineHeight;
+    });
+
+    return currentY - lineHeight;
   }
 
   function renderDualLayer(img, img2, logo, title, desc, badge, author, source, dateStr, font, watermark, layout = 'default') {
@@ -3254,10 +3299,17 @@
       }
 
       // Vẽ Thanh tiến trình
+      ctx.save();
+      ctx.font = '700 14px -apple-system, BlinkMacSystemFont, sans-serif';
+      const barTextWidth = ctx.measureText("⚡ " + item.barText).width;
+      ctx.restore();
+
       const barX = 170;
       const barY = descEndY + 12;
       const barMaxW = 680;
-      const barW = barMaxW * (item.barVal || 0.7);
+      // Co giãn động theo độ dài chữ: Ít nhất bằng độ dài chữ + padding, tối đa 820px để tránh đè cột số liệu bên phải
+      let barW = Math.max(barMaxW * (item.barVal || 0.7), barTextWidth + 36);
+      if (barW > 820) barW = 820;
       const barH = 40;
 
       ctx.beginPath();
